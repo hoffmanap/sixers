@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Can This Roster Share a Court? — A Sixers Sprawlball Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <p class="kicker">A Sprawlball-style field study</p>
+  <h1>Can this roster<br>share a court?</h1>
+  <p class="dek">The Sixers spent the offseason stacking stars — LeBron James, Jaylen Brown, Joel&nbsp;Embiid, Tyrese&nbsp;Maxey, VJ&nbsp;Edgecombe. Whether their games actually fit together is a spacing question before it's a talent question.</p>
+  <p class="byline">Data: NBA shot-log &amp; tracking data, 2022–23 through 2025–26 · Updated for the 2026–27 season</p>
+</header>
+
+<main class="scrolly">
+
+  <!-- ============ SECTION 1: SPACING ============ -->
+  <section class="chapter" id="spacing" data-chart="spacing">
+    <div class="chapter-text">
+      <h2>1. Where everyone wants to shoot from</h2>
+      <p>Sprawlball's central finding was simple: the shots worth taking are at the rim and beyond the arc. Everything in between — the <mark data-hl="1">long two</mark> — is where offenses go to die efficiency-wise. So the first question for this roster isn't "how good is each scorer," it's <mark data-hl="2">whether their shot diets overlap</mark>.</p>
+      <p class="step" data-step="0">Real 2025-26 zone splits. Hover a bar to isolate a player.</p>
+      <p class="step" data-step="1">Maxey and Edgecombe are the Sprawlball-compliant guards — under 15% mid-range each, everything else split rim/three.</p>
+      <p class="step" data-step="2">Embiid's mid-range share is <em>up</em>, not down, this season — 30.7%, his highest since 2023-24. The "modernized" version of his shot profile isn't holding steady.</p>
+      <p class="step" data-step="3"><mark data-hl="6">Brown's mid-range rate nearly doubled year over year</mark> — 14.3% in 2024-25 to 23.7% in 2025-26. That's the single biggest shot-profile swing on the roster, and it's moving the wrong direction for a Sprawlball-style offense right as he's joining a team that needs him spacing the floor, not shrinking it.</p>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 2: PLAYMAKING ============ -->
+  <section class="chapter" id="playmaking" data-chart="playmaking">
+    <div class="chapter-text">
+      <h2>2. Who actually has the ball</h2>
+      <p>Four players on this roster have a real claim to touches. Basketball only has one ball. Pick-and-roll ball-handler frequency — how often a player's offensive possessions start with them running the action, not standing in the corner — is the most direct trace of <mark data-hl="3">who's actually initiating, season over season</mark>.</p>
+      <p class="step" data-step="0">Share of offensive possessions spent as the PnR ball-handler, real data, four seasons.</p>
+      <p class="step" data-step="1">Maxey is unambiguously the engine — consistently 28-35% of his possessions, more than double anyone else on this list, every single season.</p>
+      <p class="step" data-step="2">LeBron's line is falling fast: from 20.8% in 2022-23 down to 11.7% this season — a real, measurable step back from ball-handling responsibility, not a hunch.</p>
+      <p class="step" data-step="3">Embiid's number: <mark data-hl="7">essentially zero, every season measured</mark>. He is not, and has never been, a pick-and-roll initiator — whatever playmaking he offers the offense runs through the post or short roll, a different mechanism entirely.</p>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 3: MAXEY / EMBIID ============ -->
+  <section class="chapter" id="pace" data-chart="pace">
+    <div class="chapter-text">
+      <h2>3. Maxey's speed, Embiid's mobility</h2>
+      <p>Player-tracking data logs distance covered and speed, game over game. Paired with actual on-court net rating for the Maxey-Embiid combination specifically, it's the most direct way to see whether <mark data-hl="4">Maxey's downhill pace is being unlocked or capped</mark> depending on who's sharing the floor with him.</p>
+      <p class="step" data-step="0">Line: Maxey's distance run per game vs. league average. Bars: real Maxey+Embiid on-court net rating by season.</p>
+      <p class="step" data-step="1">The pairing's net rating <mark data-hl="8">collapsed to -3.2 in 2024-25</mark> — the exact season Embiid played only 315 shot-chart possessions worth of minutes, i.e. the exact season he was hurt. It recovered to +7.2 this year, right alongside Embiid's minutes recovering.</p>
+      <p class="step" data-step="1">That correlation is the whole story: this isn't really a pace-and-space incompatibility, it's an availability problem wearing a scheme-fit costume.</p>
+    </div>
+  </section>
+
+  <!-- ============ SECTION 4: DEFENSE ============ -->
+  <section class="chapter" id="defense" data-chart="defense">
+    <div class="chapter-text">
+      <h2>4. The defensive bill comes due</h2>
+      <p>Shooting fit is solvable with spacing. Defensive fit is solvable with effort and scheme — until it isn't. Defended-FG%-versus-normal is a blunt but real individual signal: <mark data-hl="5">negative means a player makes shooters worse than their own average; positive means the opposite</mark>.</p>
+      <p class="step" data-step="0">2025-26 defended FG% minus shooter's normal FG%, five starters.</p>
+      <p class="step" data-step="1">Embiid and Brown are both clearly plus defenders by this measure — Embiid at -4.1, Brown at -4.2, essentially tied for best on the roster.</p>
+      <p class="step" data-step="2">LeBron is now a measurable defensive minus (+1.5) for the first time in this four-season window — the aging-curve concern isn't speculative anymore, it's in the tracking data.</p>
+    </div>
+  </section>
+
+  <div class="sticky-panel">
+    <div class="chart-frame">
+      <svg id="chart" viewBox="0 0 640 520" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+    <div class="chart-caption" id="chart-caption">Real shot-zone distribution, 2025-26 season — five 76ers starters</div>
+  </div>
+
+</main>
+
+<footer class="colophon">
+  <p>Built with real shot-log data pulled via <code>nba_api</code> — see <a href="https://github.com/YOUR-USERNAME/sixers-sprawlball">the repo</a> for the pull script and raw CSVs. Methodology inspired by Kirk Goldsberry's <em>Sprawlball</em>.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+<script src="js/data.js"></script>
+<script src="js/chart.js"></script>
+<script src="js/scrolly.js"></script>
+</body>
+</html>
