@@ -50,16 +50,37 @@ OUT_DIR = Path(__file__).parent / "data"
 OUT_DIR.mkdir(exist_ok=True)
 
 # ---- Configure your player pool -------------------------------------------
+# Starters (confirmed 2026-27): Maxey, Embiid, LeBron, Brown, Edgecombe.
+#
+# Bench players included here selectively - each one answers a specific
+# roster-construction question rather than "include everyone on the roster":
+#   - Dean Wade: signed as a defensive/spacing wing. Does his shot profile
+#     and defensive tracking actually support that role?
+#   - Anfernee Simons: bench scoring punch. Does his shot profile complement
+#     or duplicate Maxey/Simons's own bench-unit spacing?
+#   - Kentavious Caldwell-Pope: 3&D wing depth, real bench-unit fit question.
+#   - Adem Bona / Ariel Hukporti: with Andre Drummond gone, one of these two
+#     is Embiid's backup center. Worth knowing which profiles better before
+#     assuming either "solves" the Embiid-injury problem.
+#
+# Left OUT on purpose (not on the current roster - confirmed via search,
+# not assumption): Kyle Lowry, Eric Gordon, Jared McCain (traded to OKC,
+# Feb 2026), Andre Drummond, Quentin Grimes (signed with the Lakers), Paul
+# George (traded to Boston in the Jaylen Brown deal). If any of these
+# rejoin the roster or you want a different bench player added, just add
+# their exact full name to this list - the rest of the script doesn't care
+# who's in it.
 PLAYERS = [
     "Tyrese Maxey",
     "Joel Embiid",
     "LeBron James",
     "Jaylen Brown",
     "VJ Edgecombe",
-    "Kyle Lowry",
-    "Eric Gordon",
+    "Dean Wade",
+    "Anfernee Simons",
     "Kentavious Caldwell-Pope",
-    "Jared McCain",
+    "Adem Bona",
+    "Ariel Hukporti",
 ]
 
 # Multi-season so you can track shot-profile drift over time, not just a
@@ -68,13 +89,19 @@ SEASONS = ["2022-23", "2023-24", "2024-25", "2025-26"]
 
 REQUEST_DELAY_SEC = 1.2  # be polite / avoid rate-limit bans
 
-# 2-man lineup combos to check on/off fit for - edit as the real roster
-# settles. These are name pairs; resolved to IDs at runtime.
+# 2-man lineup combos to check on/off fit for - each pair maps to a real
+# roster question, not a blanket "all combos" list. Edit freely; the
+# fuzzy last-name match below works for any pair you add here.
 LINEUP_PAIRS_TO_WATCH = [
-    ("Tyrese Maxey", "Joel Embiid"),
-    ("Tyrese Maxey", "VJ Edgecombe"),
-    ("LeBron James", "Jaylen Brown"),
-    ("Joel Embiid", "Jaylen Brown"),
+    ("Tyrese Maxey", "Joel Embiid"),       # the headline fit question
+    ("Tyrese Maxey", "VJ Edgecombe"),      # both-guard spacing
+    ("LeBron James", "Jaylen Brown"),      # new-teammate chemistry
+    ("Joel Embiid", "Jaylen Brown"),       # paint/mid-range overlap risk
+    ("Dean Wade", "Tyrese Maxey"),         # does Wade's "spacing" role actually space for Maxey's drives?
+    ("Dean Wade", "Jaylen Brown"),         # Wade was signed as a defensive stopper - does it show up when paired with Brown's minutes?
+    ("Anfernee Simons", "Tyrese Maxey"),   # two shot-creating guards - complementary or redundant?
+    ("Adem Bona", "Tyrese Maxey"),         # backup-center-in candidate #1, on-court fit with the engine
+    ("Ariel Hukporti", "Tyrese Maxey"),    # backup-center-in candidate #2, on-court fit with the engine
 ]
 
 PHI_TEAM_ID = 1610612755
