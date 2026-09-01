@@ -8,64 +8,70 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --paper: #F5F1E8;
-  --ink: #1A1A1A;
-  --ink-soft: #4A4640;
-  --navy: #04275C;
-  --highlight: #E8F27C;
-  --risk: #C1440E;
-  --olive: #7A8B5C;
-  --rule: #D9D2C2;
-  --serif: 'Fraunces', Georgia, serif;
-  --sans: 'IBM Plex Sans', -apple-system, sans-serif;
-  --mono: 'IBM Plex Mono', monospace;
+  --paper: #F5F1E8; --ink: #1A1A1A; --ink-soft: #4A4640;
+  --navy: #04275C; --highlight: #E8F27C; --risk: #C1440E; --olive: #7A8B5C;
+  --rule: #D9D2C2; --sixers-blue: #006BB6; --sixers-red: #ED174C;
+  --serif: 'Fraunces', Georgia, serif; --sans: 'IBM Plex Sans', -apple-system, sans-serif; --mono: 'IBM Plex Mono', monospace;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { background: var(--paper); color: var(--ink); font-family: var(--sans); margin: 0; line-height: 1.55; }
-
-.masthead { max-width: 700px; margin: 0 auto; padding: 5rem 1.5rem 3rem; }
+.masthead { max-width: 720px; margin: 0 auto; padding: 5rem 1.5rem 3rem; }
 .kicker { font-family: var(--mono); font-size: 0.8rem; color: var(--navy); margin: 0 0 0.75rem; }
 .masthead h1 { font-family: var(--serif); font-weight: 500; font-size: clamp(2.4rem, 5.5vw, 3.8rem); line-height: 1.05; margin: 0 0 1.5rem; letter-spacing: -0.01em; }
 .dek { font-size: 1.1rem; color: var(--ink-soft); max-width: 38rem; margin: 0 0 1.5rem; }
 .byline { font-family: var(--mono); font-size: 0.78rem; color: var(--ink-soft); border-top: 1px solid var(--rule); padding-top: 1rem; }
-
 .section { max-width: 1180px; margin: 0 auto; padding: 3rem 1.5rem 5rem; border-top: 1px solid var(--rule); }
 .section:first-of-type { border-top: none; }
 .section h2 { font-family: var(--serif); font-weight: 500; font-size: 1.9rem; margin: 0 0 1.25rem; }
 .section .lede { font-size: 1.05rem; max-width: 42rem; margin-bottom: 1.5rem; }
-
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+@media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
 mark { background: none; color: inherit; position: relative; padding: 0 0.05em; }
 mark::before { content: ""; position: absolute; left: -0.05em; right: -0.05em; bottom: 0.05em; height: 0.5em; background: var(--highlight); z-index: -1; transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(0.65,0,0.35,1); }
 mark.is-marked::before { transform: scaleX(1); }
-
-.viz-shell { background: #FFFDF8; border: 1px solid var(--rule); border-radius: 3px; position: relative; }
-.viz-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--rule); gap: 1rem; flex-wrap: wrap; }
-.viz-title { font-family: var(--mono); font-size: 0.78rem; color: var(--ink-soft); }
-.viz-controls { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
-.chip { font-family: var(--sans); font-size: 0.8rem; padding: 0.32rem 0.7rem; border-radius: 100px; border: 1px solid var(--rule); background: #fff; cursor: pointer; color: var(--ink-soft); transition: all 0.15s ease; }
+.viz-shell { background: #FFFDF8; border: 1px solid var(--rule); border-radius: 3px; position: relative; margin-bottom: 1rem; }
+.viz-toolbar { display: flex; align-items: center; justify-content: space-between; padding: 0.85rem 1.1rem; border-bottom: 1px solid var(--rule); gap: 0.75rem; flex-wrap: wrap; }
+.viz-title { font-family: var(--mono); font-size: 0.74rem; color: var(--ink-soft); }
+.viz-controls { display: flex; gap: 0.35rem; flex-wrap: wrap; align-items: center; }
+.chip { font-family: var(--sans); font-size: 0.78rem; padding: 0.3rem 0.65rem; border-radius: 100px; border: 1px solid var(--rule); background: #fff; cursor: pointer; color: var(--ink-soft); transition: all 0.15s ease; }
 .chip:hover { border-color: var(--navy); color: var(--navy); }
 .chip.active { background: var(--navy); border-color: var(--navy); color: #fff; }
-.icon-btn { border: 1px solid var(--rule); background: #fff; border-radius: 4px; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ink-soft); }
+.icon-btn { border: 1px solid var(--rule); background: #fff; border-radius: 4px; min-width: 28px; height: 28px; padding: 0 0.6rem; white-space: nowrap; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--ink-soft); font-size: 0.85rem; }
 .icon-btn:hover { border-color: var(--navy); color: var(--navy); }
-.viz-body { padding: 1.1rem; }
+.viz-body { padding: 1rem; }
 .viz-body svg { width: 100%; height: auto; display: block; }
-#chart-overlay rect.density-cell { mix-blend-mode: multiply; }
-.viz-caption { padding: 0 1.1rem 1.1rem; font-family: var(--mono); font-size: 0.75rem; color: var(--ink-soft); }
-.viz-note { padding: 0 1.1rem 1rem; font-size: 0.92rem; color: var(--ink-soft); max-width: 46rem; }
-
-.viz-shell.is-fullscreen { position: fixed; inset: 0; z-index: 999; border-radius: 0; display: flex; flex-direction: column; }
+.viz-caption { padding: 0 1.1rem 0.6rem; font-family: var(--mono); font-size: 0.72rem; color: var(--ink-soft); }
+.viz-note { padding: 0 1.1rem 1rem; font-size: 0.9rem; color: var(--ink-soft); max-width: 46rem; }
+.viz-shell.is-fullscreen { position: fixed; inset: 0; z-index: 999; border-radius: 0; display: flex; flex-direction: column; background: #FFFDF8; }
 .viz-shell.is-fullscreen .viz-body { flex: 1; display: flex; align-items: center; justify-content: center; }
 .viz-shell.is-fullscreen .viz-body svg { max-height: 82vh; width: auto; height: 100%; }
-
-.tooltip { position: fixed; pointer-events: none; background: var(--ink); color: #fff; font-family: var(--mono); font-size: 0.72rem; padding: 0.4rem 0.6rem; border-radius: 3px; opacity: 0; transition: opacity 0.1s; z-index: 1200; max-width: 220px; line-height: 1.4; }
-
-.legend-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; font-family: var(--mono); font-size: 0.72rem; color: var(--ink-soft); }
+.tooltip { position: fixed; pointer-events: none; background: var(--ink); color: #fff; font-family: var(--mono); font-size: 0.72rem; padding: 0.4rem 0.6rem; border-radius: 3px; opacity: 0; transition: opacity 0.1s; z-index: 1200; max-width: 230px; line-height: 1.4; }
+.legend-row { display: flex; gap: 1rem; flex-wrap: wrap; align-items: center; font-family: var(--mono); font-size: 0.7rem; color: var(--ink-soft); padding: 0 1.1rem 0.75rem; }
 .legend-swatch { display: inline-block; width: 10px; height: 10px; margin-right: 4px; vertical-align: -1px; }
-
+.gradient-legend { display: flex; align-items: center; gap: 0.4rem; }
+.gradient-bar { width: 90px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, #04275C, #F5F1E8, #C1440E); }
+.narrative-box { background: #FBF8F1; border-left: 3px solid var(--navy); padding: 1rem 1.25rem; margin: 1.25rem 0; font-size: 0.95rem; max-width: 46rem; }
+.narrative-box b { color: var(--navy); }
+.narrative-box.risk { border-left-color: var(--risk); }
+.narrative-box.risk b { color: var(--risk); }
+.narrative-box ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+.narrative-box li { margin-bottom: 0.4rem; }
+.play-btn { font-family: var(--mono); font-size: 0.78rem; padding: 0.35rem 0.9rem; border-radius: 4px; border: 1px solid var(--navy); background: var(--navy); color: #fff; cursor: pointer; }
+.play-btn:hover { opacity: 0.85; }
+.court-badge { font-family: var(--serif); font-weight: 600; font-size: 0.9rem; fill: var(--sixers-blue); }
+.conclusion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+@media (max-width: 900px) { .conclusion-grid { grid-template-columns: 1fr; } }
+.pred-card { background: #FFFDF8; border: 1px solid var(--rule); border-radius: 4px; padding: 1.5rem; }
+.pred-card h3 { font-family: var(--serif); font-size: 1.2rem; margin: 0 0 0.75rem; }
+.pred-card.bull h3 { color: var(--olive); }
+.pred-card.bear h3 { color: var(--risk); }
+.pred-card ul { padding-left: 1.2rem; margin: 0; }
+.pred-card li { margin-bottom: 0.6rem; font-size: 0.95rem; }
+.watch-list { background: #FFFDF8; border: 1px solid var(--rule); border-radius: 4px; padding: 1.5rem; margin-top: 1.5rem; }
+.watch-list h3 { font-family: var(--serif); font-size: 1.2rem; margin: 0 0 0.75rem; color: var(--navy); }
 .colophon { max-width: 700px; margin: 0 auto; padding: 3rem 1.5rem 6rem; font-size: 0.9rem; color: var(--ink-soft); border-top: 1px solid var(--rule); }
 .colophon a { color: var(--navy); }
-
 @media (prefers-reduced-motion: reduce) { mark::before { transition: none; } }
 </style>
 </head>
@@ -74,51 +80,72 @@ mark.is-marked::before { transform: scaleX(1); }
 <header class="masthead">
   <p class="kicker">A Sprawlball-style field study — interactive</p>
   <h1>Can this roster<br>share a court?</h1>
-  <p class="dek">The Sixers spent the offseason stacking stars — LeBron James, Jaylen Brown, Joel&nbsp;Embiid, Tyrese&nbsp;Maxey, VJ&nbsp;Edgecombe. Whether their games actually fit together is a spacing question before it's a talent question. Every chart below is built from real shot-log and tracking data — click things.</p>
-  <p class="byline">Data: nba_api shot logs, tracking &amp; lineup data, 2022–23 through 2025–26 (24,505 shots) · Not an argument for or against Sprawlball, just its lens applied to one roster</p>
+  <p class="dek">The Sixers spent the offseason stacking stars — LeBron James, Jaylen Brown, Joel&nbsp;Embiid, Tyrese&nbsp;Maxey, VJ&nbsp;Edgecombe. Whether their games actually fit together is a spacing question before it's a talent question. Every chart below is built from real shot-log, tracking, and lineup data — click things.</p>
+  <p class="byline">Data: nba_api shot logs, tracking &amp; lineup data, 2022–23 through 2025–26 (24,505 shots) · Lens borrowed from Kirk Goldsberry's Sprawlball, applied to one roster — not an argument for it</p>
 </header>
 
 <main>
 
-  <!-- ============ SECTION 0: COURT OVERLAY ============ -->
-  <section class="section" id="overlay">
-    <h2>0. Where everyone actually stands</h2>
-    <p class="lede">Sprawlball's core idea, applied literally: overlay real shot-location density for each player and see where their <mark data-hl="0">preferred operating areas overlap</mark>. If Brown and Embiid's mid-range clusters sit on top of the driving lanes Maxey and LeBron want empty, that's a spacing conflict you can actually see, not just infer from zone percentages.</p>
-    <div class="viz-shell" id="shell-overlay">
+  <!-- ============ 0A: SHOT CHART - FREQ/EFFICIENCY ============ -->
+  <section class="section" id="shotchart">
+    <h2>0. Where everyone shoots, and how well</h2>
+    <p class="lede">Real 2025-26 shot location data, binned across the half-court. Toggle between <mark data-hl="0">where a player shoots most</mark> (frequency) and <mark data-hl="0b">how well they shoot from there</mark> (efficiency) — the same court position, two different stories. Dashed chips are the bench additions (Wade, Simons, KCP, Bona, Hukporti).</p>
+    <div class="viz-shell" id="shell-hexsingle">
       <div class="viz-toolbar">
-        <span class="viz-title">real shot density, 2025-26 · toggle players</span>
-        <div class="viz-controls" id="overlay-toggles"></div>
-        <button class="icon-btn" data-fullscreen-target="shell-overlay" title="Full screen">⤢</button>
+        <span class="viz-title">real shot chart, 2025-26</span>
+        <div class="viz-controls" id="hexsingle-players"></div>
+        <div class="viz-controls" id="hexsingle-mode"></div>
+        <button class="icon-btn" data-fullscreen-target="shell-hexsingle" title="Full screen">⤢</button>
       </div>
-      <div class="viz-body"><svg id="chart-overlay" viewBox="0 0 600 460"></svg></div>
-      <div class="legend-row" style="padding: 0 1.1rem 0.5rem;">
-        <span><span class="legend-swatch" style="background:#04275C"></span>Maxey</span>
-        <span><span class="legend-swatch" style="background:#8A6BB0"></span>LeBron</span>
-        <span><span class="legend-swatch" style="background:#C1440E"></span>Brown</span>
-        <span><span class="legend-swatch" style="background:#B8860B"></span>Embiid</span>
-        <span><span class="legend-swatch" style="background:#2DA2BB"></span>Edgecombe</span>
-      </div>
-      <p class="viz-note" id="overlay-note">Toggle Maxey + Brown, or LeBron + Embiid, to see the actual conflict zones — not estimated, this is real 2025-26 shot-location density binned across the half-court.</p>
+      <div class="viz-body"><svg id="chart-hexsingle" viewBox="0 0 600 470"></svg></div>
+      <div class="legend-row" id="hexsingle-legend"></div>
+      <p class="viz-note" id="hexsingle-note"></p>
+    </div>
+
+    <div class="narrative-box">
+      <b>What this shows:</b> a player's shot chart is their preferred operating territory. Compare Embiid's and Brown's efficiency mode against Maxey's or LeBron's — the question for roster construction isn't just "is this shot good for them," it's whether their high-frequency zones leave room for everyone else's.
     </div>
   </section>
 
-  <!-- ============ SECTION 1: SPACING ============ -->
-  <section class="section" id="spacing">
-    <h2>1. Where everyone wants to shoot from</h2>
-    <p class="lede">Sprawlball's finding: rim and three are efficient, the <mark data-hl="1">long two is where offenses go to die</mark>. First question for this roster: <mark data-hl="2">do their shot diets overlap</mark> in the wrong ways?</p>
-    <div class="viz-shell" id="shell-spacing">
+  <!-- ============ 0B: BIVARIATE OVERLAP ============ -->
+  <section class="section" id="overlap">
+    <h2>0.5. Where two players collide</h2>
+    <p class="lede">Pick two players. This chart shows only the court areas <mark data-hl="1">both of them use heavily</mark> — bigger circles mean more overlap — colored by whether that shared territory is actually efficient for them or not.</p>
+    <div class="viz-shell" id="shell-hexoverlap">
       <div class="viz-toolbar">
-        <span class="viz-title">shot-zone %, real data</span>
-        <div class="viz-controls" id="spacing-toggles"></div>
-        <button class="icon-btn" data-fullscreen-target="shell-spacing" title="Full screen">⤢</button>
+        <span class="viz-title">bivariate: overlap × efficiency</span>
+        <div class="viz-controls" id="hexoverlap-a"></div>
+        <span style="color:var(--ink-soft); font-family: var(--mono); font-size:0.75rem;">vs.</span>
+        <div class="viz-controls" id="hexoverlap-b"></div>
+        <button class="icon-btn" data-fullscreen-target="shell-hexoverlap" title="Full screen">⤢</button>
       </div>
-      <div class="viz-body"><svg id="chart-spacing" viewBox="0 0 640 420"></svg></div>
-      <div class="viz-caption" id="spacing-caption">2025-26 season · click a season chip to see the trend</div>
-      <p class="viz-note"><mark data-hl="6">Brown's mid-range rate nearly doubled year over year</mark> — 14.3% (2024-25) → 23.7% (2025-26), the single biggest shot-profile swing on the roster. Switch to "trend" to watch it move.</p>
+      <div class="viz-body"><svg id="chart-hexoverlap" viewBox="0 0 600 470"></svg></div>
+      <div class="legend-row" id="hexoverlap-legend"></div>
+      <p class="viz-note" id="hexoverlap-note"></p>
+    </div>
+    <div class="narrative-box risk" id="overlap-narrative"></div>
+  </section>
+
+  <!-- ============ ZONE EXPLAINER ============ -->
+  <section class="section" id="zones">
+    <h2>1. Rim, mid-range, three — and what they're actually worth</h2>
+    <p class="lede">Sprawlball's core argument isn't about shooting percentage, it's about <mark data-hl="2">expected points per shot</mark>. A shot can have a solid FG% and still be a worse decision than a lower-percentage shot from further out.</p>
+    <div class="viz-shell" id="shell-zones">
+      <div class="viz-toolbar">
+        <span class="viz-title">real FG% + points/shot, our 5 core players combined, 2025-26</span>
+        <div></div>
+        <button class="icon-btn" data-fullscreen-target="shell-zones" title="Full screen">⤢</button>
+      </div>
+      <div class="viz-body"><svg id="chart-zones" viewBox="0 0 600 470"></svg></div>
+      <p class="viz-note">Points per shot = FG% × point value (2 for rim/mid, 3 for three). Despite a higher raw FG% than three-pointers, mid-range shots produce fewer expected points than both rim shots <em>and</em> threes — the entire premise of why zone overlap in the mid-range matters more than it looks like on a bar chart.</p>
+    </div>
+    <div class="two-col">
+      <div class="narrative-box"><b>Rim — 56.8% FG, 1.14 pts/shot.</b> The most efficient shot in the sport by expected value, and the one Maxey and LeBron both live at (48% and 56% of their attempts).</div>
+      <div class="narrative-box risk"><b>Mid-range — 43.5% FG, 0.87 pts/shot.</b> The lowest expected-value shot on the floor despite a respectable FG% — Embiid and Brown's most-used non-rim zone.</div>
     </div>
   </section>
 
-  <!-- ============ SECTION 2: PLAYMAKING ============ -->
+  <!-- ============ PLAYMAKING ============ -->
   <section class="section" id="playmaking">
     <h2>2. Who actually has the ball</h2>
     <p class="lede">Four players have a real claim to touches; there's one ball. Pick-and-roll ball-handler frequency is the most direct trace of <mark data-hl="3">who's initiating, season over season</mark>. Click a player to isolate their line.</p>
@@ -128,39 +155,108 @@ mark.is-marked::before { transform: scaleX(1); }
         <div class="viz-controls" id="playmaking-toggles"></div>
         <button class="icon-btn" data-fullscreen-target="shell-playmaking" title="Full screen">⤢</button>
       </div>
-      <div class="viz-body"><svg id="chart-playmaking" viewBox="0 0 640 420"></svg></div>
-      <p class="viz-note"><mark data-hl="7">Embiid's PRBH share is ~0% every season measured</mark> — he's never been a pick-and-roll initiator. LeBron's has fallen from 20.8% to 11.7% since 2022-23.</p>
+      <div class="viz-body"><svg id="chart-playmaking" viewBox="0 0 640 400"></svg></div>
+    </div>
+    <div class="narrative-box">
+      <b>What this means for roster construction:</b>
+      <ul>
+        <li>Maxey is unambiguously the engine — 28-35% every season, more than double anyone else, every year measured. Whatever else changes, the offense should run through him.</li>
+        <li>Embiid's PRBH share is ~0% every season — he was never a pick-and-roll initiator, and won't become one. His playmaking has to come from the post/short-roll, a different action entirely, which means the offense needs <em>two</em> initiation systems, not one.</li>
+        <li>LeBron's ball-handling has genuinely declined (20.8% → 11.7% since 2022-23) — a real, data-backed signal that his role should keep shrinking toward off-ball and secondary creation, not stay flat.</li>
+      </ul>
     </div>
   </section>
 
-  <!-- ============ SECTION 3: MAXEY + EMBIID FIT ============ -->
+  <!-- ============ SPEED RACE ============ -->
   <section class="section" id="pace">
     <h2>3. Maxey's speed, Embiid's mobility</h2>
-    <p class="lede">Real on-court net rating for the Maxey-Embiid pairing, season by season, next to Maxey's distance-run tracking. Does <mark data-hl="4">Maxey's downhill pace get unlocked or capped</mark> by Embiid sharing the floor?</p>
+    <p class="lede">Real average speed (mph) from player tracking data, 2025-26. Watch Embiid's lane against Maxey's — then <mark data-hl="4">swap in another teammate</mark> to see who's actually built to play at his pace, and who compounds the gap.</p>
+    <div class="viz-shell" id="shell-race">
+      <div class="viz-toolbar">
+        <span class="viz-title">avg. speed race, real tracking data · mph shown per lane</span>
+        <div class="viz-controls" id="race-toggles"></div>
+        <button class="icon-btn" id="race-play">▶ run race</button>
+        <button class="icon-btn" data-fullscreen-target="shell-race" title="Full screen">⤢</button>
+      </div>
+      <div class="viz-body"><svg id="chart-race" viewBox="0 0 640 220"></svg></div>
+      <p class="viz-note" id="race-note"></p>
+    </div>
     <div class="viz-shell" id="shell-pace">
       <div class="viz-toolbar">
-        <span class="viz-title">Maxey+Embiid net rating (bars) · Maxey distance run (line)</span>
-        <div class="viz-controls"></div>
+        <span class="viz-title">Maxey+Embiid on-court net rating by season</span>
+        <div></div>
         <button class="icon-btn" data-fullscreen-target="shell-pace" title="Full screen">⤢</button>
       </div>
-      <div class="viz-body"><svg id="chart-pace" viewBox="0 0 640 420"></svg></div>
-      <p class="viz-note"><mark data-hl="8">Net rating collapsed to -3.2 in 2024-25</mark> — the exact season Embiid's health limited him to 315 shot attempts all year — and recovered to +7.2 this season. Looks like an availability problem, not a pace mismatch: among every 600+ minute duo on the 2025-26 team, Maxey+Embiid actually posts the <em>best</em> net rating.</p>
+      <div class="viz-body"><svg id="chart-pace" viewBox="0 0 640 340"></svg></div>
+    </div>
+    <div class="narrative-box">
+      <b>What this means:</b> Maxey (4.26 mph avg.) is meaningfully faster than Embiid (3.67 mph) — the widest speed gap on the roster between its two most important two-man pairing. But the net-rating data tells a different story than "pace mismatch": their on-court numbers collapsed only when Embiid was hurt (2024-25, -3.2), not because of a speed gap that exists in every season. Edgecombe (4.25 mph) profiles as the closer speed-match if the team wants a Maxey-caliber pace option that doesn't force Embiid to keep up.
+    </div>
+
+    <div class="narrative-box" id="bench-questions">
+      <b>The three bench questions you actually care about — answered with real data:</b>
+      <ul>
+        <li><b>Does Dean Wade actually achieve the spacing he was signed for?</b> Yes, clearly. <mark data-hl="9">70.5% of Wade's shots last season were threes</mark> — the single most Sprawlball-compliant shot profile of anyone in this entire study, starters included — at a real 36.2% clip. And his defended-FG%-differential (-2.3) backs up the "stopper" half of the signing too. The one surprise: his real average speed (4.53 mph) was actually <em>faster</em> than Maxey's — he's not just a stand-and-shoot floor spacer, he can keep pace in transition.</li>
+        <li><b>Do Simons and KCP address specific issues?</b> Partially, and differently. Simons (58.5% of shots from three, 38.5% 3P%) is a legitimate movement/pull-up shooter who adds guard-position shot creation the bench previously lacked — but his defended-FG%-differential (+1.2) is a mild minus, so he's an offense-only addition. KCP is the bigger question mark: his shot profile (47.5% three, only 31.6% 3P%) is below what his 3&D reputation would suggest, and his defended-FG%-differential (+8.6) is the single worst number of any player in this study — a real red flag worth tracking early in the season rather than assuming the reputation still holds.</li>
+        <li><b>Who actually backs up Embiid, with Drummond gone?</b> Bona and Hukporti profile almost identically on shot selection (96.8% and 93.8% of shots at the rim, respectively — pure roller/dunker types), but the evidence differs sharply. Bona already has real Sixers on-court data: <mark data-hl="10">+3.2 net rating in 766 minutes next to Maxey this season</mark>, up from -2.7 the year before — a real, improving track record. Hukporti has zero shared minutes with this core yet (he's a new addition) but posted the best individual defensive number of anyone in the entire study (-9.4) on a small 80-shot sample — promising, but unproven in this specific system. Bona is the safer bet; Hukporti is the higher-variance one.</li>
+      </ul>
+      <p style="margin-top:0.75rem; font-size:0.85rem; color:var(--ink-soft);"><i>Note: Wade, Simons, and KCP's numbers above reflect their last season with their <b>previous</b> team (they signed with Philadelphia in the 2026 offseason) — real evidence of what they bring, not yet Sixers on-court data. Bona's lineup numbers are real Sixers data since he's been on the roster since 2024-25.</i></p>
     </div>
   </section>
 
-  <!-- ============ SECTION 4: DEFENSE ============ -->
+  <!-- ============ DEFENSE ============ -->
   <section class="section" id="defense">
     <h2>4. The defensive bill comes due</h2>
-    <p class="lede">Defended FG% minus the shooter's normal FG% — <mark data-hl="5">negative means a player suppresses shooters below their own average</mark>. Click a bar for the player's underlying numbers.</p>
+    <p class="lede">Defended FG% minus the shooter's normal FG% — <mark data-hl="5">negative means a player suppresses shooters below their own average</mark>. Click a bar for detail.</p>
     <div class="viz-shell" id="shell-defense">
       <div class="viz-toolbar">
         <span class="viz-title">2025-26 · click a bar for detail</span>
-        <div class="viz-controls"></div>
+        <div></div>
         <button class="icon-btn" data-fullscreen-target="shell-defense" title="Full screen">⤢</button>
       </div>
-      <div class="viz-body"><svg id="chart-defense" viewBox="0 0 640 340"></svg></div>
-      <p class="viz-note" id="defense-note">Embiid and Brown are essentially tied as the roster's best individual defenders. LeBron shows up as a real defensive minus for the first time in this four-season window.</p>
+      <div class="viz-body"><svg id="chart-defense" viewBox="0 0 640 460"></svg></div>
+      <p class="viz-note" id="defense-note"></p>
     </div>
+    <div class="narrative-box">
+      <b>What this means:</b> Embiid and Brown are the roster's real defensive anchors. LeBron is now a measurable liability (+1.5) for the first time in this four-season window — paired with his declining post-up efficiency and ball-handling volume elsewhere in this study, the numbers agree on one thing: his on-court role needs to keep shrinking for this roster to work optimally, not just on offense but on both ends.
+    </div>
+  </section>
+
+  <!-- ============ CONCLUSION ============ -->
+  <section class="section" id="conclusion">
+    <h2>5. So — will it work?</h2>
+    <p class="lede">Pulling every finding above together: this roster's floor is high because of individual talent, but its ceiling depends on solving problems that are visible in the data right now, not hypothetical.</p>
+
+    <div class="conclusion-grid">
+      <div class="pred-card bull">
+        <h3>Reasons for optimism</h3>
+        <ul>
+          <li><b>Maxey + Embiid is real, and it's good.</b> Best net rating of any 600+-minute duo on the 2025-26 team (+7.2), and the collapse in 2024-25 tracks Embiid's health, not a scheme incompatibility.</li>
+          <li><b>Maxey and Edgecombe give this team two legitimately Sprawlball-compliant guards</b> — under 15% mid-range each, plus real defensive tools, plus similar top-end speed (4.26 vs. 4.25 mph).</li>
+          <li><b>Embiid's post-up efficiency (79th percentile) and Brown's isolation efficiency (77th percentile)</b> mean the "bad" shot types aren't actually bad <em>for them</em> — the problem is purely spatial, which is more coachable than a talent or efficiency problem.</li>
+        </ul>
+      </div>
+      <div class="pred-card bear">
+        <h3>Reasons for concern</h3>
+        <ul>
+          <li><b>Brown's mid-range rate nearly doubled this season</b> (14.3% → 23.7%) at the exact moment he's joining a roster that needs him spacing the floor — the single biggest shot-profile swing in the dataset, moving the wrong way.</li>
+          <li><b>Four players with a real claim to touches, one ball.</b> Maxey, LeBron, Brown, and Embiid all show meaningful usage/initiation numbers — nobody's arc points toward a clean hierarchy yet.</li>
+          <li><b>LeBron is a measurable minus in three different data cuts now</b> — declining PnR frequency, declining post-up efficiency, and a positive (bad) defended-FG% differential. At 40, that's an aging curve showing up in the numbers, not a hunch.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="watch-list">
+      <h3>What the Sixers actually have to figure out</h3>
+      <ul>
+        <li><b>Get Brown's shot profile back toward 2022-24 levels.</b> His own efficiency doesn't demand it, but the offense's floor spacing does — every mid-range Brown iso is a possession where Maxey's driving lanes and Embiid's short-roll space both get worse.</li>
+        <li><b>Stagger Embiid and Brown's touches, not just their minutes.</b> Both operate heavily in the same restricted-area/mid-range band (see the overlap chart above) — the fix isn't necessarily less Embiid or less Brown, it's not running both of their preferred actions in the same possession.</li>
+        <li><b>Decide LeBron's role explicitly, and shrink it on schedule.</b> The numbers already show him trending toward a play-finisher/secondary-creator role — formalizing that now, rather than mid-season, protects both the offense's spacing and his own defensive minutes.</li>
+        <li><b>Bet on health more than scheme.</b> The single largest swing in any dataset here — Maxey+Embiid's net rating — tracks Embiid's games played almost exactly. If he plays 65+ games, most of the spacing questions above become manageable; if he plays 30, no amount of shot-profile tinkering fixes it.</li>
+      </ul>
+    </div>
+
+    <p class="lede" style="margin-top: 2rem;"><b>Prediction:</b> this roster has enough two-way talent to be a top-6 offense and a middling-to-good defense if health cooperates — but its ceiling (championship contender vs. good-but-flawed) hinges specifically on whether Brown's shot profile reverts toward his Boston norm and whether Embiid plays 60+ games. Those two variables matter more to this team's outcome than anything about the LeBron signing.</p>
   </section>
 
 </main>
@@ -173,303 +269,309 @@ mark.is-marked::before { transform: scaleX(1); }
 
 <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 <script>
-const navy = "#04275C", ink = "#1A1A1A", inkSoft = "#4A4640", risk = "#C1440E", olive = "#7A8B5C", gold="#B8860B", teal="#2DA2BB", purple="#8A6BB0";
+const navy="#04275C", ink="#1A1A1A", inkSoft="#4A4640", risk="#C1440E", olive="#7A8B5C", gold="#B8860B", teal="#2DA2BB", purple="#8A6BB0";
+const sixersBlue="#006BB6", sixersRed="#ED174C";
 const tooltip = d3.select("#tooltip");
-function showTip(html, evt) {
-  tooltip.style("opacity", 1).html(html)
-    .style("left", (evt.clientX + 14) + "px").style("top", (evt.clientY + 10) + "px");
-}
-function hideTip() { tooltip.style("opacity", 0); }
+function showTip(html, evt) { tooltip.style("opacity",1).html(html).style("left",(evt.clientX+14)+"px").style("top",(evt.clientY+10)+"px"); }
+function hideTip() { tooltip.style("opacity",0); }
 
-// ---------------- fullscreen ----------------
 document.querySelectorAll("[data-fullscreen-target]").forEach(btn => {
   btn.addEventListener("click", () => {
     const el = document.getElementById(btn.dataset.fullscreenTarget);
-    if (!document.fullscreenElement) {
-      el.requestFullscreen ? el.requestFullscreen() : null;
-      el.classList.add("is-fullscreen");
-      btn.textContent = "⤡";
-    } else {
-      document.exitFullscreen && document.exitFullscreen();
-    }
+    if (!document.fullscreenElement) { el.requestFullscreen && el.requestFullscreen(); el.classList.add("is-fullscreen"); btn.textContent="⤡"; }
+    else { document.exitFullscreen && document.exitFullscreen(); }
   });
 });
 document.addEventListener("fullscreenchange", () => {
   document.querySelectorAll(".viz-shell").forEach(s => {
-    if (!document.fullscreenElement) {
-      s.classList.remove("is-fullscreen");
-      const btn = s.querySelector("[data-fullscreen-target]");
-      if (btn) btn.textContent = "⤢";
-    }
+    if (!document.fullscreenElement) { s.classList.remove("is-fullscreen"); const b=s.querySelector("[data-fullscreen-target]"); if(b) b.textContent="⤢"; }
   });
 });
-
-// ---------------- highlighter marks on scroll ----------------
-const markObserver = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add("is-marked"); });
-}, { threshold: 0.8 });
-document.querySelectorAll("mark").forEach(m => markObserver.observe(m));
+const markObserver = new IntersectionObserver((entries)=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("is-marked");});},{threshold:0.8});
+document.querySelectorAll("mark").forEach(m=>markObserver.observe(m));
 
 // =========================================================
-// DATA (real, from nba_api pulls)
+// COURT DRAWING HELPERS
 // =========================================================
-const SPACING_DATA = {
-  "2025-26": [
-    { player: "Maxey", rim: 48.0, mid: 12.1, three: 40.0 },
-    { player: "Edgecombe", rim: 45.9, mid: 13.2, three: 40.9 },
-    { player: "Embiid", rim: 46.5, mid: 30.7, three: 22.8 },
-    { player: "LeBron", rim: 56.4, mid: 17.2, three: 26.4 },
-    { player: "Brown", rim: 50.1, mid: 23.7, three: 26.2 },
-  ]
-};
-const SPACING_TREND = {
-  Brown:  [{s:"2022-23",mid:14.9},{s:"2023-24",mid:14.6},{s:"2024-25",mid:14.3},{s:"2025-26",mid:23.7}],
-  Embiid: [{s:"2022-23",mid:26.4},{s:"2023-24",mid:30.0},{s:"2024-25",mid:26.3},{s:"2025-26",mid:30.7}],
-  Maxey:  [{s:"2022-23",mid:14.0},{s:"2023-24",mid:13.1},{s:"2024-25",mid:12.6},{s:"2025-26",mid:12.1}],
-  LeBron: [{s:"2022-23",mid:19.8},{s:"2023-24",mid:18.5},{s:"2024-25",mid:17.9},{s:"2025-26",mid:17.2}],
-  Edgecombe: [{s:"2025-26",mid:13.2}],
-};
+function drawCourt(svg, x, y) {
+  const g = svg.append("g").attr("class","court-lines").attr("stroke","#C9C2B0").attr("fill","none").attr("stroke-width",1.4);
+  g.append("rect").attr("x",x(-250)).attr("y",y(420)).attr("width",x(250)-x(-250)).attr("height",y(-50)-y(420)).attr("fill","#FFFDF8");
+  g.append("circle").attr("cx",x(0)).attr("cy",y(0)).attr("r",2).attr("fill","#C9C2B0");
+  g.append("rect").attr("x",x(-80)).attr("y",y(190)).attr("width",x(80)-x(-80)).attr("height",y(0)-y(190));
+  g.append("circle").attr("cx",x(0)).attr("cy",y(190)).attr("r", x(60)-x(0)).attr("stroke-dasharray","3,3");
+  g.append("line").attr("x1",x(-220)).attr("x2",x(-220)).attr("y1",y(0)).attr("y2",y(140));
+  g.append("line").attr("x1",x(220)).attr("x2",x(220)).attr("y1",y(0)).attr("y2",y(140));
+  const arcR = x(237.5)-x(0);
+  const arcPath = d3.path();
+  arcPath.arc(x(0), y(0), arcR, Math.PI*1.02, -Math.PI*0.02, false);
+  g.append("path").attr("d", arcPath.toString());
+  g.append("circle").attr("cx",x(0)).attr("cy",y(52.5)).attr("r", x(4)-x(0)).attr("fill","#C9C2B0").attr("stroke","none");
+  g.append("line").attr("x1",x(-30)).attr("x2",x(30)).attr("y1",y(40)).attr("y2",y(40)).attr("stroke-width",2.5);
+  // simple generic team-colored court badge (not a reproduction of the actual team logo/mark)
+  const badge = svg.append("g").attr("transform", `translate(${x(0)},${y(230)})`);
+  badge.append("circle").attr("r", 24).attr("fill", "#fff").attr("stroke", sixersBlue).attr("stroke-width", 2);
+  badge.append("text").attr("y", -2).attr("text-anchor","middle").attr("font-family","Fraunces").attr("font-weight",600).attr("font-size",16).attr("fill", sixersRed).text("76");
+  badge.append("text").attr("y", 13).attr("text-anchor","middle").attr("font-family","IBM Plex Mono").attr("font-size",7).attr("fill", sixersBlue).text("PHILA");
+}
 
-const PLAYMAKING_DATA = [
-  {player:"Maxey",season:"2022-23",prbh:32.9},{player:"Maxey",season:"2023-24",prbh:35.0},{player:"Maxey",season:"2024-25",prbh:33.1},{player:"Maxey",season:"2025-26",prbh:28.5},
-  {player:"Brown",season:"2022-23",prbh:16.8},{player:"Brown",season:"2023-24",prbh:16.3},{player:"Brown",season:"2024-25",prbh:17.4},{player:"Brown",season:"2025-26",prbh:22.4},
-  {player:"LeBron",season:"2022-23",prbh:20.8},{player:"LeBron",season:"2023-24",prbh:18.7},{player:"LeBron",season:"2024-25",prbh:17.8},{player:"LeBron",season:"2025-26",prbh:11.7},
-  {player:"Embiid",season:"2022-23",prbh:1.2},{player:"Embiid",season:"2023-24",prbh:1.2},{player:"Embiid",season:"2024-25",prbh:0.0},{player:"Embiid",season:"2025-26",prbh:0.0},
-];
+function hexPoints(cx, cy, r) {
+  return d3.range(6).map(i => { const a = Math.PI/180*(60*i-30); return [cx+r*Math.cos(a), cy+r*Math.sin(a)]; }).map(p=>p.join(",")).join(" ");
+}
 
-const PACE_DATA = [
-  {season:"2022-23",maxey:154.5/82,leagueAvg:81.62/82},
-  {season:"2023-24",maxey:200.7/82,leagueAvg:77.63/82},
-  {season:"2024-25",maxey:150.4/82,leagueAvg:79.28/82},
-  {season:"2025-26",maxey:194.9/82,leagueAvg:75.88/82},
-];
-const MAXEY_EMBIID_NET = [
-  {season:"2022-23",minutes:1201,netRating:10.6},
-  {season:"2023-24",minutes:958,netRating:12.4},
-  {season:"2024-25",minutes:389,netRating:-3.2},
-  {season:"2025-26",minutes:961,netRating:7.2},
-];
+const HEX_DATA = {"Tyrese Maxey": [{"x": -240.4, "y": 38.1, "fga": 4, "fgpct": 0.0, "freq": 0.31}, {"x": -240.4, "y": 57.7, "fga": 4, "fgpct": 25.0, "freq": 0.31}, {"x": -221.2, "y": 136.0, "fga": 5, "fgpct": 60.0, "freq": 0.388}, {"x": -201.9, "y": 155.6, "fga": 7, "fgpct": 71.4, "freq": 0.543}, {"x": -201.9, "y": 175.2, "fga": 4, "fgpct": 25.0, "freq": 0.31}, {"x": -201.9, "y": 194.8, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": -182.7, "y": 175.2, "fga": 8, "fgpct": 37.5, "freq": 0.621}, {"x": -182.7, "y": 194.8, "fga": 12, "fgpct": 41.7, "freq": 0.931}, {"x": -182.7, "y": 214.4, "fga": 7, "fgpct": 28.6, "freq": 0.543}, {"x": -182.7, "y": 234.0, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": -163.5, "y": 194.8, "fga": 10, "fgpct": 20.0, "freq": 0.776}, {"x": -163.5, "y": 214.4, "fga": 4, "fgpct": 0.0, "freq": 0.31}, {"x": -163.5, "y": 234.0, "fga": 5, "fgpct": 20.0, "freq": 0.388}, {"x": -144.2, "y": 214.4, "fga": 10, "fgpct": 20.0, "freq": 0.776}, {"x": -144.2, "y": 234.0, "fga": 7, "fgpct": 28.6, "freq": 0.543}, {"x": -144.2, "y": 253.5, "fga": 5, "fgpct": 40.0, "freq": 0.388}, {"x": -125.0, "y": 234.0, "fga": 16, "fgpct": 37.5, "freq": 1.241}, {"x": -125.0, "y": 253.5, "fga": 7, "fgpct": 42.9, "freq": 0.543}, {"x": -125.0, "y": 273.1, "fga": 4, "fgpct": 50.0, "freq": 0.31}, {"x": -105.8, "y": 155.6, "fga": 3, "fgpct": 66.7, "freq": 0.233}, {"x": -105.8, "y": 234.0, "fga": 10, "fgpct": 60.0, "freq": 0.776}, {"x": -105.8, "y": 253.5, "fga": 16, "fgpct": 12.5, "freq": 1.241}, {"x": -105.8, "y": 273.1, "fga": 3, "fgpct": 0.0, "freq": 0.233}, {"x": -86.5, "y": 234.0, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": -86.5, "y": 253.5, "fga": 9, "fgpct": 44.4, "freq": 0.698}, {"x": -86.5, "y": 273.1, "fga": 5, "fgpct": 40.0, "freq": 0.388}, {"x": -67.3, "y": 57.7, "fga": 4, "fgpct": 50.0, "freq": 0.31}, {"x": -67.3, "y": 96.9, "fga": 4, "fgpct": 25.0, "freq": 0.31}, {"x": -67.3, "y": 116.5, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": -67.3, "y": 253.5, "fga": 9, "fgpct": 11.1, "freq": 0.698}, {"x": -67.3, "y": 273.1, "fga": 8, "fgpct": 62.5, "freq": 0.621}, {"x": -67.3, "y": 292.7, "fga": 4, "fgpct": 25.0, "freq": 0.31}, {"x": -48.1, "y": 18.5, "fga": 6, "fgpct": 33.3, "freq": 0.465}, {"x": -48.1, "y": 38.1, "fga": 5, "fgpct": 40.0, "freq": 0.388}, {"x": -48.1, "y": 57.7, "fga": 4, "fgpct": 25.0, "freq": 0.31}, {"x": -48.1, "y": 96.9, "fga": 3, "fgpct": 66.7, "freq": 0.233}, {"x": -48.1, "y": 194.8, "fga": 4, "fgpct": 75.0, "freq": 0.31}, {"x": -48.1, "y": 253.5, "fga": 7, "fgpct": 42.9, "freq": 0.543}, {"x": -48.1, "y": 273.1, "fga": 7, "fgpct": 57.1, "freq": 0.543}, {"x": -28.8, "y": -1.0, "fga": 13, "fgpct": 53.8, "freq": 1.009}, {"x": -28.8, "y": 18.5, "fga": 17, "fgpct": 47.1, "freq": 1.319}, {"x": -28.8, "y": 38.1, "fga": 9, "fgpct": 11.1, "freq": 0.698}, {"x": -28.8, "y": 57.7, "fga": 5, "fgpct": 40.0, "freq": 0.388}, {"x": -28.8, "y": 77.3, "fga": 6, "fgpct": 50.0, "freq": 0.465}, {"x": -28.8, "y": 96.9, "fga": 7, "fgpct": 28.6, "freq": 0.543}, {"x": -28.8, "y": 116.5, "fga": 5, "fgpct": 40.0, "freq": 0.388}, {"x": -28.8, "y": 136.0, "fga": 3, "fgpct": 66.7, "freq": 0.233}, {"x": -28.8, "y": 175.2, "fga": 6, "fgpct": 33.3, "freq": 0.465}, {"x": -28.8, "y": 253.5, "fga": 5, "fgpct": 20.0, "freq": 0.388}, {"x": -28.8, "y": 273.1, "fga": 12, "fgpct": 66.7, "freq": 0.931}, {"x": -9.6, "y": -1.0, "fga": 39, "fgpct": 87.2, "freq": 3.026}, {"x": -9.6, "y": 18.5, "fga": 62, "fgpct": 59.7, "freq": 4.81}, {"x": -9.6, "y": 38.1, "fga": 30, "fgpct": 53.3, "freq": 2.327}, {"x": -9.6, "y": 57.7, "fga": 10, "fgpct": 40.0, "freq": 0.776}, {"x": -9.6, "y": 77.3, "fga": 15, "fgpct": 26.7, "freq": 1.164}, {"x": -9.6, "y": 96.9, "fga": 9, "fgpct": 44.4, "freq": 0.698}, {"x": -9.6, "y": 116.5, "fga": 6, "fgpct": 50.0, "freq": 0.465}, {"x": -9.6, "y": 136.0, "fga": 3, "fgpct": 66.7, "freq": 0.233}, {"x": -9.6, "y": 155.6, "fga": 6, "fgpct": 66.7, "freq": 0.465}, {"x": -9.6, "y": 175.2, "fga": 3, "fgpct": 0.0, "freq": 0.233}, {"x": -9.6, "y": 253.5, "fga": 6, "fgpct": 16.7, "freq": 0.465}, {"x": -9.6, "y": 273.1, "fga": 14, "fgpct": 28.6, "freq": 1.086}, {"x": -9.6, "y": 292.7, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": 9.6, "y": -1.0, "fga": 71, "fgpct": 74.6, "freq": 5.508}, {"x": 9.6, "y": 18.5, "fga": 121, "fgpct": 59.5, "freq": 9.387}, {"x": 9.6, "y": 38.1, "fga": 24, "fgpct": 58.3, "freq": 1.862}, {"x": 9.6, "y": 57.7, "fga": 23, "fgpct": 30.4, "freq": 1.784}, {"x": 9.6, "y": 77.3, "fga": 14, "fgpct": 50.0, "freq": 1.086}, {"x": 9.6, "y": 96.9, "fga": 11, "fgpct": 45.5, "freq": 0.853}, {"x": 9.6, "y": 116.5, "fga": 5, "fgpct": 40.0, "freq": 0.388}, {"x": 9.6, "y": 155.6, "fga": 3, "fgpct": 66.7, "freq": 0.233}, {"x": 9.6, "y": 253.5, "fga": 6, "fgpct": 50.0, "freq": 0.465}, {"x": 9.6, "y": 273.1, "fga": 15, "fgpct": 33.3, "freq": 1.164}, {"x": 9.6, "y": 292.7, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": 28.8, "y": -1.0, "fga": 19, "fgpct": 68.4, "freq": 1.474}, {"x": 28.8, "y": 18.5, "fga": 44, "fgpct": 65.9, "freq": 3.413}, {"x": 28.8, "y": 38.1, "fga": 11, "fgpct": 54.5, "freq": 0.853}, {"x": 28.8, "y": 57.7, "fga": 8, "fgpct": 37.5, "freq": 0.621}, {"x": 28.8, "y": 77.3, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": 28.8, "y": 96.9, "fga": 5, "fgpct": 40.0, "freq": 0.388}, {"x": 28.8, "y": 116.5, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": 28.8, "y": 253.5, "fga": 10, "fgpct": 50.0, "freq": 0.776}, {"x": 28.8, "y": 273.1, "fga": 7, "fgpct": 28.6, "freq": 0.543}, {"x": 48.1, "y": 18.5, "fga": 6, "fgpct": 33.3, "freq": 0.465}, {"x": 48.1, "y": 38.1, "fga": 14, "fgpct": 57.1, "freq": 1.086}, {"x": 48.1, "y": 57.7, "fga": 10, "fgpct": 50.0, "freq": 0.776}, {"x": 48.1, "y": 77.3, "fga": 9, "fgpct": 33.3, "freq": 0.698}, {"x": 48.1, "y": 116.5, "fga": 4, "fgpct": 25.0, "freq": 0.31}, {"x": 48.1, "y": 136.0, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": 48.1, "y": 155.6, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": 48.1, "y": 253.5, "fga": 4, "fgpct": 25.0, "freq": 0.31}, {"x": 48.1, "y": 273.1, "fga": 7, "fgpct": 28.6, "freq": 0.543}, {"x": 67.3, "y": 18.5, "fga": 3, "fgpct": 0.0, "freq": 0.233}, {"x": 67.3, "y": 38.1, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": 67.3, "y": 77.3, "fga": 6, "fgpct": 16.7, "freq": 0.465}, {"x": 67.3, "y": 155.6, "fga": 5, "fgpct": 80.0, "freq": 0.388}, {"x": 67.3, "y": 194.8, "fga": 3, "fgpct": 66.7, "freq": 0.233}, {"x": 67.3, "y": 234.0, "fga": 3, "fgpct": 100.0, "freq": 0.233}, {"x": 67.3, "y": 253.5, "fga": 11, "fgpct": 18.2, "freq": 0.853}, {"x": 67.3, "y": 273.1, "fga": 15, "fgpct": 33.3, "freq": 1.164}, {"x": 86.5, "y": 38.1, "fga": 3, "fgpct": 0.0, "freq": 0.233}, {"x": 86.5, "y": 57.7, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": 86.5, "y": 96.9, "fga": 4, "fgpct": 50.0, "freq": 0.31}, {"x": 86.5, "y": 116.5, "fga": 6, "fgpct": 33.3, "freq": 0.465}, {"x": 86.5, "y": 136.0, "fga": 5, "fgpct": 40.0, "freq": 0.388}, {"x": 86.5, "y": 155.6, "fga": 5, "fgpct": 20.0, "freq": 0.388}, {"x": 86.5, "y": 175.2, "fga": 4, "fgpct": 25.0, "freq": 0.31}, {"x": 86.5, "y": 234.0, "fga": 4, "fgpct": 75.0, "freq": 0.31}, {"x": 86.5, "y": 253.5, "fga": 17, "fgpct": 41.2, "freq": 1.319}, {"x": 86.5, "y": 273.1, "fga": 8, "fgpct": 12.5, "freq": 0.621}, {"x": 105.8, "y": 18.5, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": 105.8, "y": 57.7, "fga": 4, "fgpct": 75.0, "freq": 0.31}, {"x": 105.8, "y": 155.6, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": 105.8, "y": 234.0, "fga": 10, "fgpct": 30.0, "freq": 0.776}, {"x": 105.8, "y": 253.5, "fga": 17, "fgpct": 35.3, "freq": 1.319}, {"x": 105.8, "y": 273.1, "fga": 8, "fgpct": 25.0, "freq": 0.621}, {"x": 125.0, "y": 234.0, "fga": 22, "fgpct": 54.5, "freq": 1.707}, {"x": 125.0, "y": 253.5, "fga": 14, "fgpct": 50.0, "freq": 1.086}, {"x": 144.2, "y": 38.1, "fga": 3, "fgpct": 66.7, "freq": 0.233}, {"x": 144.2, "y": 214.4, "fga": 15, "fgpct": 46.7, "freq": 1.164}, {"x": 144.2, "y": 234.0, "fga": 11, "fgpct": 63.6, "freq": 0.853}, {"x": 163.5, "y": 194.8, "fga": 4, "fgpct": 0.0, "freq": 0.31}, {"x": 163.5, "y": 214.4, "fga": 12, "fgpct": 16.7, "freq": 0.931}, {"x": 163.5, "y": 234.0, "fga": 6, "fgpct": 33.3, "freq": 0.465}, {"x": 182.7, "y": 175.2, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": 182.7, "y": 194.8, "fga": 7, "fgpct": 14.3, "freq": 0.543}, {"x": 182.7, "y": 214.4, "fga": 3, "fgpct": 0.0, "freq": 0.233}, {"x": 201.9, "y": 155.6, "fga": 6, "fgpct": 50.0, "freq": 0.465}, {"x": 221.2, "y": -1.0, "fga": 4, "fgpct": 0.0, "freq": 0.31}, {"x": 221.2, "y": 18.5, "fga": 7, "fgpct": 57.1, "freq": 0.543}, {"x": 221.2, "y": 38.1, "fga": 3, "fgpct": 33.3, "freq": 0.233}, {"x": 221.2, "y": 77.3, "fga": 4, "fgpct": 0.0, "freq": 0.31}, {"x": 240.4, "y": 18.5, "fga": 7, "fgpct": 28.6, "freq": 0.543}, {"x": 240.4, "y": 38.1, "fga": 3, "fgpct": 66.7, "freq": 0.233}], "Joel Embiid": [{"x": -163.5, "y": 194.8, "fga": 3, "fgpct": 0.0, "freq": 0.573}, {"x": -144.2, "y": 57.7, "fga": 5, "fgpct": 40.0, "freq": 0.954}, {"x": -144.2, "y": 214.4, "fga": 3, "fgpct": 66.7, "freq": 0.573}, {"x": -144.2, "y": 234.0, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": -125.0, "y": 96.9, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": -125.0, "y": 234.0, "fga": 4, "fgpct": 50.0, "freq": 0.763}, {"x": -105.8, "y": 18.5, "fga": 3, "fgpct": 66.7, "freq": 0.573}, {"x": -105.8, "y": 38.1, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": -105.8, "y": 136.0, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": -105.8, "y": 155.6, "fga": 3, "fgpct": 66.7, "freq": 0.573}, {"x": -105.8, "y": 234.0, "fga": 5, "fgpct": 20.0, "freq": 0.954}, {"x": -105.8, "y": 253.5, "fga": 5, "fgpct": 40.0, "freq": 0.954}, {"x": -86.5, "y": 18.5, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": -86.5, "y": 38.1, "fga": 4, "fgpct": 25.0, "freq": 0.763}, {"x": -86.5, "y": 77.3, "fga": 3, "fgpct": 66.7, "freq": 0.573}, {"x": -86.5, "y": 234.0, "fga": 3, "fgpct": 0.0, "freq": 0.573}, {"x": -86.5, "y": 253.5, "fga": 3, "fgpct": 66.7, "freq": 0.573}, {"x": -67.3, "y": 136.0, "fga": 4, "fgpct": 0.0, "freq": 0.763}, {"x": -67.3, "y": 155.6, "fga": 8, "fgpct": 37.5, "freq": 1.527}, {"x": -67.3, "y": 175.2, "fga": 4, "fgpct": 25.0, "freq": 0.763}, {"x": -67.3, "y": 253.5, "fga": 6, "fgpct": 66.7, "freq": 1.145}, {"x": -48.1, "y": 38.1, "fga": 4, "fgpct": 0.0, "freq": 0.763}, {"x": -48.1, "y": 136.0, "fga": 6, "fgpct": 83.3, "freq": 1.145}, {"x": -48.1, "y": 155.6, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": -48.1, "y": 175.2, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": -48.1, "y": 253.5, "fga": 5, "fgpct": 60.0, "freq": 0.954}, {"x": -28.8, "y": -1.0, "fga": 3, "fgpct": 66.7, "freq": 0.573}, {"x": -28.8, "y": 18.5, "fga": 11, "fgpct": 72.7, "freq": 2.099}, {"x": -28.8, "y": 38.1, "fga": 3, "fgpct": 0.0, "freq": 0.573}, {"x": -28.8, "y": 96.9, "fga": 4, "fgpct": 25.0, "freq": 0.763}, {"x": -28.8, "y": 116.5, "fga": 4, "fgpct": 75.0, "freq": 0.763}, {"x": -28.8, "y": 175.2, "fga": 5, "fgpct": 80.0, "freq": 0.954}, {"x": -28.8, "y": 194.8, "fga": 3, "fgpct": 66.7, "freq": 0.573}, {"x": -28.8, "y": 273.1, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": -9.6, "y": -1.0, "fga": 9, "fgpct": 55.6, "freq": 1.718}, {"x": -9.6, "y": 18.5, "fga": 39, "fgpct": 61.5, "freq": 7.443}, {"x": -9.6, "y": 38.1, "fga": 19, "fgpct": 52.6, "freq": 3.626}, {"x": -9.6, "y": 57.7, "fga": 8, "fgpct": 37.5, "freq": 1.527}, {"x": -9.6, "y": 77.3, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": -9.6, "y": 96.9, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": -9.6, "y": 116.5, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": -9.6, "y": 136.0, "fga": 6, "fgpct": 33.3, "freq": 1.145}, {"x": -9.6, "y": 155.6, "fga": 7, "fgpct": 71.4, "freq": 1.336}, {"x": -9.6, "y": 175.2, "fga": 9, "fgpct": 55.6, "freq": 1.718}, {"x": -9.6, "y": 194.8, "fga": 4, "fgpct": 25.0, "freq": 0.763}, {"x": -9.6, "y": 253.5, "fga": 12, "fgpct": 25.0, "freq": 2.29}, {"x": -9.6, "y": 273.1, "fga": 6, "fgpct": 33.3, "freq": 1.145}, {"x": 9.6, "y": -20.6, "fga": 3, "fgpct": 66.7, "freq": 0.573}, {"x": 9.6, "y": -1.0, "fga": 52, "fgpct": 78.8, "freq": 9.924}, {"x": 9.6, "y": 18.5, "fga": 32, "fgpct": 53.1, "freq": 6.107}, {"x": 9.6, "y": 38.1, "fga": 5, "fgpct": 100.0, "freq": 0.954}, {"x": 9.6, "y": 57.7, "fga": 4, "fgpct": 25.0, "freq": 0.763}, {"x": 9.6, "y": 77.3, "fga": 6, "fgpct": 16.7, "freq": 1.145}, {"x": 9.6, "y": 116.5, "fga": 8, "fgpct": 75.0, "freq": 1.527}, {"x": 9.6, "y": 136.0, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": 9.6, "y": 155.6, "fga": 8, "fgpct": 62.5, "freq": 1.527}, {"x": 9.6, "y": 175.2, "fga": 6, "fgpct": 83.3, "freq": 1.145}, {"x": 9.6, "y": 194.8, "fga": 4, "fgpct": 50.0, "freq": 0.763}, {"x": 9.6, "y": 234.0, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": 9.6, "y": 253.5, "fga": 7, "fgpct": 14.3, "freq": 1.336}, {"x": 9.6, "y": 273.1, "fga": 10, "fgpct": 50.0, "freq": 1.908}, {"x": 28.8, "y": -1.0, "fga": 4, "fgpct": 100.0, "freq": 0.763}, {"x": 28.8, "y": 18.5, "fga": 9, "fgpct": 66.7, "freq": 1.718}, {"x": 28.8, "y": 38.1, "fga": 5, "fgpct": 60.0, "freq": 0.954}, {"x": 28.8, "y": 77.3, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": 28.8, "y": 116.5, "fga": 7, "fgpct": 71.4, "freq": 1.336}, {"x": 28.8, "y": 136.0, "fga": 3, "fgpct": 100.0, "freq": 0.573}, {"x": 28.8, "y": 175.2, "fga": 4, "fgpct": 75.0, "freq": 0.763}, {"x": 28.8, "y": 194.8, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": 28.8, "y": 253.5, "fga": 8, "fgpct": 37.5, "freq": 1.527}, {"x": 48.1, "y": 38.1, "fga": 4, "fgpct": 50.0, "freq": 0.763}, {"x": 48.1, "y": 116.5, "fga": 3, "fgpct": 0.0, "freq": 0.573}, {"x": 48.1, "y": 136.0, "fga": 4, "fgpct": 50.0, "freq": 0.763}, {"x": 48.1, "y": 155.6, "fga": 4, "fgpct": 25.0, "freq": 0.763}, {"x": 48.1, "y": 253.5, "fga": 3, "fgpct": 66.7, "freq": 0.573}, {"x": 67.3, "y": 96.9, "fga": 3, "fgpct": 66.7, "freq": 0.573}, {"x": 67.3, "y": 116.5, "fga": 3, "fgpct": 0.0, "freq": 0.573}, {"x": 67.3, "y": 136.0, "fga": 3, "fgpct": 66.7, "freq": 0.573}, {"x": 67.3, "y": 155.6, "fga": 5, "fgpct": 60.0, "freq": 0.954}, {"x": 67.3, "y": 253.5, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": 86.5, "y": 116.5, "fga": 4, "fgpct": 50.0, "freq": 0.763}, {"x": 86.5, "y": 253.5, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": 105.8, "y": 234.0, "fga": 5, "fgpct": 60.0, "freq": 0.954}, {"x": 125.0, "y": 136.0, "fga": 3, "fgpct": 66.7, "freq": 0.573}, {"x": 125.0, "y": 234.0, "fga": 3, "fgpct": 33.3, "freq": 0.573}, {"x": 144.2, "y": 38.1, "fga": 3, "fgpct": 0.0, "freq": 0.573}, {"x": 163.5, "y": 194.8, "fga": 5, "fgpct": 60.0, "freq": 0.954}], "LeBron James": [{"x": -240.4, "y": -1.0, "fga": 3, "fgpct": 33.3, "freq": 0.42}, {"x": -240.4, "y": 18.5, "fga": 4, "fgpct": 0.0, "freq": 0.559}, {"x": -240.4, "y": 38.1, "fga": 5, "fgpct": 20.0, "freq": 0.699}, {"x": -221.2, "y": -1.0, "fga": 3, "fgpct": 0.0, "freq": 0.42}, {"x": -221.2, "y": 18.5, "fga": 4, "fgpct": 25.0, "freq": 0.559}, {"x": -221.2, "y": 116.5, "fga": 3, "fgpct": 66.7, "freq": 0.42}, {"x": -201.9, "y": 155.6, "fga": 5, "fgpct": 40.0, "freq": 0.699}, {"x": -201.9, "y": 175.2, "fga": 5, "fgpct": 0.0, "freq": 0.699}, {"x": -201.9, "y": 194.8, "fga": 3, "fgpct": 33.3, "freq": 0.42}, {"x": -182.7, "y": 175.2, "fga": 5, "fgpct": 20.0, "freq": 0.699}, {"x": -163.5, "y": -1.0, "fga": 4, "fgpct": 25.0, "freq": 0.559}, {"x": -163.5, "y": 38.1, "fga": 5, "fgpct": 0.0, "freq": 0.699}, {"x": -163.5, "y": 57.7, "fga": 3, "fgpct": 66.7, "freq": 0.42}, {"x": -163.5, "y": 194.8, "fga": 4, "fgpct": 0.0, "freq": 0.559}, {"x": -163.5, "y": 214.4, "fga": 6, "fgpct": 50.0, "freq": 0.839}, {"x": -163.5, "y": 234.0, "fga": 3, "fgpct": 33.3, "freq": 0.42}, {"x": -144.2, "y": 18.5, "fga": 3, "fgpct": 0.0, "freq": 0.42}, {"x": -144.2, "y": 38.1, "fga": 3, "fgpct": 66.7, "freq": 0.42}, {"x": -144.2, "y": 136.0, "fga": 3, "fgpct": 66.7, "freq": 0.42}, {"x": -144.2, "y": 214.4, "fga": 8, "fgpct": 25.0, "freq": 1.119}, {"x": -144.2, "y": 234.0, "fga": 10, "fgpct": 50.0, "freq": 1.399}, {"x": -125.0, "y": 18.5, "fga": 4, "fgpct": 50.0, "freq": 0.559}, {"x": -125.0, "y": 38.1, "fga": 4, "fgpct": 50.0, "freq": 0.559}, {"x": -125.0, "y": 77.3, "fga": 4, "fgpct": 75.0, "freq": 0.559}, {"x": -125.0, "y": 234.0, "fga": 4, "fgpct": 25.0, "freq": 0.559}, {"x": -125.0, "y": 253.5, "fga": 3, "fgpct": 66.7, "freq": 0.42}, {"x": -105.8, "y": 38.1, "fga": 4, "fgpct": 75.0, "freq": 0.559}, {"x": -105.8, "y": 77.3, "fga": 3, "fgpct": 33.3, "freq": 0.42}, {"x": -105.8, "y": 234.0, "fga": 4, "fgpct": 50.0, "freq": 0.559}, {"x": -105.8, "y": 253.5, "fga": 3, "fgpct": 33.3, "freq": 0.42}, {"x": -86.5, "y": 18.5, "fga": 3, "fgpct": 33.3, "freq": 0.42}, {"x": -86.5, "y": 175.2, "fga": 5, "fgpct": 40.0, "freq": 0.699}, {"x": -86.5, "y": 253.5, "fga": 5, "fgpct": 40.0, "freq": 0.699}, {"x": -67.3, "y": 18.5, "fga": 4, "fgpct": 25.0, "freq": 0.559}, {"x": -67.3, "y": 38.1, "fga": 5, "fgpct": 80.0, "freq": 0.699}, {"x": -67.3, "y": 57.7, "fga": 5, "fgpct": 40.0, "freq": 0.699}, {"x": -67.3, "y": 77.3, "fga": 5, "fgpct": 20.0, "freq": 0.699}, {"x": -67.3, "y": 96.9, "fga": 3, "fgpct": 33.3, "freq": 0.42}, {"x": -67.3, "y": 136.0, "fga": 3, "fgpct": 66.7, "freq": 0.42}, {"x": -67.3, "y": 253.5, "fga": 4, "fgpct": 25.0, "freq": 0.559}, {"x": -48.1, "y": 18.5, "fga": 7, "fgpct": 42.9, "freq": 0.979}, {"x": -48.1, "y": 38.1, "fga": 6, "fgpct": 33.3, "freq": 0.839}, {"x": -48.1, "y": 77.3, "fga": 5, "fgpct": 40.0, "freq": 0.699}, {"x": -48.1, "y": 96.9, "fga": 5, "fgpct": 60.0, "freq": 0.699}, {"x": -28.8, "y": -1.0, "fga": 10, "fgpct": 70.0, "freq": 1.399}, {"x": -28.8, "y": 18.5, "fga": 32, "fgpct": 62.5, "freq": 4.476}, {"x": -28.8, "y": 38.1, "fga": 15, "fgpct": 60.0, "freq": 2.098}, {"x": -28.8, "y": 57.7, "fga": 10, "fgpct": 60.0, "freq": 1.399}, {"x": -9.6, "y": -1.0, "fga": 35, "fgpct": 80.0, "freq": 4.895}, {"x": -9.6, "y": 18.5, "fga": 79, "fgpct": 75.9, "freq": 11.049}, {"x": -9.6, "y": 38.1, "fga": 17, "fgpct": 52.9, "freq": 2.378}, {"x": -9.6, "y": 57.7, "fga": 9, "fgpct": 33.3, "freq": 1.259}, {"x": -9.6, "y": 116.5, "fga": 3, "fgpct": 33.3, "freq": 0.42}, {"x": -9.6, "y": 155.6, "fga": 3, "fgpct": 100.0, "freq": 0.42}, {"x": -9.6, "y": 292.7, "fga": 3, "fgpct": 0.0, "freq": 0.42}, {"x": 9.6, "y": -1.0, "fga": 53, "fgpct": 83.0, "freq": 7.413}, {"x": 9.6, "y": 18.5, "fga": 70, "fgpct": 78.6, "freq": 9.79}, {"x": 9.6, "y": 38.1, "fga": 19, "fgpct": 68.4, "freq": 2.657}, {"x": 9.6, "y": 57.7, "fga": 7, "fgpct": 14.3, "freq": 0.979}, {"x": 9.6, "y": 77.3, "fga": 5, "fgpct": 60.0, "freq": 0.699}, {"x": 9.6, "y": 116.5, "fga": 3, "fgpct": 0.0, "freq": 0.42}, {"x": 9.6, "y": 175.2, "fga": 3, "fgpct": 33.3, "freq": 0.42}, {"x": 9.6, "y": 253.5, "fga": 3, "fgpct": 66.7, "freq": 0.42}, {"x": 9.6, "y": 273.1, "fga": 5, "fgpct": 40.0, "freq": 0.699}, {"x": 28.8, "y": -1.0, "fga": 10, "fgpct": 70.0, "freq": 1.399}, {"x": 28.8, "y": 18.5, "fga": 27, "fgpct": 74.1, "freq": 3.776}, {"x": 28.8, "y": 38.1, "fga": 13, "fgpct": 38.5, "freq": 1.818}, {"x": 28.8, "y": 57.7, "fga": 5, "fgpct": 0.0, "freq": 0.699}, {"x": 28.8, "y": 155.6, "fga": 3, "fgpct": 66.7, "freq": 0.42}, {"x": 28.8, "y": 253.5, "fga": 3, "fgpct": 0.0, "freq": 0.42}, {"x": 48.1, "y": 18.5, "fga": 6, "fgpct": 50.0, "freq": 0.839}, {"x": 48.1, "y": 194.8, "fga": 3, "fgpct": 0.0, "freq": 0.42}, {"x": 48.1, "y": 273.1, "fga": 5, "fgpct": 40.0, "freq": 0.699}, {"x": 67.3, "y": 253.5, "fga": 3, "fgpct": 0.0, "freq": 0.42}, {"x": 86.5, "y": 253.5, "fga": 5, "fgpct": 60.0, "freq": 0.699}, {"x": 105.8, "y": 77.3, "fga": 3, "fgpct": 66.7, "freq": 0.42}, {"x": 105.8, "y": 234.0, "fga": 5, "fgpct": 0.0, "freq": 0.699}, {"x": 105.8, "y": 253.5, "fga": 3, "fgpct": 0.0, "freq": 0.42}, {"x": 125.0, "y": 136.0, "fga": 3, "fgpct": 100.0, "freq": 0.42}, {"x": 125.0, "y": 234.0, "fga": 5, "fgpct": 20.0, "freq": 0.699}, {"x": 144.2, "y": 77.3, "fga": 3, "fgpct": 33.3, "freq": 0.42}, {"x": 144.2, "y": 214.4, "fga": 7, "fgpct": 28.6, "freq": 0.979}, {"x": 144.2, "y": 253.5, "fga": 3, "fgpct": 0.0, "freq": 0.42}, {"x": 163.5, "y": 194.8, "fga": 5, "fgpct": 60.0, "freq": 0.699}, {"x": 163.5, "y": 214.4, "fga": 4, "fgpct": 50.0, "freq": 0.559}, {"x": 221.2, "y": 38.1, "fga": 3, "fgpct": 66.7, "freq": 0.42}, {"x": 221.2, "y": 116.5, "fga": 4, "fgpct": 25.0, "freq": 0.559}, {"x": 240.4, "y": 18.5, "fga": 4, "fgpct": 50.0, "freq": 0.559}, {"x": 240.4, "y": 38.1, "fga": 3, "fgpct": 33.3, "freq": 0.42}, {"x": 240.4, "y": 57.7, "fga": 3, "fgpct": 0.0, "freq": 0.42}], "Jaylen Brown": [{"x": -240.4, "y": 18.5, "fga": 4, "fgpct": 25.0, "freq": 0.289}, {"x": -240.4, "y": 38.1, "fga": 3, "fgpct": 0.0, "freq": 0.217}, {"x": -221.2, "y": 18.5, "fga": 3, "fgpct": 66.7, "freq": 0.217}, {"x": -221.2, "y": 38.1, "fga": 3, "fgpct": 66.7, "freq": 0.217}, {"x": -221.2, "y": 57.7, "fga": 6, "fgpct": 33.3, "freq": 0.433}, {"x": -201.9, "y": 175.2, "fga": 3, "fgpct": 66.7, "freq": 0.217}, {"x": -182.7, "y": 175.2, "fga": 6, "fgpct": 83.3, "freq": 0.433}, {"x": -182.7, "y": 194.8, "fga": 8, "fgpct": 37.5, "freq": 0.578}, {"x": -163.5, "y": -1.0, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": -163.5, "y": 175.2, "fga": 5, "fgpct": 0.0, "freq": 0.361}, {"x": -163.5, "y": 194.8, "fga": 14, "fgpct": 21.4, "freq": 1.011}, {"x": -163.5, "y": 214.4, "fga": 7, "fgpct": 28.6, "freq": 0.505}, {"x": -163.5, "y": 234.0, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": -144.2, "y": 18.5, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": -144.2, "y": 155.6, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": -144.2, "y": 194.8, "fga": 5, "fgpct": 40.0, "freq": 0.361}, {"x": -144.2, "y": 214.4, "fga": 12, "fgpct": 66.7, "freq": 0.866}, {"x": -144.2, "y": 234.0, "fga": 8, "fgpct": 25.0, "freq": 0.578}, {"x": -125.0, "y": -1.0, "fga": 4, "fgpct": 25.0, "freq": 0.289}, {"x": -125.0, "y": 77.3, "fga": 3, "fgpct": 0.0, "freq": 0.217}, {"x": -125.0, "y": 116.5, "fga": 3, "fgpct": 66.7, "freq": 0.217}, {"x": -125.0, "y": 136.0, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": -125.0, "y": 214.4, "fga": 7, "fgpct": 14.3, "freq": 0.505}, {"x": -125.0, "y": 234.0, "fga": 13, "fgpct": 38.5, "freq": 0.939}, {"x": -105.8, "y": 77.3, "fga": 3, "fgpct": 66.7, "freq": 0.217}, {"x": -105.8, "y": 136.0, "fga": 4, "fgpct": 25.0, "freq": 0.289}, {"x": -105.8, "y": 155.6, "fga": 6, "fgpct": 50.0, "freq": 0.433}, {"x": -105.8, "y": 234.0, "fga": 13, "fgpct": 15.4, "freq": 0.939}, {"x": -105.8, "y": 253.5, "fga": 6, "fgpct": 33.3, "freq": 0.433}, {"x": -105.8, "y": 273.1, "fga": 3, "fgpct": 66.7, "freq": 0.217}, {"x": -86.5, "y": 18.5, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": -86.5, "y": 57.7, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": -86.5, "y": 116.5, "fga": 7, "fgpct": 28.6, "freq": 0.505}, {"x": -86.5, "y": 136.0, "fga": 9, "fgpct": 55.6, "freq": 0.65}, {"x": -86.5, "y": 155.6, "fga": 10, "fgpct": 40.0, "freq": 0.722}, {"x": -86.5, "y": 175.2, "fga": 7, "fgpct": 57.1, "freq": 0.505}, {"x": -86.5, "y": 194.8, "fga": 3, "fgpct": 66.7, "freq": 0.217}, {"x": -86.5, "y": 234.0, "fga": 7, "fgpct": 57.1, "freq": 0.505}, {"x": -86.5, "y": 253.5, "fga": 6, "fgpct": 83.3, "freq": 0.433}, {"x": -67.3, "y": 18.5, "fga": 5, "fgpct": 20.0, "freq": 0.361}, {"x": -67.3, "y": 38.1, "fga": 7, "fgpct": 71.4, "freq": 0.505}, {"x": -67.3, "y": 96.9, "fga": 4, "fgpct": 25.0, "freq": 0.289}, {"x": -67.3, "y": 136.0, "fga": 9, "fgpct": 66.7, "freq": 0.65}, {"x": -67.3, "y": 155.6, "fga": 6, "fgpct": 16.7, "freq": 0.433}, {"x": -67.3, "y": 175.2, "fga": 4, "fgpct": 75.0, "freq": 0.289}, {"x": -67.3, "y": 253.5, "fga": 7, "fgpct": 57.1, "freq": 0.505}, {"x": -67.3, "y": 292.7, "fga": 3, "fgpct": 0.0, "freq": 0.217}, {"x": -48.1, "y": -1.0, "fga": 7, "fgpct": 71.4, "freq": 0.505}, {"x": -48.1, "y": 18.5, "fga": 16, "fgpct": 50.0, "freq": 1.155}, {"x": -48.1, "y": 38.1, "fga": 10, "fgpct": 20.0, "freq": 0.722}, {"x": -48.1, "y": 57.7, "fga": 9, "fgpct": 66.7, "freq": 0.65}, {"x": -48.1, "y": 77.3, "fga": 5, "fgpct": 60.0, "freq": 0.361}, {"x": -48.1, "y": 96.9, "fga": 6, "fgpct": 50.0, "freq": 0.433}, {"x": -48.1, "y": 116.5, "fga": 5, "fgpct": 60.0, "freq": 0.361}, {"x": -48.1, "y": 136.0, "fga": 7, "fgpct": 71.4, "freq": 0.505}, {"x": -48.1, "y": 155.6, "fga": 6, "fgpct": 33.3, "freq": 0.433}, {"x": -48.1, "y": 253.5, "fga": 5, "fgpct": 40.0, "freq": 0.361}, {"x": -48.1, "y": 273.1, "fga": 5, "fgpct": 40.0, "freq": 0.361}, {"x": -28.8, "y": -1.0, "fga": 20, "fgpct": 70.0, "freq": 1.444}, {"x": -28.8, "y": 18.5, "fga": 25, "fgpct": 60.0, "freq": 1.805}, {"x": -28.8, "y": 38.1, "fga": 18, "fgpct": 38.9, "freq": 1.3}, {"x": -28.8, "y": 57.7, "fga": 9, "fgpct": 55.6, "freq": 0.65}, {"x": -28.8, "y": 77.3, "fga": 8, "fgpct": 75.0, "freq": 0.578}, {"x": -28.8, "y": 96.9, "fga": 6, "fgpct": 83.3, "freq": 0.433}, {"x": -28.8, "y": 116.5, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": -28.8, "y": 136.0, "fga": 5, "fgpct": 60.0, "freq": 0.361}, {"x": -28.8, "y": 155.6, "fga": 6, "fgpct": 33.3, "freq": 0.433}, {"x": -28.8, "y": 175.2, "fga": 7, "fgpct": 42.9, "freq": 0.505}, {"x": -28.8, "y": 194.8, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": -28.8, "y": 253.5, "fga": 5, "fgpct": 40.0, "freq": 0.361}, {"x": -28.8, "y": 273.1, "fga": 5, "fgpct": 20.0, "freq": 0.361}, {"x": -9.6, "y": -1.0, "fga": 22, "fgpct": 90.9, "freq": 1.588}, {"x": -9.6, "y": 18.5, "fga": 49, "fgpct": 77.6, "freq": 3.538}, {"x": -9.6, "y": 38.1, "fga": 14, "fgpct": 50.0, "freq": 1.011}, {"x": -9.6, "y": 57.7, "fga": 15, "fgpct": 46.7, "freq": 1.083}, {"x": -9.6, "y": 77.3, "fga": 9, "fgpct": 44.4, "freq": 0.65}, {"x": -9.6, "y": 96.9, "fga": 6, "fgpct": 66.7, "freq": 0.433}, {"x": -9.6, "y": 116.5, "fga": 9, "fgpct": 22.2, "freq": 0.65}, {"x": -9.6, "y": 136.0, "fga": 7, "fgpct": 71.4, "freq": 0.505}, {"x": -9.6, "y": 155.6, "fga": 11, "fgpct": 27.3, "freq": 0.794}, {"x": -9.6, "y": 175.2, "fga": 9, "fgpct": 44.4, "freq": 0.65}, {"x": -9.6, "y": 253.5, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": -9.6, "y": 273.1, "fga": 6, "fgpct": 50.0, "freq": 0.433}, {"x": 9.6, "y": -1.0, "fga": 51, "fgpct": 80.4, "freq": 3.682}, {"x": 9.6, "y": 18.5, "fga": 74, "fgpct": 70.3, "freq": 5.343}, {"x": 9.6, "y": 38.1, "fga": 25, "fgpct": 44.0, "freq": 1.805}, {"x": 9.6, "y": 57.7, "fga": 12, "fgpct": 25.0, "freq": 0.866}, {"x": 9.6, "y": 77.3, "fga": 12, "fgpct": 41.7, "freq": 0.866}, {"x": 9.6, "y": 96.9, "fga": 12, "fgpct": 41.7, "freq": 0.866}, {"x": 9.6, "y": 116.5, "fga": 13, "fgpct": 38.5, "freq": 0.939}, {"x": 9.6, "y": 136.0, "fga": 5, "fgpct": 60.0, "freq": 0.361}, {"x": 9.6, "y": 155.6, "fga": 15, "fgpct": 40.0, "freq": 1.083}, {"x": 9.6, "y": 175.2, "fga": 4, "fgpct": 25.0, "freq": 0.289}, {"x": 9.6, "y": 194.8, "fga": 4, "fgpct": 50.0, "freq": 0.289}, {"x": 9.6, "y": 253.5, "fga": 7, "fgpct": 14.3, "freq": 0.505}, {"x": 9.6, "y": 273.1, "fga": 4, "fgpct": 25.0, "freq": 0.289}, {"x": 28.8, "y": -1.0, "fga": 10, "fgpct": 70.0, "freq": 0.722}, {"x": 28.8, "y": 18.5, "fga": 74, "fgpct": 59.5, "freq": 5.343}, {"x": 28.8, "y": 38.1, "fga": 13, "fgpct": 46.2, "freq": 0.939}, {"x": 28.8, "y": 57.7, "fga": 9, "fgpct": 55.6, "freq": 0.65}, {"x": 28.8, "y": 96.9, "fga": 9, "fgpct": 44.4, "freq": 0.65}, {"x": 28.8, "y": 116.5, "fga": 7, "fgpct": 71.4, "freq": 0.505}, {"x": 28.8, "y": 136.0, "fga": 8, "fgpct": 62.5, "freq": 0.578}, {"x": 28.8, "y": 155.6, "fga": 13, "fgpct": 46.2, "freq": 0.939}, {"x": 28.8, "y": 175.2, "fga": 3, "fgpct": 100.0, "freq": 0.217}, {"x": 48.1, "y": -1.0, "fga": 7, "fgpct": 28.6, "freq": 0.505}, {"x": 48.1, "y": 18.5, "fga": 18, "fgpct": 55.6, "freq": 1.3}, {"x": 48.1, "y": 38.1, "fga": 19, "fgpct": 26.3, "freq": 1.372}, {"x": 48.1, "y": 57.7, "fga": 10, "fgpct": 40.0, "freq": 0.722}, {"x": 48.1, "y": 77.3, "fga": 7, "fgpct": 42.9, "freq": 0.505}, {"x": 48.1, "y": 96.9, "fga": 3, "fgpct": 66.7, "freq": 0.217}, {"x": 48.1, "y": 116.5, "fga": 10, "fgpct": 50.0, "freq": 0.722}, {"x": 48.1, "y": 136.0, "fga": 7, "fgpct": 28.6, "freq": 0.505}, {"x": 48.1, "y": 155.6, "fga": 4, "fgpct": 75.0, "freq": 0.289}, {"x": 48.1, "y": 253.5, "fga": 4, "fgpct": 75.0, "freq": 0.289}, {"x": 48.1, "y": 273.1, "fga": 3, "fgpct": 66.7, "freq": 0.217}, {"x": 67.3, "y": 18.5, "fga": 12, "fgpct": 50.0, "freq": 0.866}, {"x": 67.3, "y": 38.1, "fga": 9, "fgpct": 44.4, "freq": 0.65}, {"x": 67.3, "y": 57.7, "fga": 5, "fgpct": 20.0, "freq": 0.361}, {"x": 67.3, "y": 77.3, "fga": 5, "fgpct": 60.0, "freq": 0.361}, {"x": 67.3, "y": 96.9, "fga": 6, "fgpct": 33.3, "freq": 0.433}, {"x": 67.3, "y": 116.5, "fga": 5, "fgpct": 100.0, "freq": 0.361}, {"x": 67.3, "y": 136.0, "fga": 11, "fgpct": 72.7, "freq": 0.794}, {"x": 67.3, "y": 155.6, "fga": 10, "fgpct": 50.0, "freq": 0.722}, {"x": 67.3, "y": 175.2, "fga": 4, "fgpct": 0.0, "freq": 0.289}, {"x": 67.3, "y": 194.8, "fga": 4, "fgpct": 0.0, "freq": 0.289}, {"x": 67.3, "y": 253.5, "fga": 4, "fgpct": 0.0, "freq": 0.289}, {"x": 67.3, "y": 273.1, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": 86.5, "y": 18.5, "fga": 3, "fgpct": 66.7, "freq": 0.217}, {"x": 86.5, "y": 116.5, "fga": 7, "fgpct": 42.9, "freq": 0.505}, {"x": 86.5, "y": 136.0, "fga": 12, "fgpct": 50.0, "freq": 0.866}, {"x": 86.5, "y": 155.6, "fga": 13, "fgpct": 53.8, "freq": 0.939}, {"x": 86.5, "y": 175.2, "fga": 6, "fgpct": 16.7, "freq": 0.433}, {"x": 86.5, "y": 234.0, "fga": 5, "fgpct": 0.0, "freq": 0.361}, {"x": 86.5, "y": 253.5, "fga": 14, "fgpct": 35.7, "freq": 1.011}, {"x": 105.8, "y": 116.5, "fga": 5, "fgpct": 40.0, "freq": 0.361}, {"x": 105.8, "y": 136.0, "fga": 4, "fgpct": 50.0, "freq": 0.289}, {"x": 105.8, "y": 155.6, "fga": 4, "fgpct": 50.0, "freq": 0.289}, {"x": 105.8, "y": 175.2, "fga": 7, "fgpct": 28.6, "freq": 0.505}, {"x": 105.8, "y": 234.0, "fga": 13, "fgpct": 53.8, "freq": 0.939}, {"x": 105.8, "y": 253.5, "fga": 4, "fgpct": 25.0, "freq": 0.289}, {"x": 125.0, "y": 18.5, "fga": 3, "fgpct": 0.0, "freq": 0.217}, {"x": 125.0, "y": 57.7, "fga": 3, "fgpct": 0.0, "freq": 0.217}, {"x": 125.0, "y": 116.5, "fga": 5, "fgpct": 20.0, "freq": 0.361}, {"x": 125.0, "y": 155.6, "fga": 3, "fgpct": 0.0, "freq": 0.217}, {"x": 125.0, "y": 214.4, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": 125.0, "y": 234.0, "fga": 14, "fgpct": 14.3, "freq": 1.011}, {"x": 125.0, "y": 253.5, "fga": 4, "fgpct": 25.0, "freq": 0.289}, {"x": 144.2, "y": 18.5, "fga": 5, "fgpct": 40.0, "freq": 0.361}, {"x": 144.2, "y": 214.4, "fga": 9, "fgpct": 11.1, "freq": 0.65}, {"x": 144.2, "y": 234.0, "fga": 5, "fgpct": 40.0, "freq": 0.361}, {"x": 163.5, "y": 194.8, "fga": 8, "fgpct": 25.0, "freq": 0.578}, {"x": 163.5, "y": 214.4, "fga": 7, "fgpct": 14.3, "freq": 0.505}, {"x": 182.7, "y": 175.2, "fga": 4, "fgpct": 0.0, "freq": 0.289}, {"x": 182.7, "y": 194.8, "fga": 5, "fgpct": 20.0, "freq": 0.361}, {"x": 201.9, "y": 155.6, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": 201.9, "y": 194.8, "fga": 5, "fgpct": 60.0, "freq": 0.361}, {"x": 221.2, "y": -1.0, "fga": 5, "fgpct": 60.0, "freq": 0.361}, {"x": 221.2, "y": 18.5, "fga": 5, "fgpct": 40.0, "freq": 0.361}, {"x": 221.2, "y": 38.1, "fga": 4, "fgpct": 50.0, "freq": 0.289}, {"x": 221.2, "y": 77.3, "fga": 3, "fgpct": 33.3, "freq": 0.217}, {"x": 240.4, "y": 38.1, "fga": 3, "fgpct": 33.3, "freq": 0.217}], "VJ Edgecombe": [{"x": -240.4, "y": -1.0, "fga": 6, "fgpct": 16.7, "freq": 0.691}, {"x": -240.4, "y": 18.5, "fga": 4, "fgpct": 50.0, "freq": 0.461}, {"x": -240.4, "y": 38.1, "fga": 4, "fgpct": 50.0, "freq": 0.461}, {"x": -240.4, "y": 77.3, "fga": 3, "fgpct": 0.0, "freq": 0.346}, {"x": -221.2, "y": -20.6, "fga": 3, "fgpct": 33.3, "freq": 0.346}, {"x": -221.2, "y": 18.5, "fga": 7, "fgpct": 28.6, "freq": 0.806}, {"x": -221.2, "y": 38.1, "fga": 5, "fgpct": 20.0, "freq": 0.576}, {"x": -221.2, "y": 96.9, "fga": 5, "fgpct": 60.0, "freq": 0.576}, {"x": -221.2, "y": 136.0, "fga": 6, "fgpct": 50.0, "freq": 0.691}, {"x": -221.2, "y": 155.6, "fga": 3, "fgpct": 33.3, "freq": 0.346}, {"x": -201.9, "y": 155.6, "fga": 7, "fgpct": 14.3, "freq": 0.806}, {"x": -201.9, "y": 175.2, "fga": 6, "fgpct": 33.3, "freq": 0.691}, {"x": -201.9, "y": 194.8, "fga": 5, "fgpct": 40.0, "freq": 0.576}, {"x": -182.7, "y": 175.2, "fga": 13, "fgpct": 46.2, "freq": 1.498}, {"x": -182.7, "y": 194.8, "fga": 10, "fgpct": 30.0, "freq": 1.152}, {"x": -163.5, "y": 194.8, "fga": 8, "fgpct": 62.5, "freq": 0.922}, {"x": -163.5, "y": 214.4, "fga": 11, "fgpct": 36.4, "freq": 1.267}, {"x": -163.5, "y": 234.0, "fga": 3, "fgpct": 33.3, "freq": 0.346}, {"x": -144.2, "y": 18.5, "fga": 3, "fgpct": 66.7, "freq": 0.346}, {"x": -144.2, "y": 214.4, "fga": 10, "fgpct": 50.0, "freq": 1.152}, {"x": -144.2, "y": 253.5, "fga": 6, "fgpct": 33.3, "freq": 0.691}, {"x": -125.0, "y": 38.1, "fga": 3, "fgpct": 33.3, "freq": 0.346}, {"x": -125.0, "y": 214.4, "fga": 3, "fgpct": 66.7, "freq": 0.346}, {"x": -125.0, "y": 234.0, "fga": 8, "fgpct": 37.5, "freq": 0.922}, {"x": -105.8, "y": 234.0, "fga": 6, "fgpct": 33.3, "freq": 0.691}, {"x": -105.8, "y": 253.5, "fga": 10, "fgpct": 20.0, "freq": 1.152}, {"x": -86.5, "y": 234.0, "fga": 5, "fgpct": 60.0, "freq": 0.576}, {"x": -86.5, "y": 253.5, "fga": 9, "fgpct": 44.4, "freq": 1.037}, {"x": -67.3, "y": 57.7, "fga": 3, "fgpct": 0.0, "freq": 0.346}, {"x": -67.3, "y": 77.3, "fga": 3, "fgpct": 33.3, "freq": 0.346}, {"x": -67.3, "y": 116.5, "fga": 4, "fgpct": 25.0, "freq": 0.461}, {"x": -67.3, "y": 155.6, "fga": 3, "fgpct": 100.0, "freq": 0.346}, {"x": -67.3, "y": 253.5, "fga": 6, "fgpct": 16.7, "freq": 0.691}, {"x": -48.1, "y": 96.9, "fga": 6, "fgpct": 66.7, "freq": 0.691}, {"x": -48.1, "y": 136.0, "fga": 5, "fgpct": 60.0, "freq": 0.576}, {"x": -48.1, "y": 253.5, "fga": 3, "fgpct": 0.0, "freq": 0.346}, {"x": -28.8, "y": 18.5, "fga": 13, "fgpct": 53.8, "freq": 1.498}, {"x": -28.8, "y": 38.1, "fga": 9, "fgpct": 44.4, "freq": 1.037}, {"x": -28.8, "y": 57.7, "fga": 3, "fgpct": 66.7, "freq": 0.346}, {"x": -28.8, "y": 77.3, "fga": 5, "fgpct": 20.0, "freq": 0.576}, {"x": -28.8, "y": 96.9, "fga": 3, "fgpct": 33.3, "freq": 0.346}, {"x": -28.8, "y": 175.2, "fga": 3, "fgpct": 33.3, "freq": 0.346}, {"x": -28.8, "y": 253.5, "fga": 4, "fgpct": 25.0, "freq": 0.461}, {"x": -9.6, "y": -1.0, "fga": 29, "fgpct": 75.9, "freq": 3.341}, {"x": -9.6, "y": 18.5, "fga": 43, "fgpct": 48.8, "freq": 4.954}, {"x": -9.6, "y": 38.1, "fga": 12, "fgpct": 25.0, "freq": 1.382}, {"x": -9.6, "y": 57.7, "fga": 6, "fgpct": 33.3, "freq": 0.691}, {"x": -9.6, "y": 77.3, "fga": 6, "fgpct": 0.0, "freq": 0.691}, {"x": -9.6, "y": 96.9, "fga": 4, "fgpct": 50.0, "freq": 0.461}, {"x": -9.6, "y": 116.5, "fga": 8, "fgpct": 75.0, "freq": 0.922}, {"x": -9.6, "y": 136.0, "fga": 3, "fgpct": 0.0, "freq": 0.346}, {"x": -9.6, "y": 155.6, "fga": 5, "fgpct": 60.0, "freq": 0.576}, {"x": -9.6, "y": 175.2, "fga": 3, "fgpct": 66.7, "freq": 0.346}, {"x": -9.6, "y": 253.5, "fga": 7, "fgpct": 0.0, "freq": 0.806}, {"x": 9.6, "y": -1.0, "fga": 69, "fgpct": 71.0, "freq": 7.949}, {"x": 9.6, "y": 18.5, "fga": 63, "fgpct": 57.1, "freq": 7.258}, {"x": 9.6, "y": 38.1, "fga": 27, "fgpct": 44.4, "freq": 3.111}, {"x": 9.6, "y": 57.7, "fga": 10, "fgpct": 50.0, "freq": 1.152}, {"x": 9.6, "y": 77.3, "fga": 10, "fgpct": 30.0, "freq": 1.152}, {"x": 9.6, "y": 96.9, "fga": 11, "fgpct": 27.3, "freq": 1.267}, {"x": 9.6, "y": 116.5, "fga": 4, "fgpct": 25.0, "freq": 0.461}, {"x": 9.6, "y": 136.0, "fga": 4, "fgpct": 50.0, "freq": 0.461}, {"x": 9.6, "y": 155.6, "fga": 7, "fgpct": 14.3, "freq": 0.806}, {"x": 9.6, "y": 175.2, "fga": 4, "fgpct": 75.0, "freq": 0.461}, {"x": 9.6, "y": 253.5, "fga": 4, "fgpct": 50.0, "freq": 0.461}, {"x": 9.6, "y": 273.1, "fga": 6, "fgpct": 33.3, "freq": 0.691}, {"x": 28.8, "y": -1.0, "fga": 13, "fgpct": 76.9, "freq": 1.498}, {"x": 28.8, "y": 18.5, "fga": 13, "fgpct": 53.8, "freq": 1.498}, {"x": 28.8, "y": 38.1, "fga": 11, "fgpct": 36.4, "freq": 1.267}, {"x": 28.8, "y": 57.7, "fga": 7, "fgpct": 57.1, "freq": 0.806}, {"x": 28.8, "y": 77.3, "fga": 3, "fgpct": 0.0, "freq": 0.346}, {"x": 28.8, "y": 155.6, "fga": 7, "fgpct": 28.6, "freq": 0.806}, {"x": 28.8, "y": 253.5, "fga": 4, "fgpct": 50.0, "freq": 0.461}, {"x": 28.8, "y": 273.1, "fga": 3, "fgpct": 33.3, "freq": 0.346}, {"x": 48.1, "y": 18.5, "fga": 4, "fgpct": 75.0, "freq": 0.461}, {"x": 48.1, "y": 38.1, "fga": 3, "fgpct": 0.0, "freq": 0.346}, {"x": 48.1, "y": 57.7, "fga": 4, "fgpct": 0.0, "freq": 0.461}, {"x": 48.1, "y": 77.3, "fga": 3, "fgpct": 0.0, "freq": 0.346}, {"x": 48.1, "y": 116.5, "fga": 5, "fgpct": 60.0, "freq": 0.576}, {"x": 48.1, "y": 136.0, "fga": 3, "fgpct": 66.7, "freq": 0.346}, {"x": 48.1, "y": 253.5, "fga": 11, "fgpct": 27.3, "freq": 1.267}, {"x": 48.1, "y": 273.1, "fga": 3, "fgpct": 0.0, "freq": 0.346}, {"x": 67.3, "y": 38.1, "fga": 3, "fgpct": 0.0, "freq": 0.346}, {"x": 67.3, "y": 77.3, "fga": 4, "fgpct": 0.0, "freq": 0.461}, {"x": 67.3, "y": 116.5, "fga": 4, "fgpct": 0.0, "freq": 0.461}, {"x": 67.3, "y": 155.6, "fga": 5, "fgpct": 20.0, "freq": 0.576}, {"x": 67.3, "y": 253.5, "fga": 3, "fgpct": 0.0, "freq": 0.346}, {"x": 67.3, "y": 273.1, "fga": 5, "fgpct": 40.0, "freq": 0.576}, {"x": 86.5, "y": 77.3, "fga": 3, "fgpct": 0.0, "freq": 0.346}, {"x": 86.5, "y": 96.9, "fga": 4, "fgpct": 0.0, "freq": 0.461}, {"x": 86.5, "y": 234.0, "fga": 4, "fgpct": 50.0, "freq": 0.461}, {"x": 86.5, "y": 253.5, "fga": 3, "fgpct": 33.3, "freq": 0.346}, {"x": 86.5, "y": 273.1, "fga": 3, "fgpct": 33.3, "freq": 0.346}, {"x": 105.8, "y": 57.7, "fga": 3, "fgpct": 100.0, "freq": 0.346}, {"x": 105.8, "y": 116.5, "fga": 3, "fgpct": 33.3, "freq": 0.346}, {"x": 105.8, "y": 136.0, "fga": 3, "fgpct": 100.0, "freq": 0.346}, {"x": 105.8, "y": 234.0, "fga": 11, "fgpct": 45.5, "freq": 1.267}, {"x": 105.8, "y": 253.5, "fga": 7, "fgpct": 42.9, "freq": 0.806}, {"x": 105.8, "y": 273.1, "fga": 3, "fgpct": 66.7, "freq": 0.346}, {"x": 125.0, "y": 18.5, "fga": 3, "fgpct": 33.3, "freq": 0.346}, {"x": 125.0, "y": 214.4, "fga": 5, "fgpct": 60.0, "freq": 0.576}, {"x": 125.0, "y": 234.0, "fga": 7, "fgpct": 14.3, "freq": 0.806}, {"x": 144.2, "y": 214.4, "fga": 12, "fgpct": 25.0, "freq": 1.382}, {"x": 144.2, "y": 234.0, "fga": 7, "fgpct": 0.0, "freq": 0.806}, {"x": 163.5, "y": 175.2, "fga": 3, "fgpct": 0.0, "freq": 0.346}, {"x": 163.5, "y": 194.8, "fga": 9, "fgpct": 22.2, "freq": 1.037}, {"x": 163.5, "y": 214.4, "fga": 4, "fgpct": 50.0, "freq": 0.461}, {"x": 163.5, "y": 234.0, "fga": 5, "fgpct": 60.0, "freq": 0.576}, {"x": 182.7, "y": 155.6, "fga": 4, "fgpct": 25.0, "freq": 0.461}, {"x": 182.7, "y": 175.2, "fga": 8, "fgpct": 25.0, "freq": 0.922}, {"x": 182.7, "y": 194.8, "fga": 7, "fgpct": 57.1, "freq": 0.806}, {"x": 201.9, "y": 155.6, "fga": 8, "fgpct": 50.0, "freq": 0.922}, {"x": 201.9, "y": 175.2, "fga": 4, "fgpct": 25.0, "freq": 0.461}, {"x": 221.2, "y": 57.7, "fga": 6, "fgpct": 33.3, "freq": 0.691}, {"x": 221.2, "y": 77.3, "fga": 3, "fgpct": 66.7, "freq": 0.346}, {"x": 221.2, "y": 136.0, "fga": 5, "fgpct": 80.0, "freq": 0.576}, {"x": 240.4, "y": 38.1, "fga": 4, "fgpct": 50.0, "freq": 0.461}, {"x": 240.4, "y": 77.3, "fga": 6, "fgpct": 66.7, "freq": 0.691}], "Dean Wade": [{"x": -240.4, "y": -20.6, "fga": 6, "fgpct": 33.3, "freq": 3.077}, {"x": -240.4, "y": -1.0, "fga": 4, "fgpct": 50.0, "freq": 2.051}, {"x": -240.4, "y": 18.5, "fga": 7, "fgpct": 57.1, "freq": 3.59}, {"x": -240.4, "y": 38.1, "fga": 6, "fgpct": 16.7, "freq": 3.077}, {"x": -221.2, "y": -1.0, "fga": 4, "fgpct": 25.0, "freq": 2.051}, {"x": -221.2, "y": 38.1, "fga": 4, "fgpct": 50.0, "freq": 2.051}, {"x": -221.2, "y": 116.5, "fga": 3, "fgpct": 0.0, "freq": 1.538}, {"x": -221.2, "y": 136.0, "fga": 5, "fgpct": 40.0, "freq": 2.564}, {"x": -201.9, "y": 155.6, "fga": 3, "fgpct": 66.7, "freq": 1.538}, {"x": -163.5, "y": 194.8, "fga": 4, "fgpct": 25.0, "freq": 2.051}, {"x": -144.2, "y": 214.4, "fga": 5, "fgpct": 0.0, "freq": 2.564}, {"x": -9.6, "y": -1.0, "fga": 10, "fgpct": 80.0, "freq": 5.128}, {"x": -9.6, "y": 18.5, "fga": 6, "fgpct": 33.3, "freq": 3.077}, {"x": -9.6, "y": 253.5, "fga": 3, "fgpct": 0.0, "freq": 1.538}, {"x": 9.6, "y": -1.0, "fga": 29, "fgpct": 75.9, "freq": 14.872}, {"x": 9.6, "y": 18.5, "fga": 13, "fgpct": 53.8, "freq": 6.667}, {"x": 9.6, "y": 253.5, "fga": 4, "fgpct": 50.0, "freq": 2.051}, {"x": 67.3, "y": 253.5, "fga": 4, "fgpct": 50.0, "freq": 2.051}, {"x": 86.5, "y": 234.0, "fga": 4, "fgpct": 25.0, "freq": 2.051}, {"x": 144.2, "y": 214.4, "fga": 4, "fgpct": 75.0, "freq": 2.051}, {"x": 163.5, "y": 194.8, "fga": 5, "fgpct": 20.0, "freq": 2.564}, {"x": 182.7, "y": 175.2, "fga": 3, "fgpct": 33.3, "freq": 1.538}, {"x": 201.9, "y": 136.0, "fga": 3, "fgpct": 33.3, "freq": 1.538}, {"x": 201.9, "y": 155.6, "fga": 4, "fgpct": 25.0, "freq": 2.051}, {"x": 221.2, "y": -1.0, "fga": 3, "fgpct": 33.3, "freq": 1.538}, {"x": 221.2, "y": 18.5, "fga": 7, "fgpct": 42.9, "freq": 3.59}, {"x": 221.2, "y": 38.1, "fga": 4, "fgpct": 0.0, "freq": 2.051}, {"x": 221.2, "y": 77.3, "fga": 5, "fgpct": 40.0, "freq": 2.564}, {"x": 221.2, "y": 116.5, "fga": 11, "fgpct": 27.3, "freq": 5.641}, {"x": 240.4, "y": -1.0, "fga": 6, "fgpct": 50.0, "freq": 3.077}, {"x": 240.4, "y": 18.5, "fga": 7, "fgpct": 28.6, "freq": 3.59}, {"x": 240.4, "y": 38.1, "fga": 3, "fgpct": 66.7, "freq": 1.538}, {"x": 240.4, "y": 77.3, "fga": 6, "fgpct": 50.0, "freq": 3.077}], "Anfernee Simons": [{"x": -221.2, "y": 38.1, "fga": 3, "fgpct": 66.7, "freq": 0.685}, {"x": -221.2, "y": 57.7, "fga": 3, "fgpct": 33.3, "freq": 0.685}, {"x": -221.2, "y": 77.3, "fga": 3, "fgpct": 33.3, "freq": 0.685}, {"x": -201.9, "y": 155.6, "fga": 3, "fgpct": 66.7, "freq": 0.685}, {"x": -201.9, "y": 175.2, "fga": 5, "fgpct": 0.0, "freq": 1.142}, {"x": -182.7, "y": 175.2, "fga": 5, "fgpct": 20.0, "freq": 1.142}, {"x": -182.7, "y": 194.8, "fga": 3, "fgpct": 33.3, "freq": 0.685}, {"x": -163.5, "y": 194.8, "fga": 9, "fgpct": 44.4, "freq": 2.055}, {"x": -163.5, "y": 214.4, "fga": 5, "fgpct": 40.0, "freq": 1.142}, {"x": -163.5, "y": 234.0, "fga": 3, "fgpct": 66.7, "freq": 0.685}, {"x": -144.2, "y": 194.8, "fga": 4, "fgpct": 0.0, "freq": 0.913}, {"x": -144.2, "y": 214.4, "fga": 15, "fgpct": 33.3, "freq": 3.425}, {"x": -144.2, "y": 234.0, "fga": 5, "fgpct": 20.0, "freq": 1.142}, {"x": -125.0, "y": 214.4, "fga": 4, "fgpct": 25.0, "freq": 0.913}, {"x": -125.0, "y": 234.0, "fga": 10, "fgpct": 30.0, "freq": 2.283}, {"x": -105.8, "y": 57.7, "fga": 3, "fgpct": 100.0, "freq": 0.685}, {"x": -105.8, "y": 116.5, "fga": 4, "fgpct": 25.0, "freq": 0.913}, {"x": -105.8, "y": 234.0, "fga": 12, "fgpct": 41.7, "freq": 2.74}, {"x": -105.8, "y": 253.5, "fga": 6, "fgpct": 33.3, "freq": 1.37}, {"x": -105.8, "y": 273.1, "fga": 3, "fgpct": 33.3, "freq": 0.685}, {"x": -86.5, "y": 234.0, "fga": 8, "fgpct": 87.5, "freq": 1.826}, {"x": -86.5, "y": 253.5, "fga": 14, "fgpct": 14.3, "freq": 3.196}, {"x": -86.5, "y": 273.1, "fga": 3, "fgpct": 33.3, "freq": 0.685}, {"x": -67.3, "y": 116.5, "fga": 3, "fgpct": 66.7, "freq": 0.685}, {"x": -67.3, "y": 253.5, "fga": 9, "fgpct": 44.4, "freq": 2.055}, {"x": -67.3, "y": 292.7, "fga": 3, "fgpct": 66.7, "freq": 0.685}, {"x": -48.1, "y": 18.5, "fga": 3, "fgpct": 0.0, "freq": 0.685}, {"x": -48.1, "y": 38.1, "fga": 4, "fgpct": 25.0, "freq": 0.913}, {"x": -48.1, "y": 57.7, "fga": 3, "fgpct": 66.7, "freq": 0.685}, {"x": -48.1, "y": 273.1, "fga": 5, "fgpct": 0.0, "freq": 1.142}, {"x": -28.8, "y": 18.5, "fga": 3, "fgpct": 33.3, "freq": 0.685}, {"x": -28.8, "y": 273.1, "fga": 4, "fgpct": 75.0, "freq": 0.913}, {"x": -9.6, "y": -1.0, "fga": 6, "fgpct": 100.0, "freq": 1.37}, {"x": -9.6, "y": 18.5, "fga": 4, "fgpct": 50.0, "freq": 0.913}, {"x": -9.6, "y": 38.1, "fga": 3, "fgpct": 66.7, "freq": 0.685}, {"x": -9.6, "y": 77.3, "fga": 4, "fgpct": 25.0, "freq": 0.913}, {"x": -9.6, "y": 155.6, "fga": 4, "fgpct": 50.0, "freq": 0.913}, {"x": -9.6, "y": 253.5, "fga": 4, "fgpct": 0.0, "freq": 0.913}, {"x": 9.6, "y": -1.0, "fga": 10, "fgpct": 60.0, "freq": 2.283}, {"x": 9.6, "y": 18.5, "fga": 8, "fgpct": 50.0, "freq": 1.826}, {"x": 9.6, "y": 38.1, "fga": 4, "fgpct": 50.0, "freq": 0.913}, {"x": 9.6, "y": 77.3, "fga": 4, "fgpct": 75.0, "freq": 0.913}, {"x": 9.6, "y": 175.2, "fga": 3, "fgpct": 0.0, "freq": 0.685}, {"x": 9.6, "y": 253.5, "fga": 9, "fgpct": 22.2, "freq": 2.055}, {"x": 9.6, "y": 273.1, "fga": 5, "fgpct": 20.0, "freq": 1.142}, {"x": 9.6, "y": 292.7, "fga": 3, "fgpct": 33.3, "freq": 0.685}, {"x": 28.8, "y": -1.0, "fga": 6, "fgpct": 83.3, "freq": 1.37}, {"x": 28.8, "y": 18.5, "fga": 16, "fgpct": 81.2, "freq": 3.653}, {"x": 28.8, "y": 38.1, "fga": 9, "fgpct": 77.8, "freq": 2.055}, {"x": 28.8, "y": 253.5, "fga": 4, "fgpct": 50.0, "freq": 0.913}, {"x": 48.1, "y": 18.5, "fga": 5, "fgpct": 40.0, "freq": 1.142}, {"x": 48.1, "y": 38.1, "fga": 9, "fgpct": 44.4, "freq": 2.055}, {"x": 48.1, "y": 253.5, "fga": 7, "fgpct": 42.9, "freq": 1.598}, {"x": 48.1, "y": 273.1, "fga": 4, "fgpct": 0.0, "freq": 0.913}, {"x": 67.3, "y": 38.1, "fga": 5, "fgpct": 60.0, "freq": 1.142}, {"x": 67.3, "y": 77.3, "fga": 6, "fgpct": 66.7, "freq": 1.37}, {"x": 67.3, "y": 155.6, "fga": 4, "fgpct": 25.0, "freq": 0.913}, {"x": 67.3, "y": 253.5, "fga": 9, "fgpct": 22.2, "freq": 2.055}, {"x": 86.5, "y": 77.3, "fga": 3, "fgpct": 33.3, "freq": 0.685}, {"x": 86.5, "y": 155.6, "fga": 3, "fgpct": 33.3, "freq": 0.685}, {"x": 86.5, "y": 234.0, "fga": 9, "fgpct": 55.6, "freq": 2.055}, {"x": 86.5, "y": 253.5, "fga": 4, "fgpct": 0.0, "freq": 0.913}, {"x": 105.8, "y": 38.1, "fga": 3, "fgpct": 33.3, "freq": 0.685}, {"x": 105.8, "y": 136.0, "fga": 3, "fgpct": 66.7, "freq": 0.685}, {"x": 105.8, "y": 234.0, "fga": 6, "fgpct": 50.0, "freq": 1.37}, {"x": 105.8, "y": 253.5, "fga": 5, "fgpct": 40.0, "freq": 1.142}, {"x": 125.0, "y": 214.4, "fga": 12, "fgpct": 41.7, "freq": 2.74}, {"x": 125.0, "y": 234.0, "fga": 12, "fgpct": 50.0, "freq": 2.74}, {"x": 125.0, "y": 253.5, "fga": 5, "fgpct": 60.0, "freq": 1.142}, {"x": 144.2, "y": 214.4, "fga": 5, "fgpct": 60.0, "freq": 1.142}, {"x": 144.2, "y": 234.0, "fga": 7, "fgpct": 28.6, "freq": 1.598}, {"x": 163.5, "y": 194.8, "fga": 7, "fgpct": 42.9, "freq": 1.598}, {"x": 163.5, "y": 214.4, "fga": 9, "fgpct": 55.6, "freq": 2.055}, {"x": 201.9, "y": 155.6, "fga": 3, "fgpct": 33.3, "freq": 0.685}, {"x": 201.9, "y": 175.2, "fga": 3, "fgpct": 33.3, "freq": 0.685}, {"x": 221.2, "y": 18.5, "fga": 4, "fgpct": 50.0, "freq": 0.913}, {"x": 221.2, "y": 77.3, "fga": 5, "fgpct": 60.0, "freq": 1.142}, {"x": 221.2, "y": 116.5, "fga": 5, "fgpct": 20.0, "freq": 1.142}], "Kentavious Caldwell-Pope": [{"x": -221.2, "y": -1.0, "fga": 8, "fgpct": 25.0, "freq": 4.0}, {"x": -221.2, "y": 18.5, "fga": 3, "fgpct": 0.0, "freq": 1.5}, {"x": -221.2, "y": 57.7, "fga": 3, "fgpct": 33.3, "freq": 1.5}, {"x": -221.2, "y": 116.5, "fga": 6, "fgpct": 16.7, "freq": 3.0}, {"x": -201.9, "y": 136.0, "fga": 3, "fgpct": 33.3, "freq": 1.5}, {"x": -201.9, "y": 155.6, "fga": 3, "fgpct": 66.7, "freq": 1.5}, {"x": -182.7, "y": 194.8, "fga": 3, "fgpct": 33.3, "freq": 1.5}, {"x": -163.5, "y": 194.8, "fga": 4, "fgpct": 25.0, "freq": 2.0}, {"x": -144.2, "y": 194.8, "fga": 4, "fgpct": 25.0, "freq": 2.0}, {"x": -144.2, "y": 214.4, "fga": 5, "fgpct": 40.0, "freq": 2.5}, {"x": -125.0, "y": 155.6, "fga": 5, "fgpct": 40.0, "freq": 2.5}, {"x": -105.8, "y": 253.5, "fga": 3, "fgpct": 33.3, "freq": 1.5}, {"x": -67.3, "y": 18.5, "fga": 3, "fgpct": 33.3, "freq": 1.5}, {"x": -67.3, "y": 253.5, "fga": 4, "fgpct": 0.0, "freq": 2.0}, {"x": -28.8, "y": 18.5, "fga": 8, "fgpct": 37.5, "freq": 4.0}, {"x": -28.8, "y": 38.1, "fga": 5, "fgpct": 60.0, "freq": 2.5}, {"x": -9.6, "y": 18.5, "fga": 12, "fgpct": 50.0, "freq": 6.0}, {"x": -9.6, "y": 38.1, "fga": 3, "fgpct": 66.7, "freq": 1.5}, {"x": -9.6, "y": 253.5, "fga": 4, "fgpct": 50.0, "freq": 2.0}, {"x": -9.6, "y": 273.1, "fga": 3, "fgpct": 33.3, "freq": 1.5}, {"x": 9.6, "y": -1.0, "fga": 5, "fgpct": 80.0, "freq": 2.5}, {"x": 9.6, "y": 18.5, "fga": 9, "fgpct": 88.9, "freq": 4.5}, {"x": 9.6, "y": 38.1, "fga": 8, "fgpct": 50.0, "freq": 4.0}, {"x": 9.6, "y": 116.5, "fga": 3, "fgpct": 33.3, "freq": 1.5}, {"x": 9.6, "y": 253.5, "fga": 4, "fgpct": 25.0, "freq": 2.0}, {"x": 28.8, "y": -1.0, "fga": 3, "fgpct": 100.0, "freq": 1.5}, {"x": 28.8, "y": 18.5, "fga": 11, "fgpct": 45.5, "freq": 5.5}, {"x": 28.8, "y": 38.1, "fga": 3, "fgpct": 0.0, "freq": 1.5}, {"x": 28.8, "y": 194.8, "fga": 3, "fgpct": 66.7, "freq": 1.5}, {"x": 28.8, "y": 253.5, "fga": 4, "fgpct": 50.0, "freq": 2.0}, {"x": 67.3, "y": 253.5, "fga": 4, "fgpct": 25.0, "freq": 2.0}, {"x": 86.5, "y": 234.0, "fga": 4, "fgpct": 50.0, "freq": 2.0}, {"x": 105.8, "y": 136.0, "fga": 3, "fgpct": 66.7, "freq": 1.5}, {"x": 105.8, "y": 234.0, "fga": 3, "fgpct": 0.0, "freq": 1.5}, {"x": 125.0, "y": 214.4, "fga": 6, "fgpct": 66.7, "freq": 3.0}, {"x": 125.0, "y": 234.0, "fga": 5, "fgpct": 0.0, "freq": 2.5}, {"x": 144.2, "y": 155.6, "fga": 3, "fgpct": 0.0, "freq": 1.5}, {"x": 144.2, "y": 214.4, "fga": 6, "fgpct": 16.7, "freq": 3.0}, {"x": 144.2, "y": 234.0, "fga": 3, "fgpct": 0.0, "freq": 1.5}, {"x": 182.7, "y": 175.2, "fga": 4, "fgpct": 50.0, "freq": 2.0}, {"x": 201.9, "y": 155.6, "fga": 6, "fgpct": 50.0, "freq": 3.0}, {"x": 221.2, "y": 77.3, "fga": 5, "fgpct": 40.0, "freq": 2.5}, {"x": 221.2, "y": 96.9, "fga": 3, "fgpct": 66.7, "freq": 1.5}], "Adem Bona": [{"x": -28.8, "y": -1.0, "fga": 3, "fgpct": 33.3, "freq": 1.5}, {"x": -28.8, "y": 18.5, "fga": 9, "fgpct": 33.3, "freq": 4.5}, {"x": -28.8, "y": 38.1, "fga": 4, "fgpct": 50.0, "freq": 2.0}, {"x": -9.6, "y": -1.0, "fga": 18, "fgpct": 88.9, "freq": 9.0}, {"x": -9.6, "y": 18.5, "fga": 33, "fgpct": 69.7, "freq": 16.5}, {"x": -9.6, "y": 38.1, "fga": 7, "fgpct": 14.3, "freq": 3.5}, {"x": -9.6, "y": 57.7, "fga": 3, "fgpct": 0.0, "freq": 1.5}, {"x": 9.6, "y": -1.0, "fga": 72, "fgpct": 66.7, "freq": 36.0}, {"x": 9.6, "y": 18.5, "fga": 28, "fgpct": 64.3, "freq": 14.0}, {"x": 9.6, "y": 38.1, "fga": 6, "fgpct": 33.3, "freq": 3.0}, {"x": 9.6, "y": 57.7, "fga": 6, "fgpct": 50.0, "freq": 3.0}, {"x": 28.8, "y": 18.5, "fga": 7, "fgpct": 57.1, "freq": 3.5}, {"x": 48.1, "y": -1.0, "fga": 4, "fgpct": 25.0, "freq": 2.0}], "Ariel Hukporti": [{"x": -28.8, "y": 38.1, "fga": 3, "fgpct": 33.3, "freq": 5.66}, {"x": -9.6, "y": -1.0, "fga": 12, "fgpct": 83.3, "freq": 22.642}, {"x": -9.6, "y": 18.5, "fga": 11, "fgpct": 63.6, "freq": 20.755}, {"x": -9.6, "y": 38.1, "fga": 3, "fgpct": 0.0, "freq": 5.66}, {"x": -9.6, "y": 96.9, "fga": 4, "fgpct": 25.0, "freq": 7.547}, {"x": 9.6, "y": -1.0, "fga": 15, "fgpct": 86.7, "freq": 28.302}, {"x": 9.6, "y": 18.5, "fga": 5, "fgpct": 80.0, "freq": 9.434}]};
+const CORE = ["Tyrese Maxey","Joel Embiid","LeBron James","Jaylen Brown","VJ Edgecombe"];
+const BENCH = ["Dean Wade","Anfernee Simons","Kentavious Caldwell-Pope","Adem Bona","Ariel Hukporti"];
+const ALL_PLAYERS = CORE.concat(BENCH);
+const SHORT = {"Tyrese Maxey":"Maxey","Joel Embiid":"Embiid","LeBron James":"LeBron","Jaylen Brown":"Brown","VJ Edgecombe":"Edgecombe","Dean Wade":"Wade","Anfernee Simons":"Simons","Kentavious Caldwell-Pope":"KCP","Adem Bona":"Bona","Ariel Hukporti":"Hukporti"};
+const PCOLOR = {"Tyrese Maxey":navy,"LeBron James":purple,"Jaylen Brown":risk,"Joel Embiid":gold,"VJ Edgecombe":teal,"Dean Wade":"#6B4A8A","Anfernee Simons":"#C77D2E","Kentavious Caldwell-Pope":"#3D8C7D","Adem Bona":"#8A6B4A","Ariel Hukporti":"#4A6B8A"};
 
-const DEFENSE_DATA = [
-  {player:"Maxey",pctPlusMinus:0.6,dFgPct:47.1,normalFgPct:46.5},
-  {player:"Edgecombe",pctPlusMinus:0.7,dFgPct:45.8,normalFgPct:45.1},
-  {player:"Embiid",pctPlusMinus:-4.1,dFgPct:43.9,normalFgPct:48.0},
-  {player:"LeBron",pctPlusMinus:1.5,dFgPct:47.9,normalFgPct:46.4},
-  {player:"Brown",pctPlusMinus:-4.2,dFgPct:42.8,normalFgPct:47.0},
-];
-
-const COURT_DENSITY = {"Tyrese Maxey": [{"x": -240.0, "y": 46.1, "v": 0.4}, {"x": -220.0, "y": 67.5, "v": 0.2}, {"x": -220.0, "y": 131.6, "v": 0.4}, {"x": -200.0, "y": 153.0, "v": 0.47}, {"x": -200.0, "y": 174.3, "v": 0.47}, {"x": -200.0, "y": 195.7, "v": 0.2}, {"x": -180.0, "y": 174.3, "v": 0.33}, {"x": -180.0, "y": 195.7, "v": 0.93}, {"x": -180.0, "y": 217.0, "v": 0.53}, {"x": -180.0, "y": 238.4, "v": 0.27}, {"x": -160.0, "y": 195.7, "v": 0.73}, {"x": -160.0, "y": 217.0, "v": 0.47}, {"x": -160.0, "y": 238.4, "v": 0.47}, {"x": -140.0, "y": 217.0, "v": 0.53}, {"x": -140.0, "y": 238.4, "v": 0.47}, {"x": -120.0, "y": 24.8, "v": 0.2}, {"x": -120.0, "y": 217.0, "v": 0.2}, {"x": -120.0, "y": 238.4, "v": 1.27}, {"x": -120.0, "y": 259.8, "v": 0.73}, {"x": -100.0, "y": 153.0, "v": 0.2}, {"x": -100.0, "y": 238.4, "v": 0.67}, {"x": -100.0, "y": 259.8, "v": 0.8}, {"x": -80.0, "y": 67.5, "v": 0.2}, {"x": -80.0, "y": 238.4, "v": 0.27}, {"x": -80.0, "y": 259.8, "v": 0.87}, {"x": -80.0, "y": 281.1, "v": 0.33}, {"x": -60.0, "y": 3.4, "v": 0.2}, {"x": -60.0, "y": 46.1, "v": 0.2}, {"x": -60.0, "y": 67.5, "v": 0.2}, {"x": -60.0, "y": 110.2, "v": 0.2}, {"x": -60.0, "y": 259.8, "v": 0.6}, {"x": -60.0, "y": 281.1, "v": 0.53}, {"x": -60.0, "y": 302.5, "v": 0.2}, {"x": -40.0, "y": 3.4, "v": 0.6}, {"x": -40.0, "y": 24.8, "v": 0.27}, {"x": -40.0, "y": 46.1, "v": 0.47}, {"x": -40.0, "y": 88.9, "v": 0.4}, {"x": -40.0, "y": 110.2, "v": 0.4}, {"x": -40.0, "y": 174.3, "v": 0.33}, {"x": -40.0, "y": 195.7, "v": 0.27}, {"x": -40.0, "y": 259.8, "v": 0.67}, {"x": -40.0, "y": 281.1, "v": 0.47}, {"x": -20.0, "y": 3.4, "v": 2.07}, {"x": -20.0, "y": 24.8, "v": 2.47}, {"x": -20.0, "y": 46.1, "v": 0.27}, {"x": -20.0, "y": 67.5, "v": 0.73}, {"x": -20.0, "y": 88.9, "v": 0.47}, {"x": -20.0, "y": 110.2, "v": 0.4}, {"x": -20.0, "y": 131.6, "v": 0.47}, {"x": -20.0, "y": 174.3, "v": 0.27}, {"x": -20.0, "y": 259.8, "v": 0.6}, {"x": -20.0, "y": 281.1, "v": 0.67}, {"x": 0.0, "y": -18.0, "v": 0.33}, {"x": 0.0, "y": 3.4, "v": 6.46}, {"x": 0.0, "y": 24.8, "v": 5.2}, {"x": 0.0, "y": 46.1, "v": 2.2}, {"x": 0.0, "y": 67.5, "v": 1.73}, {"x": 0.0, "y": 88.9, "v": 0.47}, {"x": 0.0, "y": 110.2, "v": 0.93}, {"x": 0.0, "y": 131.6, "v": 0.2}, {"x": 0.0, "y": 153.0, "v": 0.53}, {"x": 0.0, "y": 259.8, "v": 0.73}, {"x": 0.0, "y": 281.1, "v": 0.53}, {"x": 0.0, "y": 302.5, "v": 0.27}, {"x": 20.0, "y": 3.4, "v": 6.06}, {"x": 20.0, "y": 24.8, "v": 4.33}, {"x": 20.0, "y": 46.1, "v": 0.8}, {"x": 20.0, "y": 67.5, "v": 0.73}, {"x": 20.0, "y": 88.9, "v": 0.53}, {"x": 20.0, "y": 110.2, "v": 0.33}, {"x": 20.0, "y": 131.6, "v": 0.2}, {"x": 20.0, "y": 153.0, "v": 0.2}, {"x": 20.0, "y": 259.8, "v": 1.0}, {"x": 20.0, "y": 281.1, "v": 0.4}, {"x": 40.0, "y": 3.4, "v": 0.4}, {"x": 40.0, "y": 24.8, "v": 1.47}, {"x": 40.0, "y": 46.1, "v": 0.73}, {"x": 40.0, "y": 67.5, "v": 0.53}, {"x": 40.0, "y": 88.9, "v": 0.2}, {"x": 40.0, "y": 110.2, "v": 0.33}, {"x": 40.0, "y": 131.6, "v": 0.2}, {"x": 40.0, "y": 259.8, "v": 0.53}, {"x": 40.0, "y": 281.1, "v": 0.27}, {"x": 60.0, "y": 24.8, "v": 0.6}, {"x": 60.0, "y": 46.1, "v": 0.27}, {"x": 60.0, "y": 67.5, "v": 0.33}, {"x": 60.0, "y": 110.2, "v": 0.2}, {"x": 60.0, "y": 153.0, "v": 0.4}, {"x": 60.0, "y": 238.4, "v": 0.33}, {"x": 60.0, "y": 259.8, "v": 0.73}, {"x": 60.0, "y": 281.1, "v": 0.8}, {"x": 80.0, "y": 24.8, "v": 0.27}, {"x": 80.0, "y": 46.1, "v": 0.33}, {"x": 80.0, "y": 67.5, "v": 0.33}, {"x": 80.0, "y": 88.9, "v": 0.2}, {"x": 80.0, "y": 110.2, "v": 0.2}, {"x": 80.0, "y": 131.6, "v": 0.4}, {"x": 80.0, "y": 153.0, "v": 0.4}, {"x": 80.0, "y": 174.3, "v": 0.33}, {"x": 80.0, "y": 195.7, "v": 0.27}, {"x": 80.0, "y": 238.4, "v": 0.67}, {"x": 80.0, "y": 259.8, "v": 1.07}, {"x": 80.0, "y": 281.1, "v": 0.4}, {"x": 100.0, "y": 67.5, "v": 0.2}, {"x": 100.0, "y": 110.2, "v": 0.2}, {"x": 100.0, "y": 131.6, "v": 0.33}, {"x": 100.0, "y": 153.0, "v": 0.27}, {"x": 100.0, "y": 238.4, "v": 0.87}, {"x": 100.0, "y": 259.8, "v": 0.87}, {"x": 100.0, "y": 281.1, "v": 0.27}, {"x": 120.0, "y": 24.8, "v": 0.2}, {"x": 120.0, "y": 131.6, "v": 0.2}, {"x": 120.0, "y": 217.0, "v": 0.27}, {"x": 120.0, "y": 238.4, "v": 1.53}, {"x": 120.0, "y": 259.8, "v": 0.67}, {"x": 120.0, "y": 281.1, "v": 0.2}, {"x": 140.0, "y": 217.0, "v": 0.87}, {"x": 140.0, "y": 238.4, "v": 1.0}, {"x": 160.0, "y": 195.7, "v": 0.4}, {"x": 160.0, "y": 217.0, "v": 1.13}, {"x": 160.0, "y": 238.4, "v": 0.4}, {"x": 180.0, "y": 24.8, "v": 0.2}, {"x": 180.0, "y": 195.7, "v": 0.53}, {"x": 180.0, "y": 217.0, "v": 0.27}, {"x": 200.0, "y": 153.0, "v": 0.47}, {"x": 220.0, "y": 3.4, "v": 0.33}, {"x": 220.0, "y": 24.8, "v": 0.4}, {"x": 220.0, "y": 46.1, "v": 0.2}, {"x": 220.0, "y": 131.6, "v": 0.2}, {"x": 240.0, "y": 24.8, "v": 0.67}, {"x": 240.0, "y": 67.5, "v": 0.2}], "Joel Embiid": [{"x": -180.0, "y": 174.3, "v": 0.43}, {"x": -180.0, "y": 195.7, "v": 0.43}, {"x": -160.0, "y": 24.8, "v": 0.29}, {"x": -160.0, "y": 195.7, "v": 0.29}, {"x": -140.0, "y": 46.1, "v": 0.57}, {"x": -140.0, "y": 67.5, "v": 0.57}, {"x": -140.0, "y": 88.9, "v": 0.29}, {"x": -140.0, "y": 217.0, "v": 0.72}, {"x": -120.0, "y": 3.4, "v": 0.29}, {"x": -120.0, "y": 67.5, "v": 0.57}, {"x": -120.0, "y": 88.9, "v": 0.29}, {"x": -120.0, "y": 110.2, "v": 0.72}, {"x": -120.0, "y": 131.6, "v": 0.29}, {"x": -120.0, "y": 153.0, "v": 0.29}, {"x": -120.0, "y": 217.0, "v": 0.29}, {"x": -120.0, "y": 238.4, "v": 0.43}, {"x": -100.0, "y": 3.4, "v": 0.29}, {"x": -100.0, "y": 24.8, "v": 0.72}, {"x": -100.0, "y": 67.5, "v": 0.29}, {"x": -100.0, "y": 131.6, "v": 0.57}, {"x": -100.0, "y": 153.0, "v": 0.29}, {"x": -100.0, "y": 238.4, "v": 1.0}, {"x": -100.0, "y": 259.8, "v": 0.57}, {"x": -80.0, "y": 3.4, "v": 0.29}, {"x": -80.0, "y": 24.8, "v": 0.29}, {"x": -80.0, "y": 46.1, "v": 0.43}, {"x": -80.0, "y": 88.9, "v": 0.57}, {"x": -80.0, "y": 131.6, "v": 0.43}, {"x": -80.0, "y": 153.0, "v": 0.29}, {"x": -80.0, "y": 238.4, "v": 0.57}, {"x": -80.0, "y": 259.8, "v": 0.72}, {"x": -60.0, "y": 46.1, "v": 0.29}, {"x": -60.0, "y": 110.2, "v": 0.57}, {"x": -60.0, "y": 131.6, "v": 0.57}, {"x": -60.0, "y": 153.0, "v": 1.0}, {"x": -60.0, "y": 174.3, "v": 0.72}, {"x": -60.0, "y": 259.8, "v": 0.43}, {"x": -40.0, "y": 24.8, "v": 0.43}, {"x": -40.0, "y": 46.1, "v": 0.57}, {"x": -40.0, "y": 110.2, "v": 0.43}, {"x": -40.0, "y": 131.6, "v": 0.43}, {"x": -40.0, "y": 153.0, "v": 0.29}, {"x": -40.0, "y": 174.3, "v": 1.0}, {"x": -40.0, "y": 238.4, "v": 0.29}, {"x": -40.0, "y": 259.8, "v": 1.0}, {"x": -40.0, "y": 281.1, "v": 0.29}, {"x": -20.0, "y": 3.4, "v": 2.58}, {"x": -20.0, "y": 24.8, "v": 2.01}, {"x": -20.0, "y": 46.1, "v": 1.0}, {"x": -20.0, "y": 67.5, "v": 0.43}, {"x": -20.0, "y": 88.9, "v": 0.29}, {"x": -20.0, "y": 110.2, "v": 0.86}, {"x": -20.0, "y": 131.6, "v": 0.57}, {"x": -20.0, "y": 153.0, "v": 0.57}, {"x": -20.0, "y": 174.3, "v": 0.72}, {"x": -20.0, "y": 195.7, "v": 0.72}, {"x": -20.0, "y": 217.0, "v": 0.43}, {"x": -20.0, "y": 259.8, "v": 0.86}, {"x": -20.0, "y": 281.1, "v": 0.43}, {"x": 0.0, "y": -18.0, "v": 0.29}, {"x": 0.0, "y": 3.4, "v": 9.33}, {"x": 0.0, "y": 24.8, "v": 6.6}, {"x": 0.0, "y": 46.1, "v": 1.43}, {"x": 0.0, "y": 67.5, "v": 1.15}, {"x": 0.0, "y": 88.9, "v": 0.57}, {"x": 0.0, "y": 110.2, "v": 0.86}, {"x": 0.0, "y": 131.6, "v": 1.29}, {"x": 0.0, "y": 153.0, "v": 1.87}, {"x": 0.0, "y": 174.3, "v": 1.43}, {"x": 0.0, "y": 195.7, "v": 0.43}, {"x": 0.0, "y": 217.0, "v": 0.43}, {"x": 0.0, "y": 259.8, "v": 2.15}, {"x": 0.0, "y": 281.1, "v": 0.72}, {"x": 20.0, "y": -18.0, "v": 0.29}, {"x": 20.0, "y": 3.4, "v": 2.73}, {"x": 20.0, "y": 24.8, "v": 1.58}, {"x": 20.0, "y": 46.1, "v": 0.29}, {"x": 20.0, "y": 67.5, "v": 0.29}, {"x": 20.0, "y": 88.9, "v": 0.43}, {"x": 20.0, "y": 110.2, "v": 0.72}, {"x": 20.0, "y": 131.6, "v": 0.57}, {"x": 20.0, "y": 153.0, "v": 0.29}, {"x": 20.0, "y": 174.3, "v": 0.86}, {"x": 20.0, "y": 195.7, "v": 0.72}, {"x": 20.0, "y": 217.0, "v": 0.29}, {"x": 20.0, "y": 259.8, "v": 1.58}, {"x": 20.0, "y": 281.1, "v": 0.29}, {"x": 40.0, "y": 24.8, "v": 0.72}, {"x": 40.0, "y": 46.1, "v": 0.43}, {"x": 40.0, "y": 67.5, "v": 0.29}, {"x": 40.0, "y": 88.9, "v": 0.57}, {"x": 40.0, "y": 110.2, "v": 0.86}, {"x": 40.0, "y": 131.6, "v": 0.57}, {"x": 40.0, "y": 153.0, "v": 0.43}, {"x": 40.0, "y": 195.7, "v": 0.29}, {"x": 40.0, "y": 259.8, "v": 1.0}, {"x": 60.0, "y": 46.1, "v": 0.29}, {"x": 60.0, "y": 110.2, "v": 0.57}, {"x": 60.0, "y": 131.6, "v": 0.57}, {"x": 60.0, "y": 153.0, "v": 0.86}, {"x": 60.0, "y": 217.0, "v": 0.29}, {"x": 60.0, "y": 259.8, "v": 0.57}, {"x": 80.0, "y": 3.4, "v": 0.29}, {"x": 80.0, "y": 67.5, "v": 0.29}, {"x": 80.0, "y": 88.9, "v": 0.29}, {"x": 80.0, "y": 110.2, "v": 0.29}, {"x": 80.0, "y": 131.6, "v": 0.57}, {"x": 80.0, "y": 174.3, "v": 0.29}, {"x": 80.0, "y": 238.4, "v": 0.57}, {"x": 80.0, "y": 259.8, "v": 0.29}, {"x": 100.0, "y": 3.4, "v": 0.29}, {"x": 100.0, "y": 88.9, "v": 0.29}, {"x": 100.0, "y": 110.2, "v": 0.29}, {"x": 100.0, "y": 131.6, "v": 0.29}, {"x": 100.0, "y": 174.3, "v": 0.43}, {"x": 100.0, "y": 238.4, "v": 0.43}, {"x": 120.0, "y": 24.8, "v": 0.29}, {"x": 120.0, "y": 110.2, "v": 0.29}, {"x": 120.0, "y": 131.6, "v": 0.57}, {"x": 120.0, "y": 238.4, "v": 0.86}, {"x": 140.0, "y": 24.8, "v": 0.43}, {"x": 140.0, "y": 46.1, "v": 0.29}, {"x": 140.0, "y": 67.5, "v": 0.29}, {"x": 140.0, "y": 131.6, "v": 0.29}, {"x": 140.0, "y": 217.0, "v": 0.29}, {"x": 160.0, "y": 67.5, "v": 0.29}, {"x": 160.0, "y": 195.7, "v": 0.86}], "LeBron James": [{"x": -240.0, "y": 3.4, "v": 0.44}, {"x": -240.0, "y": 24.8, "v": 0.44}, {"x": -240.0, "y": 46.1, "v": 0.44}, {"x": -240.0, "y": 67.5, "v": 0.22}, {"x": -220.0, "y": -18.0, "v": 0.22}, {"x": -220.0, "y": 3.4, "v": 0.54}, {"x": -220.0, "y": 46.1, "v": 0.33}, {"x": -220.0, "y": 131.6, "v": 0.44}, {"x": -220.0, "y": 153.0, "v": 0.22}, {"x": -200.0, "y": 153.0, "v": 0.54}, {"x": -200.0, "y": 174.3, "v": 0.54}, {"x": -200.0, "y": 195.7, "v": 0.33}, {"x": -180.0, "y": 88.9, "v": 0.22}, {"x": -180.0, "y": 174.3, "v": 0.76}, {"x": -180.0, "y": 195.7, "v": 0.22}, {"x": -180.0, "y": 217.0, "v": 0.22}, {"x": -160.0, "y": 3.4, "v": 0.44}, {"x": -160.0, "y": 24.8, "v": 0.22}, {"x": -160.0, "y": 46.1, "v": 0.54}, {"x": -160.0, "y": 67.5, "v": 0.22}, {"x": -160.0, "y": 195.7, "v": 0.54}, {"x": -160.0, "y": 217.0, "v": 0.87}, {"x": -160.0, "y": 238.4, "v": 0.44}, {"x": -140.0, "y": 3.4, "v": 0.22}, {"x": -140.0, "y": 24.8, "v": 0.22}, {"x": -140.0, "y": 46.1, "v": 0.33}, {"x": -140.0, "y": 88.9, "v": 0.22}, {"x": -140.0, "y": 131.6, "v": 0.22}, {"x": -140.0, "y": 217.0, "v": 0.98}, {"x": -140.0, "y": 238.4, "v": 0.98}, {"x": -120.0, "y": 3.4, "v": 0.33}, {"x": -120.0, "y": 24.8, "v": 0.44}, {"x": -120.0, "y": 46.1, "v": 0.33}, {"x": -120.0, "y": 67.5, "v": 0.33}, {"x": -120.0, "y": 238.4, "v": 0.76}, {"x": -100.0, "y": -18.0, "v": 0.22}, {"x": -100.0, "y": 24.8, "v": 0.22}, {"x": -100.0, "y": 46.1, "v": 0.33}, {"x": -100.0, "y": 88.9, "v": 0.22}, {"x": -100.0, "y": 110.2, "v": 0.22}, {"x": -100.0, "y": 131.6, "v": 0.22}, {"x": -100.0, "y": 174.3, "v": 0.33}, {"x": -100.0, "y": 195.7, "v": 0.22}, {"x": -100.0, "y": 217.0, "v": 0.22}, {"x": -100.0, "y": 238.4, "v": 0.22}, {"x": -100.0, "y": 259.8, "v": 0.33}, {"x": -80.0, "y": 24.8, "v": 0.44}, {"x": -80.0, "y": 46.1, "v": 0.22}, {"x": -80.0, "y": 67.5, "v": 0.33}, {"x": -80.0, "y": 131.6, "v": 0.22}, {"x": -80.0, "y": 174.3, "v": 0.44}, {"x": -80.0, "y": 238.4, "v": 0.22}, {"x": -80.0, "y": 259.8, "v": 0.65}, {"x": -60.0, "y": 3.4, "v": 0.22}, {"x": -60.0, "y": 24.8, "v": 0.65}, {"x": -60.0, "y": 46.1, "v": 0.65}, {"x": -60.0, "y": 67.5, "v": 0.22}, {"x": -60.0, "y": 88.9, "v": 0.76}, {"x": -60.0, "y": 131.6, "v": 0.44}, {"x": -60.0, "y": 259.8, "v": 0.22}, {"x": -40.0, "y": 3.4, "v": 0.76}, {"x": -40.0, "y": 24.8, "v": 1.85}, {"x": -40.0, "y": 46.1, "v": 0.44}, {"x": -40.0, "y": 67.5, "v": 0.33}, {"x": -40.0, "y": 88.9, "v": 0.65}, {"x": -40.0, "y": 110.2, "v": 0.22}, {"x": -40.0, "y": 153.0, "v": 0.22}, {"x": -40.0, "y": 259.8, "v": 0.33}, {"x": -20.0, "y": 3.4, "v": 4.03}, {"x": -20.0, "y": 24.8, "v": 5.44}, {"x": -20.0, "y": 46.1, "v": 1.41}, {"x": -20.0, "y": 67.5, "v": 0.54}, {"x": -20.0, "y": 131.6, "v": 0.33}, {"x": -20.0, "y": 174.3, "v": 0.22}, {"x": 0.0, "y": 3.4, "v": 10.23}, {"x": 0.0, "y": 24.8, "v": 7.51}, {"x": 0.0, "y": 46.1, "v": 1.74}, {"x": 0.0, "y": 67.5, "v": 0.65}, {"x": 0.0, "y": 88.9, "v": 0.33}, {"x": 0.0, "y": 110.2, "v": 0.33}, {"x": 0.0, "y": 153.0, "v": 0.44}, {"x": 0.0, "y": 217.0, "v": 0.22}, {"x": 0.0, "y": 259.8, "v": 0.33}, {"x": 0.0, "y": 281.1, "v": 0.22}, {"x": 20.0, "y": 3.4, "v": 3.81}, {"x": 20.0, "y": 24.8, "v": 3.26}, {"x": 20.0, "y": 46.1, "v": 0.98}, {"x": 20.0, "y": 67.5, "v": 0.44}, {"x": 20.0, "y": 88.9, "v": 0.44}, {"x": 20.0, "y": 110.2, "v": 0.44}, {"x": 20.0, "y": 153.0, "v": 0.44}, {"x": 20.0, "y": 174.3, "v": 0.22}, {"x": 20.0, "y": 195.7, "v": 0.22}, {"x": 20.0, "y": 259.8, "v": 0.44}, {"x": 20.0, "y": 281.1, "v": 0.33}, {"x": 40.0, "y": 3.4, "v": 1.09}, {"x": 40.0, "y": 24.8, "v": 1.52}, {"x": 40.0, "y": 46.1, "v": 0.87}, {"x": 40.0, "y": 67.5, "v": 0.33}, {"x": 40.0, "y": 88.9, "v": 0.22}, {"x": 40.0, "y": 131.6, "v": 0.44}, {"x": 40.0, "y": 153.0, "v": 0.33}, {"x": 40.0, "y": 195.7, "v": 0.22}, {"x": 40.0, "y": 259.8, "v": 0.54}, {"x": 40.0, "y": 281.1, "v": 0.22}, {"x": 60.0, "y": 3.4, "v": 0.33}, {"x": 60.0, "y": 24.8, "v": 0.22}, {"x": 60.0, "y": 88.9, "v": 0.22}, {"x": 60.0, "y": 195.7, "v": 0.22}, {"x": 60.0, "y": 259.8, "v": 0.22}, {"x": 60.0, "y": 281.1, "v": 0.33}, {"x": 80.0, "y": 88.9, "v": 0.22}, {"x": 80.0, "y": 131.6, "v": 0.22}, {"x": 80.0, "y": 153.0, "v": 0.22}, {"x": 80.0, "y": 174.3, "v": 0.22}, {"x": 80.0, "y": 259.8, "v": 0.33}, {"x": 100.0, "y": 3.4, "v": 0.22}, {"x": 100.0, "y": 67.5, "v": 0.22}, {"x": 100.0, "y": 217.0, "v": 0.22}, {"x": 100.0, "y": 238.4, "v": 0.44}, {"x": 100.0, "y": 259.8, "v": 0.33}, {"x": 120.0, "y": 3.4, "v": 0.22}, {"x": 120.0, "y": 46.1, "v": 0.22}, {"x": 120.0, "y": 88.9, "v": 0.54}, {"x": 120.0, "y": 217.0, "v": 0.22}, {"x": 120.0, "y": 238.4, "v": 0.44}, {"x": 140.0, "y": 67.5, "v": 0.22}, {"x": 140.0, "y": 131.6, "v": 0.22}, {"x": 140.0, "y": 217.0, "v": 0.44}, {"x": 140.0, "y": 238.4, "v": 0.54}, {"x": 160.0, "y": 46.1, "v": 0.22}, {"x": 160.0, "y": 195.7, "v": 0.33}, {"x": 160.0, "y": 217.0, "v": 0.76}, {"x": 160.0, "y": 238.4, "v": 0.22}, {"x": 180.0, "y": 153.0, "v": 0.22}, {"x": 180.0, "y": 174.3, "v": 0.33}, {"x": 180.0, "y": 195.7, "v": 0.44}, {"x": 220.0, "y": -18.0, "v": 0.22}, {"x": 220.0, "y": 24.8, "v": 0.33}, {"x": 220.0, "y": 67.5, "v": 0.22}, {"x": 220.0, "y": 110.2, "v": 0.22}, {"x": 220.0, "y": 131.6, "v": 0.22}, {"x": 220.0, "y": 153.0, "v": 0.22}, {"x": 240.0, "y": -18.0, "v": 0.22}, {"x": 240.0, "y": 24.8, "v": 0.44}, {"x": 240.0, "y": 46.1, "v": 0.44}, {"x": 240.0, "y": 67.5, "v": 0.33}], "Jaylen Brown": [{"x": -240.0, "y": 24.8, "v": 0.32}, {"x": -220.0, "y": 24.8, "v": 0.26}, {"x": -220.0, "y": 67.5, "v": 0.39}, {"x": -200.0, "y": 174.3, "v": 0.19}, {"x": -180.0, "y": 174.3, "v": 0.52}, {"x": -180.0, "y": 195.7, "v": 0.58}, {"x": -160.0, "y": 3.4, "v": 0.19}, {"x": -160.0, "y": 174.3, "v": 0.19}, {"x": -160.0, "y": 195.7, "v": 1.1}, {"x": -160.0, "y": 217.0, "v": 0.52}, {"x": -140.0, "y": 67.5, "v": 0.19}, {"x": -140.0, "y": 153.0, "v": 0.19}, {"x": -140.0, "y": 195.7, "v": 0.26}, {"x": -140.0, "y": 217.0, "v": 0.84}, {"x": -140.0, "y": 238.4, "v": 0.58}, {"x": -120.0, "y": 3.4, "v": 0.26}, {"x": -120.0, "y": 110.2, "v": 0.26}, {"x": -120.0, "y": 153.0, "v": 0.19}, {"x": -120.0, "y": 217.0, "v": 0.84}, {"x": -120.0, "y": 238.4, "v": 0.65}, {"x": -100.0, "y": 67.5, "v": 0.19}, {"x": -100.0, "y": 110.2, "v": 0.52}, {"x": -100.0, "y": 131.6, "v": 0.45}, {"x": -100.0, "y": 153.0, "v": 0.32}, {"x": -100.0, "y": 174.3, "v": 0.26}, {"x": -100.0, "y": 238.4, "v": 0.97}, {"x": -100.0, "y": 259.8, "v": 0.26}, {"x": -80.0, "y": 24.8, "v": 0.19}, {"x": -80.0, "y": 46.1, "v": 0.45}, {"x": -80.0, "y": 131.6, "v": 0.97}, {"x": -80.0, "y": 153.0, "v": 0.65}, {"x": -80.0, "y": 174.3, "v": 0.52}, {"x": -80.0, "y": 195.7, "v": 0.26}, {"x": -80.0, "y": 238.4, "v": 0.19}, {"x": -80.0, "y": 259.8, "v": 0.32}, {"x": -60.0, "y": 3.4, "v": 0.32}, {"x": -60.0, "y": 24.8, "v": 0.52}, {"x": -60.0, "y": 46.1, "v": 0.45}, {"x": -60.0, "y": 88.9, "v": 0.39}, {"x": -60.0, "y": 131.6, "v": 0.39}, {"x": -60.0, "y": 153.0, "v": 0.32}, {"x": -60.0, "y": 174.3, "v": 0.32}, {"x": -60.0, "y": 259.8, "v": 0.58}, {"x": -60.0, "y": 281.1, "v": 0.39}, {"x": -40.0, "y": 3.4, "v": 1.3}, {"x": -40.0, "y": 24.8, "v": 1.62}, {"x": -40.0, "y": 46.1, "v": 0.71}, {"x": -40.0, "y": 67.5, "v": 0.65}, {"x": -40.0, "y": 88.9, "v": 0.52}, {"x": -40.0, "y": 110.2, "v": 0.45}, {"x": -40.0, "y": 131.6, "v": 0.52}, {"x": -40.0, "y": 153.0, "v": 0.32}, {"x": -40.0, "y": 174.3, "v": 0.19}, {"x": -40.0, "y": 195.7, "v": 0.26}, {"x": -40.0, "y": 259.8, "v": 0.45}, {"x": -20.0, "y": 3.4, "v": 2.14}, {"x": -20.0, "y": 24.8, "v": 2.2}, {"x": -20.0, "y": 46.1, "v": 0.65}, {"x": -20.0, "y": 67.5, "v": 0.78}, {"x": -20.0, "y": 88.9, "v": 0.45}, {"x": -20.0, "y": 110.2, "v": 0.19}, {"x": -20.0, "y": 131.6, "v": 0.39}, {"x": -20.0, "y": 153.0, "v": 0.71}, {"x": -20.0, "y": 174.3, "v": 0.71}, {"x": -20.0, "y": 259.8, "v": 0.26}, {"x": -20.0, "y": 281.1, "v": 0.26}, {"x": 0.0, "y": 3.4, "v": 4.28}, {"x": 0.0, "y": 24.8, "v": 3.37}, {"x": 0.0, "y": 46.1, "v": 1.56}, {"x": 0.0, "y": 67.5, "v": 1.1}, {"x": 0.0, "y": 88.9, "v": 1.04}, {"x": 0.0, "y": 110.2, "v": 0.97}, {"x": 0.0, "y": 131.6, "v": 0.58}, {"x": 0.0, "y": 153.0, "v": 0.78}, {"x": 0.0, "y": 174.3, "v": 0.45}, {"x": 0.0, "y": 259.8, "v": 0.39}, {"x": 0.0, "y": 281.1, "v": 0.39}, {"x": 20.0, "y": 3.4, "v": 3.95}, {"x": 20.0, "y": 24.8, "v": 3.63}, {"x": 20.0, "y": 46.1, "v": 0.84}, {"x": 20.0, "y": 67.5, "v": 0.26}, {"x": 20.0, "y": 88.9, "v": 0.45}, {"x": 20.0, "y": 110.2, "v": 0.58}, {"x": 20.0, "y": 131.6, "v": 0.45}, {"x": 20.0, "y": 153.0, "v": 0.91}, {"x": 20.0, "y": 174.3, "v": 0.39}, {"x": 20.0, "y": 195.7, "v": 0.19}, {"x": 20.0, "y": 259.8, "v": 0.45}, {"x": 40.0, "y": 3.4, "v": 1.56}, {"x": 40.0, "y": 24.8, "v": 2.2}, {"x": 40.0, "y": 46.1, "v": 0.84}, {"x": 40.0, "y": 67.5, "v": 0.52}, {"x": 40.0, "y": 88.9, "v": 0.32}, {"x": 40.0, "y": 110.2, "v": 0.65}, {"x": 40.0, "y": 131.6, "v": 0.65}, {"x": 40.0, "y": 153.0, "v": 0.52}, {"x": 40.0, "y": 259.8, "v": 0.26}, {"x": 60.0, "y": 3.4, "v": 0.39}, {"x": 60.0, "y": 24.8, "v": 0.91}, {"x": 60.0, "y": 46.1, "v": 0.91}, {"x": 60.0, "y": 67.5, "v": 0.52}, {"x": 60.0, "y": 88.9, "v": 0.19}, {"x": 60.0, "y": 110.2, "v": 0.39}, {"x": 60.0, "y": 131.6, "v": 0.84}, {"x": 60.0, "y": 153.0, "v": 0.91}, {"x": 60.0, "y": 174.3, "v": 0.26}, {"x": 60.0, "y": 195.7, "v": 0.32}, {"x": 60.0, "y": 259.8, "v": 0.26}, {"x": 60.0, "y": 281.1, "v": 0.26}, {"x": 80.0, "y": 24.8, "v": 0.45}, {"x": 80.0, "y": 88.9, "v": 0.39}, {"x": 80.0, "y": 110.2, "v": 0.19}, {"x": 80.0, "y": 131.6, "v": 0.78}, {"x": 80.0, "y": 153.0, "v": 1.04}, {"x": 80.0, "y": 174.3, "v": 0.39}, {"x": 80.0, "y": 238.4, "v": 0.52}, {"x": 80.0, "y": 259.8, "v": 0.52}, {"x": 100.0, "y": 110.2, "v": 0.32}, {"x": 100.0, "y": 131.6, "v": 0.52}, {"x": 100.0, "y": 153.0, "v": 0.58}, {"x": 100.0, "y": 174.3, "v": 0.39}, {"x": 100.0, "y": 217.0, "v": 0.19}, {"x": 100.0, "y": 238.4, "v": 0.71}, {"x": 100.0, "y": 259.8, "v": 0.32}, {"x": 120.0, "y": 24.8, "v": 0.19}, {"x": 120.0, "y": 67.5, "v": 0.19}, {"x": 120.0, "y": 110.2, "v": 0.45}, {"x": 120.0, "y": 174.3, "v": 0.19}, {"x": 120.0, "y": 217.0, "v": 0.19}, {"x": 120.0, "y": 238.4, "v": 1.1}, {"x": 140.0, "y": 24.8, "v": 0.39}, {"x": 140.0, "y": 217.0, "v": 0.65}, {"x": 140.0, "y": 238.4, "v": 0.39}, {"x": 160.0, "y": 195.7, "v": 0.45}, {"x": 160.0, "y": 217.0, "v": 0.45}, {"x": 160.0, "y": 238.4, "v": 0.26}, {"x": 180.0, "y": 174.3, "v": 0.19}, {"x": 180.0, "y": 195.7, "v": 0.45}, {"x": 200.0, "y": 174.3, "v": 0.19}, {"x": 200.0, "y": 195.7, "v": 0.32}, {"x": 220.0, "y": 3.4, "v": 0.39}, {"x": 220.0, "y": 24.8, "v": 0.19}, {"x": 220.0, "y": 67.5, "v": 0.26}, {"x": 240.0, "y": 24.8, "v": 0.32}, {"x": 240.0, "y": 46.1, "v": 0.19}], "VJ Edgecombe": [{"x": -240.0, "y": -18.0, "v": 0.19}, {"x": -240.0, "y": 3.4, "v": 0.68}, {"x": -240.0, "y": 24.8, "v": 0.39}, {"x": -240.0, "y": 46.1, "v": 0.29}, {"x": -240.0, "y": 67.5, "v": 0.19}, {"x": -220.0, "y": -18.0, "v": 0.29}, {"x": -220.0, "y": 3.4, "v": 0.29}, {"x": -220.0, "y": 24.8, "v": 0.58}, {"x": -220.0, "y": 46.1, "v": 0.49}, {"x": -220.0, "y": 67.5, "v": 0.29}, {"x": -220.0, "y": 88.9, "v": 0.19}, {"x": -220.0, "y": 110.2, "v": 0.39}, {"x": -220.0, "y": 131.6, "v": 0.49}, {"x": -220.0, "y": 153.0, "v": 0.29}, {"x": -220.0, "y": 174.3, "v": 0.39}, {"x": -200.0, "y": 153.0, "v": 0.68}, {"x": -200.0, "y": 174.3, "v": 0.87}, {"x": -200.0, "y": 195.7, "v": 0.49}, {"x": -180.0, "y": 174.3, "v": 0.97}, {"x": -180.0, "y": 195.7, "v": 1.17}, {"x": -180.0, "y": 217.0, "v": 0.19}, {"x": -160.0, "y": 174.3, "v": 0.19}, {"x": -160.0, "y": 195.7, "v": 0.87}, {"x": -160.0, "y": 217.0, "v": 0.78}, {"x": -160.0, "y": 238.4, "v": 0.49}, {"x": -140.0, "y": 24.8, "v": 0.19}, {"x": -140.0, "y": 217.0, "v": 1.17}, {"x": -140.0, "y": 238.4, "v": 0.29}, {"x": -140.0, "y": 259.8, "v": 0.19}, {"x": -120.0, "y": 46.1, "v": 0.29}, {"x": -120.0, "y": 131.6, "v": 0.19}, {"x": -120.0, "y": 217.0, "v": 0.68}, {"x": -120.0, "y": 238.4, "v": 0.29}, {"x": -120.0, "y": 259.8, "v": 0.29}, {"x": -100.0, "y": 46.1, "v": 0.19}, {"x": -100.0, "y": 67.5, "v": 0.19}, {"x": -100.0, "y": 110.2, "v": 0.29}, {"x": -100.0, "y": 238.4, "v": 1.07}, {"x": -100.0, "y": 259.8, "v": 0.49}, {"x": -80.0, "y": 3.4, "v": 0.19}, {"x": -80.0, "y": 67.5, "v": 0.19}, {"x": -80.0, "y": 238.4, "v": 0.97}, {"x": -80.0, "y": 259.8, "v": 0.39}, {"x": -60.0, "y": 46.1, "v": 0.19}, {"x": -60.0, "y": 67.5, "v": 0.39}, {"x": -60.0, "y": 88.9, "v": 0.19}, {"x": -60.0, "y": 110.2, "v": 0.39}, {"x": -60.0, "y": 131.6, "v": 0.78}, {"x": -60.0, "y": 153.0, "v": 0.29}, {"x": -60.0, "y": 238.4, "v": 0.29}, {"x": -60.0, "y": 259.8, "v": 0.39}, {"x": -40.0, "y": 3.4, "v": 0.39}, {"x": -40.0, "y": 24.8, "v": 0.87}, {"x": -40.0, "y": 67.5, "v": 0.29}, {"x": -40.0, "y": 88.9, "v": 0.39}, {"x": -40.0, "y": 110.2, "v": 0.19}, {"x": -40.0, "y": 153.0, "v": 0.29}, {"x": -40.0, "y": 174.3, "v": 0.39}, {"x": -40.0, "y": 259.8, "v": 0.58}, {"x": -20.0, "y": 3.4, "v": 2.04}, {"x": -20.0, "y": 24.8, "v": 1.75}, {"x": -20.0, "y": 46.1, "v": 0.78}, {"x": -20.0, "y": 67.5, "v": 0.39}, {"x": -20.0, "y": 88.9, "v": 0.58}, {"x": -20.0, "y": 110.2, "v": 0.68}, {"x": -20.0, "y": 131.6, "v": 0.19}, {"x": -20.0, "y": 153.0, "v": 0.19}, {"x": -20.0, "y": 174.3, "v": 0.19}, {"x": -20.0, "y": 259.8, "v": 0.58}, {"x": 0.0, "y": -18.0, "v": 0.29}, {"x": 0.0, "y": 3.4, "v": 9.42}, {"x": 0.0, "y": 24.8, "v": 4.95}, {"x": 0.0, "y": 46.1, "v": 1.36}, {"x": 0.0, "y": 67.5, "v": 1.46}, {"x": 0.0, "y": 88.9, "v": 0.97}, {"x": 0.0, "y": 110.2, "v": 0.68}, {"x": 0.0, "y": 131.6, "v": 0.68}, {"x": 0.0, "y": 153.0, "v": 0.68}, {"x": 0.0, "y": 174.3, "v": 0.19}, {"x": 0.0, "y": 238.4, "v": 0.39}, {"x": 0.0, "y": 259.8, "v": 0.68}, {"x": 0.0, "y": 281.1, "v": 0.19}, {"x": 0.0, "y": 302.5, "v": 0.19}, {"x": 20.0, "y": 3.4, "v": 3.79}, {"x": 20.0, "y": 24.8, "v": 3.01}, {"x": 20.0, "y": 46.1, "v": 1.07}, {"x": 20.0, "y": 67.5, "v": 0.78}, {"x": 20.0, "y": 88.9, "v": 0.49}, {"x": 20.0, "y": 110.2, "v": 0.19}, {"x": 20.0, "y": 131.6, "v": 0.19}, {"x": 20.0, "y": 153.0, "v": 0.78}, {"x": 20.0, "y": 174.3, "v": 0.39}, {"x": 20.0, "y": 259.8, "v": 0.49}, {"x": 40.0, "y": 3.4, "v": 0.58}, {"x": 40.0, "y": 24.8, "v": 0.78}, {"x": 40.0, "y": 46.1, "v": 0.78}, {"x": 40.0, "y": 67.5, "v": 0.39}, {"x": 40.0, "y": 88.9, "v": 0.19}, {"x": 40.0, "y": 110.2, "v": 0.39}, {"x": 40.0, "y": 153.0, "v": 0.29}, {"x": 40.0, "y": 259.8, "v": 0.97}, {"x": 40.0, "y": 281.1, "v": 0.29}, {"x": 60.0, "y": 24.8, "v": 0.19}, {"x": 60.0, "y": 46.1, "v": 0.29}, {"x": 60.0, "y": 67.5, "v": 0.49}, {"x": 60.0, "y": 88.9, "v": 0.39}, {"x": 60.0, "y": 110.2, "v": 0.58}, {"x": 60.0, "y": 131.6, "v": 0.49}, {"x": 60.0, "y": 153.0, "v": 0.19}, {"x": 60.0, "y": 238.4, "v": 0.19}, {"x": 60.0, "y": 259.8, "v": 0.78}, {"x": 80.0, "y": 46.1, "v": 0.19}, {"x": 80.0, "y": 67.5, "v": 0.19}, {"x": 80.0, "y": 88.9, "v": 0.39}, {"x": 80.0, "y": 110.2, "v": 0.19}, {"x": 80.0, "y": 131.6, "v": 0.19}, {"x": 80.0, "y": 153.0, "v": 0.49}, {"x": 80.0, "y": 174.3, "v": 0.29}, {"x": 80.0, "y": 238.4, "v": 0.39}, {"x": 80.0, "y": 259.8, "v": 0.39}, {"x": 100.0, "y": 67.5, "v": 0.19}, {"x": 100.0, "y": 110.2, "v": 0.39}, {"x": 100.0, "y": 131.6, "v": 0.29}, {"x": 100.0, "y": 153.0, "v": 0.19}, {"x": 100.0, "y": 238.4, "v": 0.97}, {"x": 100.0, "y": 259.8, "v": 0.78}, {"x": 120.0, "y": 3.4, "v": 0.29}, {"x": 120.0, "y": 67.5, "v": 0.19}, {"x": 120.0, "y": 131.6, "v": 0.19}, {"x": 120.0, "y": 217.0, "v": 0.58}, {"x": 120.0, "y": 238.4, "v": 0.78}, {"x": 120.0, "y": 259.8, "v": 0.19}, {"x": 140.0, "y": 3.4, "v": 0.19}, {"x": 140.0, "y": 46.1, "v": 0.19}, {"x": 140.0, "y": 195.7, "v": 0.29}, {"x": 140.0, "y": 217.0, "v": 1.17}, {"x": 140.0, "y": 238.4, "v": 0.78}, {"x": 160.0, "y": 174.3, "v": 0.19}, {"x": 160.0, "y": 195.7, "v": 0.78}, {"x": 160.0, "y": 217.0, "v": 0.58}, {"x": 160.0, "y": 238.4, "v": 0.39}, {"x": 180.0, "y": 174.3, "v": 0.68}, {"x": 180.0, "y": 195.7, "v": 0.87}, {"x": 200.0, "y": 153.0, "v": 1.07}, {"x": 200.0, "y": 174.3, "v": 0.58}, {"x": 220.0, "y": 46.1, "v": 0.29}, {"x": 220.0, "y": 67.5, "v": 0.29}, {"x": 220.0, "y": 88.9, "v": 0.29}, {"x": 220.0, "y": 110.2, "v": 0.29}, {"x": 220.0, "y": 131.6, "v": 0.58}, {"x": 240.0, "y": 3.4, "v": 0.29}, {"x": 240.0, "y": 24.8, "v": 0.29}, {"x": 240.0, "y": 46.1, "v": 0.29}, {"x": 240.0, "y": 67.5, "v": 0.39}, {"x": 240.0, "y": 88.9, "v": 0.29}]};
-const OVERLAY_COLORS = { "Tyrese Maxey": navy, "LeBron James": purple, "Jaylen Brown": risk, "Joel Embiid": gold, "VJ Edgecombe": teal };
-const OVERLAY_SHORT = { "Tyrese Maxey":"Maxey", "LeBron James":"LeBron", "Jaylen Brown":"Brown", "Joel Embiid":"Embiid", "VJ Edgecombe":"Edgecombe" };
-
-// =========================================================
-// 0. COURT OVERLAY
-// =========================================================
-(function() {
-  const svg = d3.select("#chart-overlay");
-  const W = 600, H = 460;
-  // NBA coord system: X -250..250 (feet*10), Y -50..420ish. Map to court box.
-  const x = d3.scaleLinear().domain([-250,250]).range([40, W-40]);
-  const y = d3.scaleLinear().domain([-50,420]).range([H-30, 20]);
-
-  let active = new Set(["Tyrese Maxey","Jaylen Brown"]);
-
-  function drawCourtLines() {
-    const g = svg.append("g").attr("class","court-lines").attr("stroke","#D9D2C2").attr("fill","none").attr("stroke-width",1.5);
-    g.append("rect").attr("x", x(-250)).attr("y", y(420)).attr("width", x(250)-x(-250)).attr("height", y(-50)-y(420));
-    g.append("circle").attr("cx", x(0)).attr("cy", y(0)).attr("r", 3).attr("fill","#D9D2C2");
-    // free throw circle-ish + arc approx
-    g.append("path").attr("d", d3.arc()({innerRadius:0, outerRadius: x(237.5)-x(0), startAngle: -Math.PI*0.44, endAngle: Math.PI*0.44}))
-      .attr("transform", `translate(${x(0)},${y(0)})`);
-    g.append("line").attr("x1", x(-220)).attr("x2", x(-220)).attr("y1", y(0)).attr("y2", y(140));
-    g.append("line").attr("x1", x(220)).attr("x2", x(220)).attr("y1", y(0)).attr("y2", y(140));
-    g.append("rect").attr("x", x(-80)).attr("y", y(190)).attr("width", x(80)-x(-80)).attr("height", y(0)-y(190));
-    g.append("circle").attr("cx", x(0)).attr("cy", y(0)).attr("r", x(7.5)-x(0));
+// diverging quantile-class efficiency color, equal-count breaks so highs/lows visually pop
+const FGPCT_BREAKS = [0.0, 20.0, 33.3, 40.0, 50.0, 66.7, 100.0];
+const CLASS_COLORS = ["#1A4A87","#5B84B8","#A9C0DA","#F2C29A","#E08A4B","#C1440E"]; // blue (below avg) -> orange/red (above avg)
+function effClassColor(fgpct) {
+  for (let i = 0; i < FGPCT_BREAKS.length - 1; i++) {
+    if (fgpct <= FGPCT_BREAKS[i+1] || i === FGPCT_BREAKS.length - 2) return CLASS_COLORS[i];
   }
+  return CLASS_COLORS[CLASS_COLORS.length-1];
+}
+
+// =========================================================
+// 0A. SINGLE PLAYER HEX SHOT CHART (freq / efficiency toggle)
+// =========================================================
+(function(){
+  const svg = d3.select("#chart-hexsingle");
+  const W=600,H=470,M={top:20,right:20,bottom:20,left:20};
+  const x = d3.scaleLinear().domain([-250,250]).range([M.left+20,W-M.right-20]);
+  const y = d3.scaleLinear().domain([-50,420]).range([H-M.bottom,M.top+20]);
+  let player = "Tyrese Maxey";
+  let mode = "freq"; // freq | efficiency
 
   function render() {
     svg.selectAll("*").remove();
-    drawCourtLines();
-    const cell = 500/25;
-    active.forEach(player => {
-      const cells = COURT_DENSITY[player] || [];
-      const maxV = d3.max(cells, d => d.v) || 1;
-      const op = d3.scaleSqrt().domain([0, maxV]).range([0.04, 0.85]);
-      svg.selectAll(`.cell-${player.replace(/\s/g,'')}`)
-        .data(cells).enter().append("rect")
-        .attr("x", d => x(d.x) - (x(cell)-x(0))/2)
-        .attr("y", d => y(d.y) - (y(0)-y(cell))/2)
-        .attr("width", x(cell)-x(0))
-        .attr("height", y(0)-y(cell))
-        .attr("fill", OVERLAY_COLORS[player])
-        .attr("opacity", d => op(d.v))
-        .attr("rx", 2).attr("class","density-cell")
-        .on("mousemove", (evt,d) => showTip(`<b>${OVERLAY_SHORT[player]}</b><br>${d.v}% of shots from here`, evt))
-        .on("mouseleave", hideTip);
-    });
-    // conflict badge if 2+ active
-    if (active.size >= 2) {
-      const names = [...active].map(p => OVERLAY_SHORT[p]).join(" + ");
-      document.getElementById("overlay-note").innerHTML =
-        `Showing <b>${names}</b>. Darker overlap = both players operating from the same real-world court area — that's a literal spacing conflict, not an inferred one.`;
-    } else if (active.size === 1) {
-      document.getElementById("overlay-note").innerHTML = `Showing ${OVERLAY_SHORT[[...active][0]]} alone. Toggle a second player to check for overlap.`;
+    drawCourt(svg, x, y);
+    const cells = HEX_DATA[player] || [];
+    const cellPx = x(500/26+(-250)) - x(-250); // approx cell width in px, used as max dot diameter
+    const maxFreq = d3.max(cells, d=>d.freq) || 1;
+    const rScale = d3.scaleSqrt().domain([0,maxFreq]).range([1, cellPx*0.62]);
+
+    svg.selectAll(".hexcell").data(cells).enter().append("circle")
+      .attr("cx", d => x(d.x)).attr("cy", d => y(d.y))
+      .attr("r", d => mode==="freq" ? rScale(d.freq) : cellPx*0.42)
+      .attr("fill", d => mode==="freq" ? PCOLOR[player] : effClassColor(d.fgpct))
+      .attr("opacity", d => mode==="freq" ? d3.scaleLinear().domain([0,maxFreq]).range([0.35,0.95])(d.freq) : 0.92)
+      .attr("stroke", "#FFFDF8").attr("stroke-width", 0.4)
+      .on("mousemove",(evt,d)=>showTip(`<b>${SHORT[player]}</b><br>${d.fga} attempts here<br>${d.fgpct}% FG · ${d.freq}% of shots`,evt))
+      .on("mouseleave",hideTip);
+
+    document.getElementById("hexsingle-note").innerHTML = mode==="freq"
+      ? `Circle size = share of ${SHORT[player]}'s total shot attempts from that spot (bigger = more frequent).`
+      : `Circle color = FG% class at that spot, using equal-count (quantile) breaks across all 5 players' zones — so "above average" and "below average" are calibrated to this roster's actual shot data, not an arbitrary scale.`;
+
+    const legend = d3.select("#hexsingle-legend");
+    legend.selectAll("*").remove();
+    if (mode === "efficiency") {
+      const wrap = legend.append("span").style("display","flex").style("gap","3px").style("align-items","center");
+      wrap.append("span").style("font-family","var(--mono)").text("below avg.");
+      CLASS_COLORS.forEach(c => wrap.append("span").attr("class","legend-swatch").style("border-radius","50%").style("background",c));
+      wrap.append("span").style("font-family","var(--mono)").text("above avg.");
     } else {
-      document.getElementById("overlay-note").textContent = "Toggle at least one player to see their shot density.";
+      legend.append("span").html(`<span class="legend-swatch" style="background:${PCOLOR[player]};border-radius:50%"></span>bigger = more frequent`);
     }
   }
 
-  const toggles = d3.select("#overlay-toggles");
-  Object.keys(OVERLAY_COLORS).forEach(p => {
-    toggles.append("button").attr("class", "chip" + (active.has(p) ? " active" : ""))
-      .style("border-color", OVERLAY_COLORS[p]).text(OVERLAY_SHORT[p])
-      .on("click", function() {
-        if (active.has(p)) active.delete(p); else active.add(p);
-        d3.select(this).classed("active", active.has(p));
-        render();
-      });
+  const pToggles = d3.select("#hexsingle-players");
+  CORE.forEach(p => {
+    pToggles.append("button").attr("class","chip"+(p===player?" active":"")).text(SHORT[p])
+      .on("click", function(){ player=p; d3.selectAll("#hexsingle-players .chip").classed("active",false); d3.select(this).classed("active",true); render(); });
+  });
+  pToggles.append("span").style("color","var(--rule)").style("padding","0 2px").text("|");
+  BENCH.forEach(p => {
+    pToggles.append("button").attr("class","chip"+(p===player?" active":"")).style("border-style","dashed").text(SHORT[p])
+      .on("click", function(){ player=p; d3.selectAll("#hexsingle-players .chip").classed("active",false); d3.select(this).classed("active",true); render(); });
+  });
+  const mToggles = d3.select("#hexsingle-mode");
+  ["freq","efficiency"].forEach(m => {
+    mToggles.append("button").attr("class","chip"+(m===mode?" active":"")).text(m==="freq"?"frequency":"efficiency")
+      .on("click", function(){ mode=m; d3.selectAll("#hexsingle-mode .chip").classed("active",false); d3.select(this).classed("active",true); render(); });
   });
   render();
 })();
 
 // =========================================================
-// 1. SPACING
+// 0B. BIVARIATE OVERLAP
 // =========================================================
-(function() {
-  const svg = d3.select("#chart-spacing");
-  const W=640,H=420,M={top:40,right:30,bottom:50,left:60};
-  const paletteZone = {rim:navy, mid:risk, three:olive};
-  let mode = "bars"; // bars | trend
-  let isolated = null;
+(function(){
+  const svg = d3.select("#chart-hexoverlap");
+  const W=600,H=470,M={top:20,right:20,bottom:20,left:20};
+  const x = d3.scaleLinear().domain([-250,250]).range([M.left+20,W-M.right-20]);
+  const y = d3.scaleLinear().domain([-50,420]).range([H-M.bottom,M.top+20]);
+  let pa = "Tyrese Maxey", pb = "Jaylen Brown";
 
-  function renderBars() {
+  function render() {
     svg.selectAll("*").remove();
-    const data = SPACING_DATA["2025-26"];
-    const zones = ["rim","mid","three"];
-    const x0 = d3.scaleBand().domain(data.map(d=>d.player)).range([M.left,W-M.right]).padding(0.3);
-    const x1 = d3.scaleBand().domain(zones).range([0,x0.bandwidth()]).padding(0.08);
-    const y = d3.scaleLinear().domain([0,60]).range([H-M.bottom,M.top]);
-
-    svg.append("g").attr("transform",`translate(0,${H-M.bottom})`).call(d3.axisBottom(x0).tickSize(0))
-      .call(g=>g.select(".domain").attr("stroke","#D9D2C2"))
-      .selectAll("text").attr("font-family","IBM Plex Sans").attr("font-size",13).attr("fill",ink).style("cursor","pointer")
-      .on("click",(evt,d)=>{ isolated = isolated===d? null : d; renderBars(); });
-
-    svg.append("g").attr("transform",`translate(${M.left},0)`).call(d3.axisLeft(y).ticks(6).tickSize(-(W-M.left-M.right)))
-      .call(g=>g.select(".domain").remove()).call(g=>g.selectAll(".tick line").attr("stroke","#EDE8DC"))
-      .selectAll("text").attr("font-family","IBM Plex Mono").attr("font-size",10).attr("fill",inkSoft);
-
-    const groups = svg.selectAll(".pgroup").data(data).enter().append("g")
-      .attr("transform", d=>`translate(${x0(d.player)},0)`)
-      .attr("opacity", d => isolated && d.player!==isolated ? 0.25 : 1);
-
-    groups.selectAll("rect").data(d=>zones.map(z=>({zone:z,val:d[z],player:d.player})))
-      .enter().append("rect")
-      .attr("x",d=>x1(d.zone)).attr("width",x1.bandwidth())
-      .attr("y",H-M.bottom).attr("height",0).attr("fill",d=>paletteZone[d.zone]).attr("rx",2)
-      .on("mousemove",(evt,d)=>showTip(`<b>${d.player}</b> · ${d.zone}<br>${d.val}% of FGA`,evt))
-      .on("mouseleave",hideTip)
-      .transition().duration(500).delay((d,i)=>i*40)
-      .attr("y",d=>y(d.val)).attr("height",d=>(H-M.bottom)-y(d.val));
-
-    const legend = svg.append("g").attr("transform",`translate(${M.left},${M.top-22})`);
-    zones.forEach((z,i)=>{
-      const g = legend.append("g").attr("transform",`translate(${i*90},0)`);
-      g.append("rect").attr("width",10).attr("height",10).attr("fill",paletteZone[z]);
-      g.append("text").attr("x",15).attr("y",9).attr("font-family","IBM Plex Mono").attr("font-size",10).attr("fill",inkSoft).text(z);
+    drawCourt(svg, x, y);
+    const ca = HEX_DATA[pa] || [], cb = HEX_DATA[pb] || [];
+    const mapB = new Map(cb.map(d => [`${d.x},${d.y}`, d]));
+    const overlap = [];
+    ca.forEach(da => {
+      const key = `${da.x},${da.y}`;
+      if (mapB.has(key)) {
+        const db = mapB.get(key);
+        const combinedFga = da.fga + db.fga;
+        const combinedFgpct = (da.fgpct*da.fga + db.fgpct*db.fga) / combinedFga;
+        const overlapScore = Math.min(da.freq, db.freq);
+        overlap.push({x:da.x, y:da.y, overlapScore, fgpct: combinedFgpct, fgaA: da.fga, fgaB: db.fga, freqA: da.freq, freqB: db.freq});
+      }
     });
-    document.getElementById("spacing-caption").textContent = "2025-26 season · click a player name to isolate";
+    const cellPx = x(500/26+(-250)) - x(-250);
+    const maxOv = d3.max(overlap, d=>d.overlapScore) || 1;
+    const sizeScale = d3.scaleSqrt().domain([0,maxOv]).range([1.5, cellPx*0.62]);
+
+    svg.selectAll(".ovcell").data(overlap).enter().append("circle")
+      .attr("cx", d => x(d.x)).attr("cy", d => y(d.y))
+      .attr("r", d => sizeScale(d.overlapScore))
+      .attr("fill", d => effClassColor(d.fgpct))
+      .attr("opacity", 0.92).attr("stroke","#FFFDF8").attr("stroke-width",0.4)
+      .on("mousemove",(evt,d)=>showTip(`<b>${SHORT[pa]}</b> ${d.freqA}% here (${d.fgaA} att)<br><b>${SHORT[pb]}</b> ${d.freqB}% here (${d.fgaB} att)<br>combined FG%: ${d.fgpct.toFixed(1)}%`,evt))
+      .on("mouseleave",hideTip);
+
+    // context: light dots for non-overlapping cells of each player
+    [{data:ca,color:PCOLOR[pa]},{data:cb,color:PCOLOR[pb]}].forEach(({data,color})=>{
+      const solo = data.filter(d => !overlap.find(o=>o.x===d.x && o.y===d.y));
+      svg.selectAll(null).data(solo).enter().append("circle")
+        .attr("cx",d=>x(d.x)).attr("cy",d=>y(d.y)).attr("r",2).attr("fill",color).attr("opacity",0.25);
+    });
+
+    const worstCells = overlap.filter(d=>d.overlapScore > d3.quantile(overlap.map(o=>o.overlapScore).sort((a,b)=>a-b),0.7)).sort((a,b)=>a.fgpct-b.fgpct);
+    const worst = worstCells[0];
+    document.getElementById("hexoverlap-note").innerHTML = overlap.length
+      ? `${overlap.length} shared hot zones between ${SHORT[pa]} and ${SHORT[pb]}. Bigger circle = more overlap; color = combined efficiency there.`
+      : `No significant shared zones detected between ${SHORT[pa]} and ${SHORT[pb]} at this resolution.`;
+
+    const narrative = document.getElementById("overlap-narrative");
+    if (worst) {
+      narrative.innerHTML = `<b>Worst high-overlap zone:</b> ${SHORT[pa]} and ${SHORT[pb]} both operate heavily around (${worst.x>0?'right':worst.x<0?'left':'center'} side, ${worst.y<80?'near the rim':worst.y<190?'mid-range':'three-point range'}) — combined ${worst.fgpct.toFixed(1)}% FG in a zone both players are competing for. ${worst.fgpct < 45 ? "That's below-average efficiency in a zone that's already crowded — a real clogging risk." : "Efficiency there is still solid despite the crowding, so it's a spacing inconvenience more than a real problem."}`;
+    } else {
+      narrative.innerHTML = `<b>No major overlap risk detected</b> between ${SHORT[pa]} and ${SHORT[pb]} in this view.`;
+    }
+
+    const legend = d3.select("#hexoverlap-legend");
+    legend.selectAll("*").remove();
+    legend.append("span").style("font-family","var(--mono)").text("size = overlap intensity");
+    const wrap = legend.append("span").style("display","flex").style("gap","3px").style("align-items","center");
+    wrap.append("span").style("font-family","var(--mono)").text("below avg.");
+    CLASS_COLORS.forEach(c => wrap.append("span").attr("class","legend-swatch").style("border-radius","50%").style("background",c));
+    wrap.append("span").style("font-family","var(--mono)").text("above avg.");
   }
 
-  function renderTrend() {
-    svg.selectAll("*").remove();
-    const players = Object.keys(SPACING_TREND);
-    const color = {Brown:risk, Embiid:gold, Maxey:navy, LeBron:purple, Edgecombe:teal};
-    const seasons = ["2022-23","2023-24","2024-25","2025-26"];
-    const x = d3.scalePoint().domain(seasons).range([M.left,W-M.right]).padding(0.5);
-    const y = d3.scaleLinear().domain([0,35]).range([H-M.bottom,M.top]);
-
-    svg.append("g").attr("transform",`translate(0,${H-M.bottom})`).call(d3.axisBottom(x))
-      .call(g=>g.select(".domain").attr("stroke","#D9D2C2"))
-      .selectAll("text").attr("font-family","IBM Plex Mono").attr("font-size",10).attr("fill",inkSoft);
-    svg.append("g").attr("transform",`translate(${M.left},0)`).call(d3.axisLeft(y).ticks(5).tickSize(-(W-M.left-M.right)))
-      .call(g=>g.select(".domain").remove()).call(g=>g.selectAll(".tick line").attr("stroke","#EDE8DC"))
-      .selectAll("text").attr("font-family","IBM Plex Mono").attr("font-size",10).attr("fill",inkSoft);
-    svg.append("text").attr("transform","rotate(-90)").attr("x",-H/2).attr("y",18).attr("text-anchor","middle")
-      .attr("font-family","IBM Plex Sans").attr("font-size",11).attr("fill",inkSoft).text("Mid-range share of FGA (%)");
-
-    players.forEach(p=>{
-      const rows = SPACING_TREND[p];
-      if (rows.length<2) return;
-      const line = d3.line().x(d=>x(d.s)).y(d=>y(d.mid)).curve(d3.curveMonotoneX);
-      svg.append("path").datum(rows).attr("fill","none").attr("stroke",color[p]).attr("stroke-width",p==="Brown"?3.5:2)
-        .attr("opacity", p==="Brown"?1:0.55).attr("d",line);
-      svg.selectAll(`.d-${p}`).data(rows).enter().append("circle")
-        .attr("cx",d=>x(d.s)).attr("cy",d=>y(d.mid)).attr("r",p==="Brown"?5:4)
-        .attr("fill",color[p]).attr("stroke","#FFFDF8").attr("stroke-width",1.5)
-        .on("mousemove",(evt,d)=>showTip(`<b>${p}</b> · ${d.s}<br>${d.mid}% mid-range`,evt)).on("mouseleave",hideTip);
-      const last = rows[rows.length-1];
-      svg.append("text").attr("x",x(last.s)+10).attr("y",y(last.mid)+4).attr("font-family","IBM Plex Sans")
-        .attr("font-size",11).attr("fill",ink).text(p);
+  function buildToggle(sel, current, onPick) {
+    const el = d3.select(sel);
+    el.selectAll("*").remove();
+    CORE.forEach(p => {
+      el.append("button").attr("class","chip"+(p===current?" active":"")).text(SHORT[p])
+        .on("click", () => onPick(p));
     });
-    document.getElementById("spacing-caption").textContent = "Mid-range share over time · Brown highlighted";
+    el.append("span").style("color","var(--rule)").style("padding","0 2px").text("|");
+    BENCH.forEach(p => {
+      el.append("button").attr("class","chip"+(p===current?" active":"")).style("border-style","dashed").text(SHORT[p])
+        .on("click", () => onPick(p));
+    });
   }
-
-  const toggles = d3.select("#spacing-toggles");
-  toggles.append("button").attr("class","chip active").text("2025-26 bars").on("click",function(){
-    mode="bars"; d3.selectAll("#spacing-toggles .chip").classed("active",false); d3.select(this).classed("active",true); renderBars();
-  });
-  toggles.append("button").attr("class","chip").text("trend, 4 seasons").on("click",function(){
-    mode="trend"; d3.selectAll("#spacing-toggles .chip").classed("active",false); d3.select(this).classed("active",true); renderTrend();
-  });
-
-  renderBars();
+  function setA(p) { pa = p; buildToggle("#hexoverlap-a", pa, setA); render(); }
+  function setB(p) { pb = p; buildToggle("#hexoverlap-b", pb, setB); render(); }
+  buildToggle("#hexoverlap-a", pa, setA);
+  buildToggle("#hexoverlap-b", pb, setB);
+  render();
 })();
 
 // =========================================================
-// 2. PLAYMAKING
+// ZONE EXPLAINER (rim/mid/three regions + real numbers)
+// =========================================================
+(function(){
+  const svg = d3.select("#chart-zones");
+  const W=600,H=470;
+  const x = d3.scaleLinear().domain([-250,250]).range([40,W-40]);
+  const y = d3.scaleLinear().domain([-50,420]).range([H-30,40]);
+  const cx = x(0), cy = y(0);
+  const rRim = x(40)-x(0);
+  const rArc = x(230)-x(0);
+  const rOuter = Math.max(x(250)-x(-250), y(-50)-y(420)); // big enough to cover corners
+
+  drawCourt(svg, x, y);
+
+  // THREE zone: big square minus the arc circle (annulus to infinity, clipped by court rect via mask already drawn as court bg)
+  const arcGen = d3.arc();
+  svg.append("path")
+    .attr("d", arcGen({innerRadius:rArc, outerRadius:rOuter, startAngle:-Math.PI/2, endAngle:Math.PI/2}))
+    .attr("transform", `translate(${cx},${cy})`)
+    .attr("fill", olive).attr("opacity",0.14);
+  // corners are rectangular in real courts (straight sideline), approximate with side rects too
+  svg.append("rect").attr("x",x(-250)).attr("y",y(140)).attr("width",x(-220)-x(-250)).attr("height",y(0)-y(140)).attr("fill",olive).attr("opacity",0.14);
+  svg.append("rect").attr("x",x(220)).attr("y",y(140)).attr("width",x(250)-x(220)).attr("height",y(0)-y(140)).attr("fill",olive).attr("opacity",0.14);
+
+  // MID-RANGE zone: annulus between rim and arc
+  svg.append("path")
+    .attr("d", arcGen({innerRadius:rRim, outerRadius:rArc, startAngle:-Math.PI/2, endAngle:Math.PI/2}))
+    .attr("transform", `translate(${cx},${cy})`)
+    .attr("fill", risk).attr("opacity",0.14);
+
+  // RIM zone
+  svg.append("path")
+    .attr("d", arcGen({innerRadius:0, outerRadius:rRim, startAngle:-Math.PI/2, endAngle:Math.PI/2}))
+    .attr("transform", `translate(${cx},${cy})`)
+    .attr("fill", navy).attr("opacity",0.22);
+
+  // side legend, not overlapping court markings
+  const legendData = [
+    {label:"RIM", sub:"56.8% FG · 1.14 pts/shot", color:navy},
+    {label:"MID-RANGE", sub:"43.5% FG · 0.87 pts/shot", color:risk},
+    {label:"THREE", sub:"35.0% FG · 1.05 pts/shot", color:olive},
+  ];
+  const lg = svg.append("g").attr("transform", `translate(${W-175},${H-100})`);
+  lg.append("rect").attr("x",-15).attr("y",-15).attr("width",190).attr("height",95).attr("fill","#FFFDF8").attr("stroke","#D9D2C2").attr("rx",3);
+  legendData.forEach((d,i) => {
+    const row = lg.append("g").attr("transform", `translate(0,${i*28})`);
+    row.append("rect").attr("width",12).attr("height",12).attr("fill",d.color).attr("opacity",0.7).attr("rx",2);
+    row.append("text").attr("x",18).attr("y",10).attr("font-family","IBM Plex Sans").attr("font-weight",600).attr("font-size",11).attr("fill",ink).text(d.label);
+    row.append("text").attr("x",18).attr("y",22).attr("font-family","IBM Plex Mono").attr("font-size",9).attr("fill",inkSoft).text(d.sub);
+  });
+})();
+
+// =========================================================
+// PLAYMAKING (unchanged logic from prior build)
 // =========================================================
 (function() {
   const svg = d3.select("#chart-playmaking");
-  const W=640,H=420,M={top:30,right:30,bottom:50,left:60};
+  const W=640,H=400,M={top:30,right:30,bottom:50,left:60};
   const color = {Maxey:navy, Brown:risk, LeBron:purple, Embiid:gold};
+  const PLAYMAKING_DATA = [
+    {player:"Maxey",season:"2022-23",prbh:32.9},{player:"Maxey",season:"2023-24",prbh:35.0},{player:"Maxey",season:"2024-25",prbh:33.1},{player:"Maxey",season:"2025-26",prbh:28.5},
+    {player:"Brown",season:"2022-23",prbh:16.8},{player:"Brown",season:"2023-24",prbh:16.3},{player:"Brown",season:"2024-25",prbh:17.4},{player:"Brown",season:"2025-26",prbh:22.4},
+    {player:"LeBron",season:"2022-23",prbh:20.8},{player:"LeBron",season:"2023-24",prbh:18.7},{player:"LeBron",season:"2024-25",prbh:17.8},{player:"LeBron",season:"2025-26",prbh:11.7},
+    {player:"Embiid",season:"2022-23",prbh:1.2},{player:"Embiid",season:"2023-24",prbh:1.2},{player:"Embiid",season:"2024-25",prbh:0.0},{player:"Embiid",season:"2025-26",prbh:0.0},
+  ];
   let isolated = null;
-
   function render() {
     svg.selectAll("*").remove();
     const seasons = [...new Set(PLAYMAKING_DATA.map(d=>d.season))].sort();
     const x = d3.scalePoint().domain(seasons).range([M.left,W-M.right]).padding(0.5);
     const y = d3.scaleLinear().domain([0,40]).range([H-M.bottom,M.top]);
     const players = Object.keys(color);
-
-    svg.append("g").attr("transform",`translate(0,${H-M.bottom})`).call(d3.axisBottom(x))
-      .call(g=>g.select(".domain").attr("stroke","#D9D2C2"))
-      .selectAll("text").attr("font-family","IBM Plex Mono").attr("font-size",10).attr("fill",inkSoft);
-    svg.append("g").attr("transform",`translate(${M.left},0)`).call(d3.axisLeft(y).ticks(5).tickSize(-(W-M.left-M.right)))
-      .call(g=>g.select(".domain").remove()).call(g=>g.selectAll(".tick line").attr("stroke","#EDE8DC"))
-      .selectAll("text").attr("font-family","IBM Plex Mono").attr("font-size",10).attr("fill",inkSoft);
-    svg.append("text").attr("transform","rotate(-90)").attr("x",-H/2).attr("y",18).attr("text-anchor","middle")
-      .attr("font-family","IBM Plex Sans").attr("font-size",11).attr("fill",inkSoft).text("PR ball-handler poss. %");
-
+    svg.append("g").attr("transform",`translate(0,${H-M.bottom})`).call(d3.axisBottom(x)).call(g=>g.select(".domain").attr("stroke","#D9D2C2")).selectAll("text").attr("font-family","IBM Plex Mono").attr("font-size",10).attr("fill",inkSoft);
+    svg.append("g").attr("transform",`translate(${M.left},0)`).call(d3.axisLeft(y).ticks(5).tickSize(-(W-M.left-M.right))).call(g=>g.select(".domain").remove()).call(g=>g.selectAll(".tick line").attr("stroke","#EDE8DC")).selectAll("text").attr("font-family","IBM Plex Mono").attr("font-size",10).attr("fill",inkSoft);
+    svg.append("text").attr("transform","rotate(-90)").attr("x",-H/2).attr("y",18).attr("text-anchor","middle").attr("font-family","IBM Plex Sans").attr("font-size",11).attr("fill",inkSoft).text("PR ball-handler poss. %");
     players.forEach(p=>{
       const rows = PLAYMAKING_DATA.filter(d=>d.player===p).sort((a,b)=>a.season.localeCompare(b.season));
       const dim = isolated && isolated!==p;
       const line = d3.line().x(d=>x(d.season)).y(d=>y(d.prbh)).curve(d3.curveMonotoneX);
-      svg.append("path").datum(rows).attr("fill","none").attr("stroke",color[p])
-        .attr("stroke-width",isolated===p?4:2.5).attr("opacity",dim?0.15:0.85).attr("d",line);
-      svg.selectAll(`.pd-${p}`).data(rows).enter().append("circle")
-        .attr("cx",d=>x(d.season)).attr("cy",d=>y(d.prbh)).attr("r",5)
-        .attr("fill",color[p]).attr("stroke","#FFFDF8").attr("stroke-width",1.5).attr("opacity",dim?0.15:1)
-        .style("cursor","pointer")
-        .on("mousemove",(evt,d)=>showTip(`<b>${p}</b> · ${d.season}<br>${d.prbh}% of possessions as PnR ball-handler`,evt))
-        .on("mouseleave",hideTip)
+      svg.append("path").datum(rows).attr("fill","none").attr("stroke",color[p]).attr("stroke-width",isolated===p?4:2.5).attr("opacity",dim?0.15:0.85).attr("d",line);
+      svg.selectAll(`.pd-${p}`).data(rows).enter().append("circle").attr("cx",d=>x(d.season)).attr("cy",d=>y(d.prbh)).attr("r",5).attr("fill",color[p]).attr("stroke","#FFFDF8").attr("stroke-width",1.5).attr("opacity",dim?0.15:1).style("cursor","pointer")
+        .on("mousemove",(evt,d)=>showTip(`<b>${p}</b> · ${d.season}<br>${d.prbh}% of possessions as PnR ball-handler`,evt)).on("mouseleave",hideTip)
         .on("click",()=>{ isolated = isolated===p?null:p; render(); });
       const last = rows[rows.length-1];
-      svg.append("text").attr("x",x(last.season)+10).attr("y",y(last.prbh)+4).attr("font-family","IBM Plex Sans")
-        .attr("font-size",11).attr("fill",ink).attr("opacity",dim?0.2:1).text(p);
+      svg.append("text").attr("x",x(last.season)+10).attr("y",y(last.prbh)+4).attr("font-family","IBM Plex Sans").attr("font-size",11).attr("fill",ink).attr("opacity",dim?0.2:1).text(p);
     });
   }
-
   const toggles = d3.select("#playmaking-toggles");
   Object.keys(color).forEach(p=>{
     toggles.append("button").attr("class","chip").style("border-color",color[p]).text(p)
@@ -479,88 +581,121 @@ const OVERLAY_SHORT = { "Tyrese Maxey":"Maxey", "LeBron James":"LeBron", "Jaylen
 })();
 
 // =========================================================
-// 3. PACE / MAXEY+EMBIID FIT
+// SPEED RACE
 // =========================================================
-(function() {
-  const svg = d3.select("#chart-pace");
-  const W=640,H=420,M={top:40,right:30,bottom:50,left:60};
+(function(){
+  const svg = d3.select("#chart-race");
+  const W=640,H=220,M={left:70,right:60,top:40,bottom:40};
+  const SPEEDS = {"Joel Embiid":3.67,"Tyrese Maxey":4.26,"Jaylen Brown":4.06,"LeBron James":3.62,"VJ Edgecombe":4.25,"Dean Wade":4.53,"Anfernee Simons":4.40,"Kentavious Caldwell-Pope":4.20,"Adem Bona":4.43,"Ariel Hukporti":4.41};
+  let opponent = "Tyrese Maxey";
+  let animId = null, startTime = null;
+  const RACE_SECONDS = 3.5;
 
-  function render() {
+  const x = d3.scaleLinear().domain([0,1]).range([M.left, W-M.right]);
+
+  function drawTrack() {
     svg.selectAll("*").remove();
-    const x = d3.scaleBand().domain(PACE_DATA.map(d=>d.season)).range([M.left,W-M.right]).padding(0.45);
-    const yNet = d3.scaleLinear().domain([-8,16]).range([H-M.bottom, H-M.bottom-150]);
-    const yDist = d3.scaleLinear().domain([1.7,2.6]).range([H-M.bottom-170, M.top]);
+    svg.append("line").attr("x1",x(0)).attr("x2",x(1)).attr("y1",70).attr("y2",70).attr("stroke","#D9D2C2").attr("stroke-width",2);
+    svg.append("line").attr("x1",x(0)).attr("x2",x(1)).attr("y1",150).attr("y2",150).attr("stroke","#D9D2C2").attr("stroke-width",2);
+    svg.append("line").attr("x1",x(1)).attr("x2",x(1)).attr("y1",50).attr("y2",170).attr("stroke",ink).attr("stroke-width",2).attr("stroke-dasharray","3,3");
+    svg.append("text").attr("x",x(1)+8).attr("y",115).attr("font-family","IBM Plex Mono").attr("font-size",10).attr("fill",inkSoft).text("finish");
 
-    svg.append("g").attr("transform",`translate(0,${H-M.bottom})`).call(d3.axisBottom(x))
-      .call(g=>g.select(".domain").attr("stroke","#D9D2C2"))
-      .selectAll("text").attr("font-family","IBM Plex Mono").attr("font-size",11).attr("fill",inkSoft);
+    svg.append("text").attr("x",M.left).attr("y",55).attr("font-family","IBM Plex Sans").attr("font-size",13).attr("fill",gold).attr("font-weight",600).text(`Embiid — ${SPEEDS["Joel Embiid"]} mph avg.`);
+    svg.append("text").attr("x",M.left).attr("y",135).attr("font-family","IBM Plex Sans").attr("font-size",13).attr("fill",PCOLOR[opponent]).attr("font-weight",600).text(`${SHORT[opponent]} — ${SPEEDS[opponent]} mph avg.`);
 
-    svg.append("line").attr("x1",M.left).attr("x2",W-M.right).attr("y1",yNet(0)).attr("y2",yNet(0)).attr("stroke","#D9D2C2");
-    svg.selectAll(".netbar").data(MAXEY_EMBIID_NET).enter().append("rect")
-      .attr("x",d=>x(d.season)+x.bandwidth()/2-20).attr("width",40)
-      .attr("y",yNet(0)).attr("height",0).attr("fill",d=>d.netRating>=0?olive:risk).attr("rx",2)
-      .on("mousemove",(evt,d)=>showTip(`<b>Maxey+Embiid</b> · ${d.season}<br>Net rating: ${d.netRating>0?'+':''}${d.netRating}<br>${d.minutes} min together`,evt))
-      .on("mouseleave",hideTip)
-      .transition().duration(600)
-      .attr("y",d=>Math.min(yNet(0),yNet(d.netRating))).attr("height",d=>Math.abs(yNet(d.netRating)-yNet(0)));
-    svg.selectAll(".netlbl").data(MAXEY_EMBIID_NET).enter().append("text")
-      .attr("x",d=>x(d.season)+x.bandwidth()/2).attr("y",d=>yNet(d.netRating)+(d.netRating>=0?-8:16))
-      .attr("text-anchor","middle").attr("font-family","IBM Plex Mono").attr("font-size",11).attr("fill",ink)
-      .text(d=>(d.netRating>0?"+":"")+d.netRating);
-    svg.append("text").attr("x",M.left).attr("y",yNet(16)-10).attr("font-family","IBM Plex Sans")
-      .attr("font-size",11).attr("fill",inkSoft).text("Maxey + Embiid on-court net rating");
+    svg.append("circle").attr("id","dot-embiid").attr("cx",x(0)).attr("cy",70).attr("r",9).attr("fill",gold);
+    svg.append("circle").attr("id","dot-opp").attr("cx",x(0)).attr("cy",150).attr("r",9).attr("fill",PCOLOR[opponent]);
 
-    const lineMaxey = d3.line().x(d=>x(d.season)+x.bandwidth()/2).y(d=>yDist(d.maxey)).curve(d3.curveMonotoneX);
-    const lineLeague = d3.line().x(d=>x(d.season)+x.bandwidth()/2).y(d=>yDist(d.leagueAvg)).curve(d3.curveMonotoneX);
-    svg.append("path").datum(PACE_DATA).attr("fill","none").attr("stroke","#D9D2C2").attr("stroke-width",2).attr("stroke-dasharray","4,3").attr("d",lineLeague);
-    svg.append("path").datum(PACE_DATA).attr("fill","none").attr("stroke",navy).attr("stroke-width",3).attr("d",lineMaxey);
-    svg.selectAll(".dotm").data(PACE_DATA).enter().append("circle")
-      .attr("cx",d=>x(d.season)+x.bandwidth()/2).attr("cy",d=>yDist(d.maxey)).attr("r",5).attr("fill",navy)
-      .on("mousemove",(evt,d)=>showTip(`<b>Maxey</b> · ${d.season}<br>${d.maxey.toFixed(2)} mi/game`,evt)).on("mouseleave",hideTip);
-    svg.append("text").attr("x",M.left).attr("y",M.top).attr("font-family","IBM Plex Sans").attr("font-size",11).attr("fill",navy).text("Maxey — miles run/game");
-    svg.append("text").attr("x",M.left).attr("y",M.top+14).attr("font-family","IBM Plex Sans").attr("font-size",11).attr("fill",inkSoft).text("league avg — miles run/game");
+    const gapPct = Math.round((SPEEDS[opponent]-SPEEDS["Joel Embiid"])/SPEEDS["Joel Embiid"]*100);
+    document.getElementById("race-note").innerHTML = `${SHORT[opponent]} averages ${gapPct > 0 ? gapPct+"% faster" : Math.abs(gapPct)+"% slower"} than Embiid in real tracking data (${SPEEDS[opponent]} vs. ${SPEEDS["Joel Embiid"]} mph). Press "run race" to watch the gap play out over a simulated possession.`;
   }
-  render();
+
+  function animate(ts) {
+    if (!startTime) startTime = ts;
+    const elapsed = (ts - startTime) / 1000;
+    const maxSpeed = Math.max(...Object.values(SPEEDS));
+    const tEmbiid = Math.min(1, (elapsed / RACE_SECONDS) * (SPEEDS["Joel Embiid"]/maxSpeed));
+    const tOpp = Math.min(1, (elapsed / RACE_SECONDS) * (SPEEDS[opponent]/maxSpeed));
+    d3.select("#dot-embiid").attr("cx", x(tEmbiid));
+    d3.select("#dot-opp").attr("cx", x(tOpp));
+    if (tEmbiid < 1 || tOpp < 1) { animId = requestAnimationFrame(animate); }
+    else { animId = null; startTime = null; }
+  }
+
+  document.getElementById("race-play").addEventListener("click", () => {
+    if (animId) cancelAnimationFrame(animId);
+    startTime = null;
+    drawTrack();
+    animId = requestAnimationFrame(animate);
+  });
+
+  const toggles = d3.select("#race-toggles");
+  Object.keys(SPEEDS).filter(p=>p!=="Joel Embiid").forEach(p => {
+    toggles.append("button").attr("class","chip"+(p===opponent?" active":"")+(BENCH.includes(p)?" bench-chip":"")).style("border-style", BENCH.includes(p)?"dashed":"solid").text(SHORT[p])
+      .on("click", function(){ opponent=p; d3.selectAll("#race-toggles .chip").classed("active",false); d3.select(this).classed("active",true); if(animId) cancelAnimationFrame(animId); startTime=null; drawTrack(); });
+  });
+  drawTrack();
 })();
 
 // =========================================================
-// 4. DEFENSE
+// PACE / NET RATING (unchanged)
+// =========================================================
+(function() {
+  const svg = d3.select("#chart-pace");
+  const W=640,H=340,M={top:30,right:30,bottom:50,left:60};
+  const MAXEY_EMBIID_NET = [{season:"2022-23",minutes:1201,netRating:10.6},{season:"2023-24",minutes:958,netRating:12.4},{season:"2024-25",minutes:389,netRating:-3.2},{season:"2025-26",minutes:961,netRating:7.2}];
+  const x = d3.scaleBand().domain(MAXEY_EMBIID_NET.map(d=>d.season)).range([M.left,W-M.right]).padding(0.4);
+  const yNet = d3.scaleLinear().domain([-6,14]).range([H-M.bottom, M.top]);
+  svg.append("g").attr("transform",`translate(0,${H-M.bottom})`).call(d3.axisBottom(x)).call(g=>g.select(".domain").attr("stroke","#D9D2C2")).selectAll("text").attr("font-family","IBM Plex Mono").attr("font-size",11).attr("fill",inkSoft);
+  svg.append("line").attr("x1",M.left).attr("x2",W-M.right).attr("y1",yNet(0)).attr("y2",yNet(0)).attr("stroke","#D9D2C2");
+  svg.selectAll("rect").data(MAXEY_EMBIID_NET).enter().append("rect")
+    .attr("x",d=>x(d.season)+x.bandwidth()/2-25).attr("width",50).attr("y",yNet(0)).attr("height",0)
+    .attr("fill",d=>d.netRating>=0?olive:risk).attr("rx",2)
+    .on("mousemove",(evt,d)=>showTip(`<b>Maxey+Embiid</b> · ${d.season}<br>Net rating: ${d.netRating>0?'+':''}${d.netRating}<br>${d.minutes} min together`,evt)).on("mouseleave",hideTip)
+    .transition().duration(600).attr("y",d=>Math.min(yNet(0),yNet(d.netRating))).attr("height",d=>Math.abs(yNet(d.netRating)-yNet(0)));
+  svg.selectAll(".netlbl").data(MAXEY_EMBIID_NET).enter().append("text").attr("x",d=>x(d.season)+x.bandwidth()/2).attr("y",d=>yNet(d.netRating)+(d.netRating>=0?-8:16)).attr("text-anchor","middle").attr("font-family","IBM Plex Mono").attr("font-size",12).attr("fill",ink).text(d=>(d.netRating>0?"+":"")+d.netRating);
+})();
+
+// =========================================================
+// DEFENSE (unchanged)
 // =========================================================
 (function() {
   const svg = d3.select("#chart-defense");
-  const W=640,H=340,M={top:20,right:30,bottom:40,left:90};
+  const W=640,H=460,M={top:20,right:30,bottom:40,left:90};
+  const DEFENSE_DATA = [
+    {player:"Maxey",pctPlusMinus:0.6,dFgPct:47.1,normalFgPct:46.5,bench:false},
+    {player:"Edgecombe",pctPlusMinus:0.7,dFgPct:45.8,normalFgPct:45.1,bench:false},
+    {player:"Embiid",pctPlusMinus:-4.1,dFgPct:43.9,normalFgPct:48.0,bench:false},
+    {player:"LeBron",pctPlusMinus:1.5,dFgPct:47.9,normalFgPct:46.4,bench:false},
+    {player:"Brown",pctPlusMinus:-4.2,dFgPct:42.8,normalFgPct:47.0,bench:false},
+    {player:"Wade",pctPlusMinus:-2.3,dFgPct:44.5,normalFgPct:46.8,bench:true},
+    {player:"Simons",pctPlusMinus:1.2,dFgPct:46.8,normalFgPct:45.6,bench:true},
+    {player:"KCP",pctPlusMinus:8.6,dFgPct:54.9,normalFgPct:46.3,bench:true},
+    {player:"Bona",pctPlusMinus:-1.0,dFgPct:47.8,normalFgPct:48.8,bench:true},
+    {player:"Hukporti",pctPlusMinus:-9.4,dFgPct:38.3,normalFgPct:47.6,bench:true},
+  ];
   let selected = null;
-
   function render() {
     svg.selectAll("*").remove();
-    const y = d3.scaleBand().domain(DEFENSE_DATA.map(d=>d.player)).range([M.top,H-M.bottom]).padding(0.35);
-    const x = d3.scaleLinear().domain([-5,2]).range([M.left,W-M.right]);
-
-    svg.append("g").attr("transform",`translate(0,${H-M.bottom})`).call(d3.axisBottom(x).ticks(7))
-      .call(g=>g.select(".domain").attr("stroke","#D9D2C2"))
-      .selectAll("text").attr("font-family","IBM Plex Mono").attr("font-size",10).attr("fill",inkSoft);
+    const y = d3.scaleBand().domain(DEFENSE_DATA.map(d=>d.player)).range([M.top,H-M.bottom]).padding(0.3);
+    const x = d3.scaleLinear().domain([-11,10]).range([M.left,W-M.right]);
+    svg.append("g").attr("transform",`translate(0,${H-M.bottom})`).call(d3.axisBottom(x).ticks(7)).call(g=>g.select(".domain").attr("stroke","#D9D2C2")).selectAll("text").attr("font-family","IBM Plex Mono").attr("font-size",10).attr("fill",inkSoft);
     svg.append("g").attr("transform",`translate(${x(0)},0)`).call(g=>g.append("line").attr("y1",M.top).attr("y2",H-M.bottom).attr("stroke","#D9D2C2"));
-
     svg.selectAll("rect").data(DEFENSE_DATA).enter().append("rect")
-      .attr("y",d=>y(d.player)).attr("height",y.bandwidth())
-      .attr("x",d=>x(Math.min(0,d.pctPlusMinus))).attr("width",0)
-      .attr("fill",d=>d.pctPlusMinus<=0?navy:risk).attr("rx",2).style("cursor","pointer")
-      .on("mousemove",(evt,d)=>showTip(`<b>${d.player}</b><br>Defended FG%: ${d.dFgPct}<br>Normal FG%: ${d.normalFgPct}<br>Diff: ${d.pctPlusMinus>0?'+':''}${d.pctPlusMinus}`,evt))
-      .on("mouseleave",hideTip)
+      .attr("y",d=>y(d.player)).attr("height",y.bandwidth()).attr("x",d=>x(Math.min(0,d.pctPlusMinus))).attr("width",0)
+      .attr("fill",d=>d.pctPlusMinus<=0?navy:risk).attr("opacity",d=>d.bench?0.65:1).attr("rx",2).style("cursor","pointer")
+      .on("mousemove",(evt,d)=>showTip(`<b>${d.player}</b>${d.bench?' (bench, pre-Sixers data)':''}<br>Defended FG%: ${d.dFgPct}<br>Normal FG%: ${d.normalFgPct}`,evt)).on("mouseleave",hideTip)
       .on("click",d=>{ selected = selected===d.player?null:d.player; updateNote(); render(); })
-      .transition().duration(500).delay((d,i)=>i*70)
-      .attr("width",d=>Math.abs(x(d.pctPlusMinus)-x(0)));
-
-    svg.selectAll(".lbl").data(DEFENSE_DATA).enter().append("text")
-      .attr("x",M.left-10).attr("y",d=>y(d.player)+y.bandwidth()/2+4).attr("text-anchor","end")
-      .attr("font-family","IBM Plex Sans").attr("font-size",12).attr("fill",ink)
-      .attr("font-weight", d=>d.player===selected?600:400).text(d=>d.player);
+      .transition().duration(500).delay((d,i)=>i*50).attr("width",d=>Math.abs(x(d.pctPlusMinus)-x(0)));
+    svg.selectAll(".lbl").data(DEFENSE_DATA).enter().append("text").attr("x",M.left-10).attr("y",d=>y(d.player)+y.bandwidth()/2+4).attr("text-anchor","end").attr("font-family","IBM Plex Sans").attr("font-style",d=>d.bench?"italic":"normal").attr("font-size",12).attr("fill",ink).attr("font-weight",d=>d.player===selected?600:400).text(d=>d.player);
+    svg.append("line").attr("x1",M.left-15).attr("x2",W-M.right).attr("y1",y("Wade")-y.bandwidth()*0.35).attr("y2",y("Wade")-y.bandwidth()*0.35).attr("stroke","#D9D2C2").attr("stroke-dasharray","2,2");
+    svg.append("text").attr("x",W-M.right).attr("y",y("Wade")-y.bandwidth()*0.35-6).attr("text-anchor","end").attr("font-family","IBM Plex Mono").attr("font-size",9).attr("fill",inkSoft).text("bench (italic) = last season, pre-Sixers");
   }
   function updateNote() {
     const note = document.getElementById("defense-note");
-    if (!selected) { note.innerHTML = "Embiid and Brown are essentially tied as the roster's best individual defenders. LeBron shows up as a real defensive minus for the first time in this four-season window."; return; }
+    if (!selected) { note.innerHTML = "Embiid, Brown, and Hukporti grade out as the roster's best individual defenders by this measure. KCP is a real outlier in the wrong direction — worth watching whether that holds up in a Sixers system."; return; }
     const d = DEFENSE_DATA.find(r=>r.player===selected);
-    note.innerHTML = `<b>${d.player}</b>: opponents shoot ${d.dFgPct}% against them vs. their normal ${d.normalFgPct}% (${d.pctPlusMinus>0?'+':''}${d.pctPlusMinus} pts) — ${d.pctPlusMinus<0 ? 'a real defensive plus' : 'a defensive minus'}.`;
+    note.innerHTML = `<b>${d.player}</b>${d.bench?' <span style="font-style:italic;color:var(--ink-soft)">(bench, last season with prior team)</span>':''}: opponents shoot ${d.dFgPct}% against them vs. their normal ${d.normalFgPct}% — ${d.pctPlusMinus<0?'a real defensive plus':'a defensive minus'}.`;
   }
   render();
 })();
