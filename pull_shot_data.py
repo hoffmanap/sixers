@@ -183,6 +183,33 @@ def pull_drop_coverage_defense(season: str) -> pd.DataFrame:
     return df
 
 
+def pull_defense_by_zone(season: str) -> pd.DataFrame:
+    """Same defended-FG% data as pull_drop_coverage_defense, but split by
+    shot distance instead of collapsed to one 'Overall' number. This is
+    the closest real approximation to a spatial defense chart available
+    from stats.nba.com - not true x/y coordinates, but a real rim/mid/
+    three-ish zone breakdown that can be plotted onto the same court
+    diagram used for the offensive zone chart. One call per category."""
+    categories = ["3 Pointers", "2 Pointers", "Less Than 6Ft", "Less Than 10Ft", "Greater Than 15Ft"]
+    frames = []
+    for cat in categories:
+        try:
+            resp = leaguedashptdefend.LeagueDashPtDefend(
+                season=season,
+                season_type_all_star="Regular Season",
+                defense_category=cat,
+                timeout=30,
+            )
+            df = resp.get_data_frames()[0]
+            df["DEFENSE_CATEGORY"] = cat
+            df["SEASON"] = season
+            frames.append(df)
+            time.sleep(REQUEST_DELAY_SEC)
+        except Exception as e:
+            print(f"    defense zone {cat} {season} FAILED ({e})")
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
 def pull_lineups(season: str, min_group_size: int = 2) -> pd.DataFrame:
     """All 76ers 2-man combos with minutes, net rating, on-court numbers.
     This is how you actually answer 'does X fit with Y' - not shot profiles
@@ -277,7 +304,7 @@ def main():
     # League-wide tracking pulls (one call per season, not per-player) -
     # these come back with EVERY player in the league, so we filter down
     # to our roster before saving.
-    speed_frames, defend_frames = [], []
+    speed_frames, defend_frames, defend_zone_frames = [], [], []
     for season in SEASONS:
         try:
             speed_frames.append(pull_speed_distance(season))
@@ -289,6 +316,12 @@ def main():
             time.sleep(REQUEST_DELAY_SEC)
         except Exception as e:
             print(f"Defend {season} FAILED ({e})")
+        try:
+            dz = pull_defense_by_zone(season)
+            if not dz.empty:
+                defend_zone_frames.append(dz)
+        except Exception as e:
+            print(f"Defend-by-zone {season} FAILED ({e})")
 
     if speed_frames:
         speed_df = pd.concat(speed_frames, ignore_index=True)
@@ -309,6 +342,18 @@ def main():
                 OUT_DIR / "defend_summary.csv", index=False
             )
         print("Wrote data/defend_summary.csv (+ _league.csv full version)")
+
+    if defend_zone_frames:
+        dz_df = pd.concat(defend_zone_frames, ignore_index=True)
+        dz_df.to_csv(OUT_DIR / "defend_by_zone_league.csv", index=False)
+        name_col = "PLAYER_NAME" if "PLAYER_NAME" in dz_df.columns else None
+        if name_col:
+            dz_df[dz_df["PLAYER_NAME"].isin(PLAYERS)].to_csv(
+                OUT_DIR / "defend_by_zone.csv", index=False
+            )
+        print("Wrote data/defend_by_zone.csv (+ _league.csv full version) - "
+              "zone-level defended FG%, the closest available proxy for a "
+              "spatial defense chart")
 
     # 76ers-specific lineup on/off data - answers "does X fit with Y"
     # directly via net rating, not shot-profile inference.
