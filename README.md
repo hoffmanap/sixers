@@ -202,3 +202,12 @@ have no 2025-26 baseline shown.
   long twos, and threes. NBA's "greater than 15 ft" category includes threes, so long twos are derived as
   15 ft+ minus threes, and 6-15 ft as all twos minus the other two-point bands.
 - Rebuild after re-pulling data: `python tools/build_viz_data.py` (writes `tools/viz_data.json`).
+
+## With / without a teammate (spacing)
+
+`spacing.py` splits a player's shots into games where a teammate played and games he missed, and the site
+shows where the shot map shifts (orange = more shots there with the teammate, blue = fewer), plus the
+rim / mid-range / three shares. History (Maxey, Embiid, Edgecombe, 2022-27) is built by
+`tools/build_viz_data.py`; 2026-27 is rebuilt by every `update_live.py` run. It is a game-level comparison,
+not minute-by-minute lineups, and the page flags pairs with fewer than 40 shots on either side.
+Ariel Hukporti (season-ending Achilles injury) was removed from the analysis.

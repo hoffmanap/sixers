@@ -27,15 +27,6 @@
    "three": 58.5,
    "three_fg": 38.5
   },
-  "Ariel Hukporti": {
-   "fga": 80,
-   "rim": 93.8,
-   "rim_fg": 58.7,
-   "mid": 1.2,
-   "mid_fg": 0.0,
-   "three": 5.0,
-   "three_fg": 25.0
-  },
   "Dean Wade": {
    "fga": 278,
    "rim": 26.6,
@@ -154,12 +145,6 @@
    "fga": 286,
    "d_fg": 54.9,
    "gp": 50
-  },
-  "Ariel Hukporti": {
-   "diff": -9.4,
-   "fga": 243,
-   "d_fg": 38.3,
-   "gp": 50
   }
  },
  "speed": {
@@ -170,10 +155,6 @@
   "Anfernee Simons": {
    "speed": 4.4,
    "gp": 55
-  },
-  "Ariel Hukporti": {
-   "speed": 4.41,
-   "gp": 54
   },
   "Dean Wade": {
    "speed": 4.53,

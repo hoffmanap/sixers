@@ -17,16 +17,19 @@ locally (run_update.bat on Windows) - see README.
 import argparse, json, sys, time, datetime as dt
 from pathlib import Path
 import pandas as pd
+sys.path.insert(0, str(Path(__file__).parent))
+import spacing
 
 ROOT = Path(__file__).parent
 SEASON = "2026-27"
 PHI = 1610612755
+CORE = ["Tyrese Maxey", "Joel Embiid", "LeBron James", "Jaylen Brown", "VJ Edgecombe"]
 DELAY = 1.2
 PLAYERS = ["Tyrese Maxey", "Joel Embiid", "LeBron James", "Jaylen Brown", "VJ Edgecombe",
-           "Dean Wade", "Anfernee Simons", "Kentavious Caldwell-Pope", "Adem Bona", "Ariel Hukporti"]
+           "Dean Wade", "Anfernee Simons", "Kentavious Caldwell-Pope", "Adem Bona"]
 # short key -> (last-name token used to match lineup GROUP_NAME, full name)
 PAIRS = [("Maxey", "Embiid"), ("Maxey", "Edgecombe"), ("James", "Brown"), ("Embiid", "Brown"),
-         ("Wade", "Maxey"), ("Wade", "Brown"), ("Simons", "Maxey"), ("Bona", "Maxey"), ("Hukporti", "Maxey")]
+         ("Wade", "Maxey"), ("Wade", "Brown"), ("Simons", "Maxey"), ("Bona", "Maxey")]
 ZONE = {"Restricted Area": "rim", "In The Paint (Non-RA)": "rim", "Mid-Range": "mid",
         "Above the Break 3": "three", "Left Corner 3": "three", "Right Corner 3": "three"}
 
@@ -168,7 +171,18 @@ def pull_live(season):
                    season_type_all_star="Regular Season")
     tstats = _call(leaguedashteamstats.LeagueDashTeamStats, season=season, season_type_all_star="Regular Season",
                    measure_type_detailed_defense="Advanced", per_mode_detailed="Per100Possessions")
-    return shots, defense, speed, lineups, pt, pstats, tstats
+    # which games each player actually played (minutes > 0), for the with/without-teammate view
+    from nba_api.stats.endpoints import playergamelog
+    presence = {}
+    for name in PLAYERS:
+        hit = sp.find_players_by_full_name(name)
+        if not hit:
+            continue
+        gl = _call(playergamelog.PlayerGameLog, player_id=hit[0]["id"], season=season, season_type_all_star="Regular Season")
+        if len(gl):
+            gl = gl[pd.to_numeric(gl["MIN"], errors="coerce").fillna(0) > 0]
+            presence[name] = set(gl["Game_ID"].astype(str))
+    return shots, defense, speed, lineups, pt, pstats, tstats, presence
 
 
 def team_row(tstats):
@@ -181,7 +195,7 @@ def team_row(tstats):
 
 
 # ---------------------------------------------------------------- assemble
-def assemble(season, shots, defense, speed, lineups, pt, pstats, tstats, preds, base, history):
+def assemble(season, shots, defense, speed, lineups, pt, pstats, tstats, preds, base, history, presence=None):
     d_tab, s_tab, p_tab = defense_table(defense), speed_table(speed), pair_table(lineups)
     team = team_row(tstats) if tstats is not None and len(tstats) else {}
     gp = {r.PLAYER_NAME: int(r.GP) for _, r in pstats.iterrows()} if pstats is not None and len(pstats) else {}
@@ -197,6 +211,7 @@ def assemble(season, shots, defense, speed, lineups, pt, pstats, tstats, preds, 
             "team": team, "metrics": met, "zones": shot_profile(shots) if len(shots) else {},
             "defense": d_tab, "speed": s_tab, "pairs": p_tab, "games_played": gp,
             "trend": {"brown_mid": cumulative_trend(shots, "Jaylen Brown")} if len(shots) else {},
+            "spacing": spacing.build(shots[shots.TEAM_ID == PHI] if "TEAM_ID" in shots.columns else shots, presence or {}, CORE, PLAYERS) if len(shots) else {},
             "history": history, "predictions": preds["predictions"], "baselines": base}
 
 
@@ -244,15 +259,17 @@ def main():
         tstats = pd.DataFrame([{"TEAM_ID": PHI, "GP": 82, "W": 45, "L": 37, "OFF_RATING": 116.0, "DEF_RATING": 114.0,
                                 "NET_RATING": 2.0, "OFF_RATING_RANK": 7, "DEF_RATING_RANK": 14}])
         pstats = pd.DataFrame([{"PLAYER_NAME": k, "GP": v} for k, v in gp.items()])
-        res = assemble(a.replay_season + " (REPLAY)", shots, defense, speed, lineups, pt, pstats, tstats, preds, base, [])
+        phi = shots[shots.TEAM_ID == PHI]
+        pres = {p: set(g.GAME_ID.astype(str)) for p, g in phi.groupby("PLAYER_NAME_QUERY")}
+        res = assemble(a.replay_season + " (REPLAY)", shots, defense, speed, lineups, pt, pstats, tstats, preds, base, [], pres)
     else:
         try:
-            shots, defense, speed, lineups, pt, pstats, tstats = pull_live(SEASON)
+            shots, defense, speed, lineups, pt, pstats, tstats, presence = pull_live(SEASON)
         except Exception as e:
             print("PULL FAILED:", e); sys.exit(1)
-        res = assemble(SEASON, shots, defense, speed, lineups, pt, pstats, tstats, preds, base, history)
+        res = assemble(SEASON, shots, defense, speed, lineups, pt, pstats, tstats, preds, base, history, presence)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(json.dumps(res, indent=1, default=str))
+    out.write_text(json.dumps(res, separators=(",", ":"), default=str))
     print(f"wrote {out}  status={res['status']}")
     for p in preds["predictions"]:
         c = res["metrics"][p["id"]]

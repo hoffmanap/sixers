@@ -80,7 +80,6 @@ PLAYERS = [
     "Anfernee Simons",
     "Kentavious Caldwell-Pope",
     "Adem Bona",
-    "Ariel Hukporti",
 ]
 
 # Multi-season so you can track shot-profile drift over time, not just a
@@ -101,7 +100,6 @@ LINEUP_PAIRS_TO_WATCH = [
     ("Dean Wade", "Jaylen Brown"),         # Wade was signed as a defensive stopper - does it show up when paired with Brown's minutes?
     ("Anfernee Simons", "Tyrese Maxey"),   # two shot-creating guards - complementary or redundant?
     ("Adem Bona", "Tyrese Maxey"),         # backup-center-in candidate #1, on-court fit with the engine
-    ("Ariel Hukporti", "Tyrese Maxey"),    # backup-center-in candidate #2, on-court fit with the engine
 ]
 
 PHI_TEAM_ID = 1610612755

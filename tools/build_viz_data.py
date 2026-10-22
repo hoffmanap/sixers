@@ -7,6 +7,8 @@ Then tools/inject_viz_data.py swaps them into docs/index.html.
 """
 import json, math, sys
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+import spacing
 import numpy as np, pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -17,7 +19,7 @@ NEAR = 25.0             # radius for the "share of shots from near here" count
 MIN_W = 1.0             # a cell is drawn only if the kernel weight of nearby same-zone shots >= this
 PRIOR_K = 3.0           # shrinkage toward the player's own zone FG%
 PLAYERS = ["Tyrese Maxey", "Joel Embiid", "LeBron James", "Jaylen Brown", "VJ Edgecombe", "Dean Wade",
-           "Anfernee Simons", "Kentavious Caldwell-Pope", "Adem Bona", "Ariel Hukporti"]
+           "Anfernee Simons", "Kentavious Caldwell-Pope", "Adem Bona"]
 CLASSES = ["ra", "lane", "mid", "three"]
 
 
@@ -110,7 +112,12 @@ def main():
     cells = build_cells()
     hexd = build_hex(shots, cells)
     bands = build_bands(pd.read_csv(ROOT / "data" / "defend_by_zone.csv"))
-    blob = {"HEX": {"R": R, "cells": cells, "players": hexd}, "BANDS": bands}
+    phi = shots[shots.TEAM_ID == 1610612755]
+    pres = {p: set(g.GAME_ID.astype(str)) for p, g in phi.groupby("PLAYER_NAME_QUERY")}
+    gs = {str(a): b for a, b in zip(phi.GAME_ID, phi.SEASON)}
+    trio = ["Tyrese Maxey", "Joel Embiid", "VJ Edgecombe"]   # only players with real Sixers history together
+    space = spacing.build(phi, pres, trio, trio, gs)
+    blob = {"HEX": {"R": R, "cells": cells, "players": hexd}, "BANDS": bands, "SPACE_HIST": space}
     (ROOT / "tools" / "viz_data.json").write_text(json.dumps(blob, separators=(",", ":")))
     print({c: len(v) for c, v in cells.items()}, "bytes:", (ROOT / "tools" / "viz_data.json").stat().st_size)
     for p, r in hexd.items():
