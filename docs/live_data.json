@@ -1,23 +1,32 @@
 {
  "season": "2026-27",
- "status": "awaiting",
- "updated_utc": null,
- "team": {},
+ "status": "ok",
+ "updated_utc": "2026-10-22 21:46 UTC",
+ "team": {
+  "gp": 1,
+  "w": 1,
+  "l": 0,
+  "off_rtg": 103.9,
+  "def_rtg": 98.0,
+  "net_rtg": 5.9,
+  "off_rank": 19,
+  "def_rank": 4
+ },
  "metrics": {
   "brown_mid": {
-   "value": null,
-   "n": 0,
-   "status": "awaiting"
+   "value": 21.4,
+   "n": 14,
+   "status": "early"
   },
   "embiid_games": {
-   "value": null,
-   "n": 0,
-   "status": "awaiting"
+   "value": 82.0,
+   "n": 1,
+   "status": "early"
   },
   "maxey_embiid_net": {
-   "value": null,
-   "n": 0,
-   "status": "awaiting"
+   "value": 28.7,
+   "n": 25.0,
+   "status": "early"
   },
   "lebron_prbh": {
    "value": null,
@@ -25,33 +34,252 @@
    "status": "awaiting"
   },
   "lebron_def": {
-   "value": null,
-   "n": 0,
-   "status": "awaiting"
+   "value": -9.6,
+   "n": 7,
+   "status": "early"
   },
   "kcp_def": {
-   "value": null,
-   "n": 0,
-   "status": "awaiting"
+   "value": 24.6,
+   "n": 9,
+   "status": "early"
   },
   "team_off_rank": {
-   "value": null,
-   "n": 0,
-   "status": "awaiting"
+   "value": 19,
+   "n": 1,
+   "status": "early"
   },
   "team_def_rank": {
-   "value": null,
-   "n": 0,
-   "status": "awaiting"
+   "value": 4,
+   "n": 1,
+   "status": "early"
   }
  },
- "zones": {},
- "defense": {},
- "speed": {},
- "pairs": {},
- "games_played": {},
- "trend": {},
- "history": [],
+ "zones": {
+  "Anfernee Simons": {
+   "fga": 10,
+   "rim": 10.0,
+   "rim_fg": 100.0,
+   "mid": 10.0,
+   "mid_fg": 100.0,
+   "three": 80.0,
+   "three_fg": 37.5
+  },
+  "Jaylen Brown": {
+   "fga": 14,
+   "rim": 50.0,
+   "rim_fg": 71.4,
+   "mid": 21.4,
+   "mid_fg": 0.0,
+   "three": 28.6,
+   "three_fg": 50.0
+  },
+  "Joel Embiid": {
+   "fga": 15,
+   "rim": 26.7,
+   "rim_fg": 25.0,
+   "mid": 26.7,
+   "mid_fg": 25.0,
+   "three": 46.7,
+   "three_fg": 28.6
+  },
+  "Kentavious Caldwell-Pope": {
+   "fga": 8,
+   "rim": 25.0,
+   "rim_fg": 50.0,
+   "mid": 0.0,
+   "mid_fg": null,
+   "three": 75.0,
+   "three_fg": 33.3
+  },
+  "LeBron James": {
+   "fga": 13,
+   "rim": 69.2,
+   "rim_fg": 44.4,
+   "mid": 7.7,
+   "mid_fg": 100.0,
+   "three": 23.1,
+   "three_fg": 0.0
+  },
+  "Tyrese Maxey": {
+   "fga": 19,
+   "rim": 31.6,
+   "rim_fg": 83.3,
+   "mid": 21.1,
+   "mid_fg": 50.0,
+   "three": 47.4,
+   "three_fg": 22.2
+  },
+  "VJ Edgecombe": {
+   "fga": 10,
+   "rim": 60.0,
+   "rim_fg": 50.0,
+   "mid": 10.0,
+   "mid_fg": 100.0,
+   "three": 30.0,
+   "three_fg": 0.0
+  }
+ },
+ "defense": {
+  "VJ Edgecombe": {
+   "diff": 1.5,
+   "fga": 15,
+   "d_fg": 40.0,
+   "gp": 1
+  },
+  "Tyrese Maxey": {
+   "diff": 22.5,
+   "fga": 14,
+   "d_fg": 57.1,
+   "gp": 1
+  },
+  "Joel Embiid": {
+   "diff": -9.4,
+   "fga": 14,
+   "d_fg": 28.6,
+   "gp": 1
+  },
+  "Jaylen Brown": {
+   "diff": -27.9,
+   "fga": 13,
+   "d_fg": 7.7,
+   "gp": 1
+  },
+  "Anfernee Simons": {
+   "diff": 7.1,
+   "fga": 11,
+   "d_fg": 36.4,
+   "gp": 1
+  },
+  "Kentavious Caldwell-Pope": {
+   "diff": 24.6,
+   "fga": 9,
+   "d_fg": 66.7,
+   "gp": 1
+  },
+  "Adem Bona": {
+   "diff": -20.5,
+   "fga": 8,
+   "d_fg": 25.0,
+   "gp": 1
+  },
+  "LeBron James": {
+   "diff": -9.6,
+   "fga": 7,
+   "d_fg": 28.6,
+   "gp": 1
+  }
+ },
+ "speed": {
+  "Adem Bona": {
+   "speed": 4.37,
+   "gp": 1
+  },
+  "Anfernee Simons": {
+   "speed": 4.51,
+   "gp": 1
+  },
+  "Jaylen Brown": {
+   "speed": 4.31,
+   "gp": 1
+  },
+  "Joel Embiid": {
+   "speed": 3.6,
+   "gp": 1
+  },
+  "Kentavious Caldwell-Pope": {
+   "speed": 4.36,
+   "gp": 1
+  },
+  "LeBron James": {
+   "speed": 3.92,
+   "gp": 1
+  },
+  "Tyrese Maxey": {
+   "speed": 4.41,
+   "gp": 1
+  },
+  "VJ Edgecombe": {
+   "speed": 4.5,
+   "gp": 1
+  }
+ },
+ "pairs": {
+  "Maxey|Embiid": {
+   "min": 25.0,
+   "net": 28.7,
+   "off": 101.8,
+   "def": 73.1
+  },
+  "Maxey|Edgecombe": {
+   "min": 26.0,
+   "net": 10.6,
+   "off": 105.4,
+   "def": 94.7
+  },
+  "James|Brown": {
+   "min": 21.0,
+   "net": 21.8,
+   "off": 104.4,
+   "def": 82.6
+  },
+  "Embiid|Brown": {
+   "min": 25.0,
+   "net": 23.6,
+   "off": 100.0,
+   "def": 76.4
+  },
+  "Simons|Maxey": {
+   "min": 17.0,
+   "net": -5.7,
+   "off": 100.0,
+   "def": 105.7
+  },
+  "Bona|Maxey": {
+   "min": 10.0,
+   "net": -10.3,
+   "off": 95.0,
+   "def": 105.3
+  }
+ },
+ "games_played": {
+  "Adem Bona": 1,
+  "Anfernee Simons": 1,
+  "Jabari Walker": 1,
+  "Jaylen Brown": 1,
+  "Joel Embiid": 1,
+  "Kentavious Caldwell-Pope": 1,
+  "LeBron James": 1,
+  "Tyrese Maxey": 1,
+  "VJ Edgecombe": 1
+ },
+ "trend": {
+  "brown_mid": []
+ },
+ "history": [
+  {
+   "date": "2026-10-22",
+   "values": {
+    "brown_mid": 21.4,
+    "embiid_games": 82.0,
+    "maxey_embiid_net": 28.7,
+    "lebron_prbh": null,
+    "lebron_def": -9.6,
+    "kcp_def": 24.6,
+    "team_off_rank": 19,
+    "team_def_rank": 4
+   },
+   "n": {
+    "brown_mid": 14,
+    "embiid_games": 1,
+    "maxey_embiid_net": 25.0,
+    "lebron_prbh": 0,
+    "lebron_def": 7,
+    "kcp_def": 9,
+    "team_off_rank": 1,
+    "team_def_rank": 1
+   }
+  }
+ ],
  "predictions": [
   {
    "id": "brown_mid",
