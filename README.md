@@ -155,10 +155,9 @@ to draw a line.
 
 **Automation, pick one:**
 
-1. **GitHub Action** (`.github/workflows/update-live.yml`) runs daily at 11:00 UTC and commits the new
-   file. stats.nba.com often blocks GitHub's servers, so this may fail. If the run shows a timeout
-   in the Actions tab, switch to option 2. You can also trigger it by hand from the Actions tab.
-2. **Your own computer** (reliable): `run_update.bat` pulls, rebuilds and pushes. Schedule it in
+1. **GitHub Action** (`.github/workflows/update-live.yml`): manual-only. stats.nba.com blocks GitHub's
+   servers (the first scheduled run timed out), so the daily schedule is switched off.
+2. **Your own computer** (the one that works): `run_update.bat` pulls, rebuilds and pushes. Schedule it in
    Windows once from a Command Prompt (edit the path):
    `schtasks /Create /SC DAILY /ST 09:00 /TN "SixersLiveUpdate" /TR "C:\path\to\repo\run_update.bat"`
    The computer needs to be on at that time.
@@ -172,6 +171,7 @@ sixers/
 ├── README.md
 ├── pull_shot_data.py     # one-time historical pull (2022-23 to 2025-26)
 ├── update_live.py        # live 2026-27 pull + metric calculation
+├── tools/build_viz_data.py  # builds the small-hex shot data and defense bands embedded in docs/index.html
 ├── predictions.json      # the testable predictions and thresholds
 ├── baselines.json        # 2025-26 baseline values
 ├── run_update.bat        # Windows: pull + commit + push
@@ -191,3 +191,14 @@ not simulated 76ers lineup data, since most of this roster hadn't played togethe
 season. Defended-FG%-vs.-normal and PR-ball-handler-frequency are useful proxies, not perfect
 measures. Early-season live numbers are small samples and will swing. The team rank predictions
 have no 2025-26 baseline shown.
+
+## How the court charts are built
+
+- The half-court is drawn to true NBA dimensions (1 unit = 0.1 ft, basket at the origin).
+- Shot charts use ~1.6 ft hexagons. Each hexagon's FG% comes from shots within a few feet of its center
+  **in the same zone only** (restricted area, paint, mid-range, three-point), then lightly pulled toward the
+  player's average for that zone. Hexagons are clipped to their zone, so none cross the arc or the lane lines.
+- "Where each player defends best" splits tracking data into disjoint distance bands: under 6 ft, 6-15 ft,
+  long twos, and threes. NBA's "greater than 15 ft" category includes threes, so long twos are derived as
+  15 ft+ minus threes, and 6-15 ft as all twos minus the other two-point bands.
+- Rebuild after re-pulling data: `python tools/build_viz_data.py` (writes `tools/viz_data.json`).

@@ -1,9 +1,11 @@
 name: Update live tracker
 
 on:
-  schedule:
-    - cron: "0 11 * * *"   # daily, 11:00 UTC (after the previous night's games are posted)
-  workflow_dispatch:        # lets you run it by hand from the Actions tab
+  # The daily schedule is switched off: stats.nba.com blocks GitHub's servers (every run timed out).
+  # Use run_update.bat on your own computer instead. To retry GitHub, restore this block:
+  #   schedule:
+  #     - cron: "0 11 * * *"
+  workflow_dispatch:        # manual run from the Actions tab only
 
 permissions:
   contents: write
