@@ -1,0 +1,20 @@
+{
+  "predictions": [
+    {"id": "brown_mid", "title": "Brown's mid-range share reverts", "claim": "Brown's mid-range share of shots falls back toward his ~14% norm (target: 18% or lower).",
+     "unit": "%", "direction": "lower", "target": 18, "min_n": 150, "n_label": "FGA", "decimals": 1, "section": "Spacing"},
+    {"id": "embiid_games", "title": "Embiid plays 60+ games", "claim": "Embiid's games-played pace projects to 60 or more over 82.",
+     "unit": "gm pace", "direction": "higher", "target": 60, "min_n": 15, "n_label": "team games", "decimals": 0, "section": "Health"},
+    {"id": "maxey_embiid_net", "title": "Maxey + Embiid stay positive", "claim": "Net rating with Maxey and Embiid together stays above zero.",
+     "unit": "net rtg", "direction": "higher", "target": 0, "min_n": 150, "n_label": "min together", "decimals": 1, "section": "Fit"},
+    {"id": "lebron_prbh", "title": "LeBron's ball-handling role holds or shrinks", "claim": "LeBron's pick-and-roll ball-handler share stays at or under 12% of possessions.",
+     "unit": "%", "direction": "lower", "target": 12, "min_n": 60, "n_label": "poss", "decimals": 1, "section": "Playmaking"},
+    {"id": "lebron_def", "title": "LeBron stays a defensive minus", "claim": "Opponents still shoot better than normal against LeBron (defended FG% differential of 0 or higher).",
+     "unit": "pts", "direction": "higher", "target": 0, "min_n": 150, "n_label": "defended FGA", "decimals": 1, "section": "Defense"},
+    {"id": "kcp_def", "title": "KCP is a defensive risk", "claim": "Opponents shoot at least 3 points better than normal against Caldwell-Pope.",
+     "unit": "pts", "direction": "higher", "target": 3, "min_n": 150, "n_label": "defended FGA", "decimals": 1, "section": "Defense"},
+    {"id": "team_off_rank", "title": "Top-6 offense", "claim": "Philadelphia ranks 6th or better in offensive rating.",
+     "unit": "rank", "direction": "lower", "target": 6, "min_n": 15, "n_label": "team games", "decimals": 0, "section": "Team"},
+    {"id": "team_def_rank", "title": "Middling-to-good defense", "claim": "Philadelphia ranks 20th or better in defensive rating.",
+     "unit": "rank", "direction": "lower", "target": 20, "min_n": 15, "n_label": "team games", "decimals": 0, "section": "Team"}
+  ]
+}

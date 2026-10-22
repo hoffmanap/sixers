@@ -119,27 +119,75 @@ toward mid-range at the exact moment the offense needs him spacing it**,
 combined with a genuine logjam of players (Maxey, LeBron, Brown, Embiid)
 who each have a real, data-backed claim to shot-creation touches.
 
+## Live tracker: predicted vs. actual (2026-27)
+
+The site has two tabs. **Predicted** is the preseason study above. **Live tracker**
+scores eight of its predictions against real 2026-27 games:
+
+| Prediction | Target |
+|---|---|
+| Brown's mid-range share reverts | 18% or lower (was 23.7%) |
+| Embiid plays 60+ games | games-played pace of 60+ (was 38) |
+| Maxey + Embiid stay positive | net rating above 0 (was +7.2) |
+| LeBron's ball-handling role holds or shrinks | PnR ball-handler share 12% or lower (was 11.7%) |
+| LeBron stays a defensive minus | defended FG% differential 0 or higher (was +1.5) |
+| KCP is a defensive risk | differential +3 or higher (was +8.6) |
+| Top-6 offense | offensive rating rank 6 or better |
+| Middling-to-good defense | defensive rating rank 20 or better |
+
+Each card is graded **On track / Off track / Too early**. A call is only graded once
+it passes a minimum sample (for example 150 shots, 150 minutes together, 15 team games),
+so most cards read "Too early" for the first few weeks. Thresholds live in
+`predictions.json`; edit them there. The 2025-26 baselines are in `baselines.json`
+(rebuild with `python update_live.py --make-baselines --data-dir data`).
+
+### Updating the data
+
+```
+pip install nba_api pandas
+python update_live.py        # writes docs/live_data.json
+```
+
+The page reads `docs/live_data.json`, so pushing that file is all it takes to refresh the site.
+Trend lines: Brown's mid-range share is rebuilt game by game from the shot log. The other metrics
+get one point per update (history is kept inside `live_data.json`), so they need a few runs
+to draw a line.
+
+**Automation, pick one:**
+
+1. **GitHub Action** (`.github/workflows/update-live.yml`) runs daily at 11:00 UTC and commits the new
+   file. stats.nba.com often blocks GitHub's servers, so this may fail. If the run shows a timeout
+   in the Actions tab, switch to option 2. You can also trigger it by hand from the Actions tab.
+2. **Your own computer** (reliable): `run_update.bat` pulls, rebuilds and pushes. Schedule it in
+   Windows once from a Command Prompt (edit the path):
+   `schtasks /Create /SC DAILY /ST 09:00 /TN "SixersLiveUpdate" /TR "C:\path\to\repo\run_update.bat"`
+   The computer needs to be on at that time.
+
+Do not run both: they would both commit the same file.
+
 ## Repo layout, regenerating the data, and caveats
 
 ```
-sixers-sprawlball/
+sixers/
 ├── README.md
-├── pull_shot_data.py     # nba_api script - regenerate the data yourself
-├── data/                 # raw + derived CSVs (optional to keep in repo)
+├── pull_shot_data.py     # one-time historical pull (2022-23 to 2025-26)
+├── update_live.py        # live 2026-27 pull + metric calculation
+├── predictions.json      # the testable predictions and thresholds
+├── baselines.json        # 2025-26 baseline values
+├── run_update.bat        # Windows: pull + commit + push
+├── requirements.txt
+├── .github/workflows/update-live.yml
+├── data/                 # your CSV pulls (optional to keep in repo)
 └── docs/                 # the GitHub Pages site (served from /docs)
-    ├── index.html
-    ├── css/style.css
-    └── js/{data.js, chart.js, scrolly.js}
+    ├── index.html        # single self-contained page, both tabs
+    └── live_data.json    # rewritten by update_live.py
 ```
 
-Regenerate with `pip install nba_api pandas && python pull_shot_data.py`
-from a normal home/office network (stats.nba.com blocks most datacenter
-IP ranges).
+Regenerate the historical data with `python pull_shot_data.py` from a normal home/office network
+(stats.nba.com blocks most datacenter IP ranges).
 
-**Caveats:** shot-zone and playmaking splits are individual-player data
-across prior teams/seasons, not simulated 76ers lineup data, since most of
-this roster hasn't played a game together yet. Defended-FG%-vs.-normal and
-PR-ball-handler-frequency are useful proxies, not perfect measures —
-small-sample seasons (e.g. Embiid's 315 shots in 2024-25) should be read
-with appropriate skepticism. All 2025-26 numbers are a season-in-progress
-snapshot, not a final season total.
+**Caveats:** shot-zone and playmaking splits are individual-player data across prior teams/seasons,
+not simulated 76ers lineup data, since most of this roster hadn't played together before this
+season. Defended-FG%-vs.-normal and PR-ball-handler-frequency are useful proxies, not perfect
+measures. Early-season live numbers are small samples and will swing. The team rank predictions
+have no 2025-26 baseline shown.

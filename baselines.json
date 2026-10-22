@@ -1,0 +1,229 @@
+{
+ "season": "2025-26",
+ "metrics": {
+  "brown_mid": 23.7,
+  "embiid_games": 38.0,
+  "maxey_embiid_net": 7.2,
+  "lebron_prbh": 11.7,
+  "lebron_def": 1.5,
+  "kcp_def": 8.6
+ },
+ "zones": {
+  "Adem Bona": {
+   "fga": 220,
+   "rim": 96.8,
+   "rim_fg": 60.6,
+   "mid": 0.5,
+   "mid_fg": 0.0,
+   "three": 2.7,
+   "three_fg": 33.3
+  },
+  "Anfernee Simons": {
+   "fga": 648,
+   "rim": 25.8,
+   "rim_fg": 59.3,
+   "mid": 15.7,
+   "mid_fg": 39.2,
+   "three": 58.5,
+   "three_fg": 38.5
+  },
+  "Ariel Hukporti": {
+   "fga": 80,
+   "rim": 93.8,
+   "rim_fg": 58.7,
+   "mid": 1.2,
+   "mid_fg": 0.0,
+   "three": 5.0,
+   "three_fg": 25.0
+  },
+  "Dean Wade": {
+   "fga": 278,
+   "rim": 26.6,
+   "rim_fg": 64.9,
+   "mid": 2.9,
+   "mid_fg": 37.5,
+   "three": 70.5,
+   "three_fg": 36.2
+  },
+  "Jaylen Brown": {
+   "fga": 1543,
+   "rim": 50.1,
+   "rim_fg": 57.6,
+   "mid": 23.7,
+   "mid_fg": 41.3,
+   "three": 26.2,
+   "three_fg": 34.7
+  },
+  "Joel Embiid": {
+   "fga": 697,
+   "rim": 46.5,
+   "rim_fg": 58.3,
+   "mid": 30.7,
+   "mid_fg": 46.3,
+   "three": 22.8,
+   "three_fg": 33.3
+  },
+  "Kentavious Caldwell-Pope": {
+   "fga": 366,
+   "rim": 30.1,
+   "rim_fg": 52.7,
+   "mid": 22.4,
+   "mid_fg": 45.1,
+   "three": 47.5,
+   "three_fg": 31.6
+  },
+  "LeBron James": {
+   "fga": 919,
+   "rim": 56.4,
+   "rim_fg": 64.1,
+   "mid": 17.2,
+   "mid_fg": 40.5,
+   "three": 26.4,
+   "three_fg": 31.7
+  },
+  "Tyrese Maxey": {
+   "fga": 1501,
+   "rim": 48.0,
+   "rim_fg": 54.7,
+   "mid": 12.1,
+   "mid_fg": 43.6,
+   "three": 40.0,
+   "three_fg": 36.8
+  },
+  "VJ Edgecombe": {
+   "fga": 1030,
+   "rim": 45.9,
+   "rim_fg": 49.9,
+   "mid": 13.2,
+   "mid_fg": 48.5,
+   "three": 40.9,
+   "three_fg": 35.4
+  }
+ },
+ "defense": {
+  "VJ Edgecombe": {
+   "diff": 0.7,
+   "fga": 959,
+   "d_fg": 47.2,
+   "gp": 74
+  },
+  "Tyrese Maxey": {
+   "diff": 0.6,
+   "fga": 878,
+   "d_fg": 46.5,
+   "gp": 70
+  },
+  "Jaylen Brown": {
+   "diff": -4.2,
+   "fga": 805,
+   "d_fg": 42.2,
+   "gp": 71
+  },
+  "Joel Embiid": {
+   "diff": -4.1,
+   "fga": 622,
+   "d_fg": 44.5,
+   "gp": 38
+  },
+  "Adem Bona": {
+   "diff": -1.0,
+   "fga": 575,
+   "d_fg": 47.8,
+   "gp": 70
+  },
+  "LeBron James": {
+   "diff": 1.5,
+   "fga": 568,
+   "d_fg": 48.8,
+   "gp": 60
+  },
+  "Dean Wade": {
+   "diff": -2.3,
+   "fga": 564,
+   "d_fg": 44.5,
+   "gp": 58
+  },
+  "Anfernee Simons": {
+   "diff": 1.2,
+   "fga": 489,
+   "d_fg": 46.8,
+   "gp": 55
+  },
+  "Kentavious Caldwell-Pope": {
+   "diff": 8.6,
+   "fga": 286,
+   "d_fg": 54.9,
+   "gp": 50
+  },
+  "Ariel Hukporti": {
+   "diff": -9.4,
+   "fga": 243,
+   "d_fg": 38.3,
+   "gp": 50
+  }
+ },
+ "speed": {
+  "Adem Bona": {
+   "speed": 4.43,
+   "gp": 71
+  },
+  "Anfernee Simons": {
+   "speed": 4.4,
+   "gp": 55
+  },
+  "Ariel Hukporti": {
+   "speed": 4.41,
+   "gp": 54
+  },
+  "Dean Wade": {
+   "speed": 4.53,
+   "gp": 59
+  },
+  "Jaylen Brown": {
+   "speed": 4.06,
+   "gp": 71
+  },
+  "Joel Embiid": {
+   "speed": 3.67,
+   "gp": 38
+  },
+  "Kentavious Caldwell-Pope": {
+   "speed": 4.2,
+   "gp": 51
+  },
+  "LeBron James": {
+   "speed": 3.62,
+   "gp": 60
+  },
+  "Tyrese Maxey": {
+   "speed": 4.26,
+   "gp": 70
+  },
+  "VJ Edgecombe": {
+   "speed": 4.25,
+   "gp": 75
+  }
+ },
+ "pairs": {
+  "Maxey|Embiid": {
+   "min": 961.0,
+   "net": 7.2,
+   "off": 119.7,
+   "def": 112.5
+  },
+  "Maxey|Edgecombe": {
+   "min": 1698.0,
+   "net": 2.0,
+   "off": 115.3,
+   "def": 113.3
+  },
+  "Bona|Maxey": {
+   "min": 766.0,
+   "net": 3.2,
+   "off": 113.1,
+   "def": 109.9
+  }
+ },
+ "brown_mid_norm": 14.3,
+ "note": "team_off_rank/team_def_rank have no 2025-26 baseline file; add them by hand if you want one."
+}

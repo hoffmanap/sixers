@@ -80,6 +80,34 @@ mark.is-marked::before { transform: scaleX(1); }
 .colophon { max-width: 700px; margin: 0 auto; padding: 3rem 1.5rem 6rem; font-size: 0.9rem; color: var(--ink-soft); border-top: 1px solid var(--rule); }
 .colophon a { color: var(--navy); }
 @media (prefers-reduced-motion: reduce) { mark::before { transition: none; } }
+
+.tabs { max-width: 1180px; margin: 0 auto; padding: 0 1.5rem; display: flex; gap: 0.5rem; border-bottom: 1px solid var(--rule); position: sticky; top: 0; background: var(--paper); z-index: 50; }
+.tab-btn { font-family: var(--mono); font-size: 0.82rem; padding: 0.85rem 1.1rem; border: none; border-bottom: 3px solid transparent; background: none; cursor: pointer; color: var(--ink-soft); }
+.tab-btn:hover { color: var(--navy); }
+.tab-btn.active { color: var(--navy); border-bottom-color: var(--navy); font-weight: 500; }
+.tab-btn .dot { display:inline-block; width:8px; height:8px; border-radius:50%; background: var(--risk); margin-right:6px; }
+.live-status { display:flex; flex-wrap:wrap; gap:0.6rem 1.5rem; font-family: var(--mono); font-size: 0.76rem; color: var(--ink-soft); margin: 0 0 1rem; }
+.live-status b { color: var(--ink); }
+.sample-banner { background: #FFF6D6; border: 1px solid #E5D48A; border-radius: 4px; padding: 0.8rem 1rem; font-size: 0.9rem; max-width: 46rem; margin: 0 0 1.5rem; }
+.score-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin: 1rem 0 2rem; }
+.score-card { background: #FFFDF8; border: 1px solid var(--rule); border-radius: 4px; padding: 1rem 1.1rem; border-top: 4px solid var(--rule); cursor: pointer; }
+.score-card:hover { border-color: var(--navy); }
+.score-card.on_track { border-top-color: var(--olive); } .score-card.off_track { border-top-color: var(--risk); } .score-card.early { border-top-color: var(--gold, #B8860B); }
+.score-card .sc-sec { font-family: var(--mono); font-size: 0.66rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.05em; }
+.score-card h3 { font-family: var(--serif); font-size: 1.02rem; margin: 0.2rem 0 0.5rem; font-weight: 500; }
+.sc-vals { display: flex; justify-content: space-between; gap: 0.5rem; align-items: flex-end; }
+.sc-vals div { font-family: var(--mono); font-size: 0.66rem; color: var(--ink-soft); }
+.sc-vals div span { display: block; font-size: 1.35rem; color: var(--ink); font-family: var(--serif); }
+.sc-vals .actual span { color: var(--navy); }
+.chipstat { display:inline-block; font-family: var(--mono); font-size: 0.66rem; padding: 0.15rem 0.5rem; border-radius: 100px; margin-top: 0.6rem; }
+.chipstat.on_track { background:#E3EBD3; color:#4B5B2E; } .chipstat.off_track { background:#F6DCCF; color:#8E3009; }
+.chipstat.early { background:#FFF0C2; color:#7A5A00; } .chipstat.awaiting { background:#EDE8DC; color:var(--ink-soft); }
+.sc-claim { font-size: 0.78rem; color: var(--ink-soft); margin: 0.5rem 0 0; }
+.live-table { width:100%; border-collapse: collapse; font-family: var(--mono); font-size: 0.76rem; }
+.live-table th, .live-table td { text-align: right; padding: 0.4rem 0.5rem; border-bottom: 1px solid var(--rule); }
+.live-table th:first-child, .live-table td:first-child { text-align: left; }
+.live-table th { color: var(--ink-soft); font-weight: 500; }
+.delta-good { color: #4B5B2E; } .delta-bad { color: #8E3009; }
 </style>
 </head>
 <body>
@@ -91,7 +119,13 @@ mark.is-marked::before { transform: scaleX(1); }
   <p class="byline">Data: nba_api shot logs, tracking &amp; lineup data, 2022–23 through 2025–26 (24,505 shots) · Lens borrowed from Kirk Goldsberry's Sprawlball, applied to one roster — not an argument for it</p>
 </header>
 
-<main>
+<nav class="tabs" id="tabs">
+  <button class="tab-btn active" data-tab="predicted">Predicted · preseason</button>
+  <button class="tab-btn" data-tab="live"><span class="dot"></span>Live tracker · 2026-27</button>
+</nav>
+
+
+<main id="tab-predicted">
 
   <!-- ============ 0A: SHOT CHART - FREQ/EFFICIENCY ============ -->
   <section class="section" id="shotchart">
@@ -289,6 +323,79 @@ mark.is-marked::before { transform: scaleX(1); }
 
 </main>
 
+<main id="tab-live" hidden>
+  <section class="section" id="live-top">
+    <h2>Predicted vs. actual</h2>
+    <p class="lede">Every call from the preseason study, now scored against real 2026-27 games. Each card shows the preseason baseline (2025-26), the target we set, and where the season stands. Early in the year most calls are marked <mark data-hl="1">too early</mark> on purpose — a prediction is only graded once enough shots, minutes or games exist for the number to mean something.</p>
+    <div class="live-status" id="live-status"></div>
+    <div class="sample-banner" id="live-banner" hidden></div>
+    <div class="score-grid" id="score-grid"></div>
+  </section>
+
+  <section class="section" id="live-trend">
+    <h2>Trends</h2>
+    <p class="lede">How each tracked number is moving over the season. The dashed line is the 2025-26 baseline; the shaded side is the prediction. Brown's mid-range share is rebuilt game by game from the shot log; the other lines build up one point per update.</p>
+    
+    <div class="viz-shell" id="shell-trend">
+      <div class="viz-toolbar">
+        <span class="viz-title">season-to-date value vs. preseason baseline and target</span>
+        <div class="viz-controls" id="ctl-trend"></div>
+        <button class="icon-btn" data-fullscreen-target="shell-trend" title="Full screen">⤢</button>
+      </div>
+      <div class="viz-body"><svg id="chart-trend" viewBox="0 0 760 400"></svg></div>
+      <div class="viz-caption" id="cap-trend"></div>
+    </div>
+    <div class="narrative-box" id="live-narrative"></div>
+  </section>
+
+  <section class="section" id="live-shots">
+    <h2>Shot diet: preseason vs. now</h2>
+    <p class="lede">The study's main spacing worry was where Brown and Embiid take their shots. Tick marks are the 2025-26 share; bars are this season so far.</p>
+    
+    <div class="viz-shell" id="shell-liveshots">
+      <div class="viz-toolbar">
+        <span class="viz-title">share of field goal attempts by zone</span>
+        <div class="viz-controls" id="ctl-liveshots"></div>
+        <button class="icon-btn" data-fullscreen-target="shell-liveshots" title="Full screen">⤢</button>
+      </div>
+      <div class="viz-body"><svg id="chart-liveshots" viewBox="0 0 760 400"></svg></div>
+      <div class="viz-caption" id="cap-liveshots"></div>
+    </div>
+  </section>
+
+  <section class="section" id="live-defspeed">
+    <h2>Defense and speed: preseason vs. now</h2>
+    <div class="two-col">
+      <div>
+    <div class="viz-shell" id="shell-livedef">
+      <div class="viz-toolbar">
+        <span class="viz-title">defended FG% vs. expected (points; lower is better)</span>
+        <div class="viz-controls" id="ctl-livedef"></div>
+        <button class="icon-btn" data-fullscreen-target="shell-livedef" title="Full screen">⤢</button>
+      </div>
+      <div class="viz-body"><svg id="chart-livedef" viewBox="0 0 760 400"></svg></div>
+      <div class="viz-caption" id="cap-livedef"></div>
+    </div></div>
+      <div>
+    <div class="viz-shell" id="shell-livespeed">
+      <div class="viz-toolbar">
+        <span class="viz-title">average speed (mph)</span>
+        <div class="viz-controls" id="ctl-livespeed"></div>
+        <button class="icon-btn" data-fullscreen-target="shell-livespeed" title="Full screen">⤢</button>
+      </div>
+      <div class="viz-body"><svg id="chart-livespeed" viewBox="0 0 760 400"></svg></div>
+      <div class="viz-caption" id="cap-livespeed"></div>
+    </div></div>
+    </div>
+  </section>
+
+  <section class="section" id="live-pairs">
+    <h2>Pairs to watch</h2>
+    <p class="lede">Two-man net rating per 100 possessions when each pair shares the floor. Minutes matter: below roughly 150 together, treat the number as noise.</p>
+    <div class="viz-shell" style="padding:1rem; overflow-x:auto;"><table class="live-table" id="pairs-table"></table></div>
+  </section>
+</main>
+
 <footer class="colophon">
   <p>Built with real shot-log, tracking, lineup, and play-type data pulled via <code>nba_api</code>. Methodology inspired by Kirk Goldsberry's <em>Sprawlball</em> — this is an application of that lens to one roster, not an argument for it.</p>
 </footer>
@@ -336,7 +443,8 @@ function drawCourt(svg, x, y, playerForBadge) {
   g.append("circle").attr("cx",x(0)).attr("cy",y(52.5)).attr("r", x(4)-x(0)).attr("fill","#C9C2B0").attr("stroke","none");
   g.append("line").attr("x1",x(-30)).attr("x2",x(30)).attr("y1",y(40)).attr("y2",y(40)).attr("stroke-width",2.5);
   // simple generic team-colored court badge, or the selected player's headshot when provided
-  const badge = svg.append("g").attr("transform", `translate(${x(0)},${y(230)})`);
+  const badge = svg.append("g").attr("class","court-badge-g").style("pointer-events","none").attr("transform", `translate(${x(0)},${y(230)})`);
+  setTimeout(() => badge.raise(), 0); // keep the headshot/logo above hexes and other data layers
   if (playerForBadge && PLAYER_IDS[playerForBadge]) {
     const clipId = "badgeClip-" + playerForBadge.replace(/\s/g,'');
     svg.append("defs").append("clipPath").attr("id",clipId).append("circle").attr("r",26);
@@ -955,5 +1063,173 @@ const DEFEND_ZONE = {"Tyrese Maxey": {"rim_diff": 2.7, "rim_dfg": 65.4, "rim_nor
   render();
 })();
 </script>
+
+<script>
+(function(){
+const $ = s => document.querySelector(s);
+const col = {on_track: "#7A8B5C", off_track: "#C1440E", early: "#B8860B", awaiting: "#9A948A"};
+const LABEL = {on_track: "On track", off_track: "Off track", early: "Too early", awaiting: "Awaiting data"};
+const NAME = {Maxey:"Maxey",Embiid:"Embiid",Edgecombe:"Edgecombe",James:"LeBron",Brown:"Brown",Wade:"Wade",Simons:"Simons",Bona:"Bona",Hukporti:"Hukporti"};
+const SHORTN = {"Tyrese Maxey":"Maxey","Joel Embiid":"Embiid","LeBron James":"LeBron","Jaylen Brown":"Brown","VJ Edgecombe":"Edgecombe","Dean Wade":"Wade","Anfernee Simons":"Simons","Kentavious Caldwell-Pope":"KCP","Adem Bona":"Bona","Ariel Hukporti":"Hukporti"};
+const tip = d3.select("#tooltip");
+let D = null, selected = "brown_mid";
+
+// ---- tabs
+function showTab(t){
+  document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === t));
+  $("#tab-predicted").hidden = t !== "predicted"; $("#tab-live").hidden = t !== "live";
+  try { history.replaceState(null, "", t === "live" ? "#live" : "#"); } catch(e){}
+  window.scrollTo({top: $("#tabs").offsetTop, behavior: "auto"});
+}
+document.querySelectorAll(".tab-btn").forEach(b => b.addEventListener("click", () => showTab(b.dataset.tab)));
+if (location.hash === "#live") showTab("live");
+
+const fmt = (v, p) => v == null ? "—" : (p.decimals === 0 ? Math.round(v) : v.toFixed(p.decimals)) + (p.unit === "%" ? "%" : "");
+const sign = v => (v > 0 ? "+" : "") + v;
+const base = id => D.baselines.metrics[id];
+const P = id => D.predictions.find(p => p.id === id);
+
+function load(){
+  fetch("live_data.json?" + Date.now()).then(r => { if(!r.ok) throw 0; return r.json(); })
+    .then(j => { D = j; render(); })
+    .catch(() => { $("#score-grid").innerHTML = "<p class='lede'>Live data isn't available yet (live_data.json not found). It is created the first time update_live.py runs.</p>"; });
+}
+
+function render(){
+  const T = D.team || {}, awaiting = D.status === "awaiting";
+  const rec = T.gp ? `${T.w}-${T.l}` : "no games yet";
+  $("#live-status").innerHTML = `<span>Season <b>${D.season}</b></span><span>Record <b>${rec}</b></span>` +
+    (T.off_rtg ? `<span>Off rtg <b>${T.off_rtg.toFixed(1)}</b> (#${T.off_rank})</span><span>Def rtg <b>${T.def_rtg.toFixed(1)}</b> (#${T.def_rank})</span>` : "") +
+    `<span>Updated <b>${D.updated_utc || "never"}</b></span>`;
+  const ban = $("#live-banner");
+  const ready = D.predictions.filter(p => ["on_track","off_track"].includes(D.metrics[p.id].status)).length;
+  if (awaiting) { ban.hidden = false; ban.innerHTML = "<b>No 2026-27 data pulled yet.</b> Cards show the preseason baseline and our target. They fill in after the first run of update_live.py."; }
+  else if (T.gp < 20) { ban.hidden = false; ban.innerHTML = `<b>Small samples.</b> ${T.gp} games played: ${ready} of ${D.predictions.length} calls have enough data to grade. Early-season numbers swing a lot, so expect cards to change status.`; }
+  else ban.hidden = true;
+  renderCards(); renderTrend(); renderNarrative(); renderShots(); renderDumbbell("livedef", D.defense, D.baselines.defense, "diff", [-12, 14], 1, "fga", " FGA");
+  renderDumbbell("livespeed", D.speed, D.baselines.speed, "speed", [3.4, 4.8], 2, "gp", " GP", true);
+  renderPairs();
+}
+
+function renderCards(){
+  $("#score-grid").innerHTML = D.predictions.map(p => {
+    const m = D.metrics[p.id], b = base(p.id), st = m.status;
+    const dir = p.direction === "lower" ? "≤" : "≥";
+    return `<div class="score-card ${st}" data-id="${p.id}">
+      <div class="sc-sec">${p.section}</div><h3>${p.title}</h3>
+      <div class="sc-vals"><div>preseason<span>${fmt(b, p)}</span></div><div>target<span>${dir} ${p.target}${p.unit === "%" ? "%" : ""}</span></div><div class="actual">now<span>${fmt(m.value, p)}</span></div></div>
+      <span class="chipstat ${st}">${LABEL[st]}${m.value != null ? " · " + Math.round(m.n) + " " + p.n_label : ""}</span>
+      <p class="sc-claim">${p.claim}</p></div>`;
+  }).join("");
+  document.querySelectorAll(".score-card").forEach(c => c.addEventListener("click", () => { selected = c.dataset.id; renderTrend(); $("#live-trend").scrollIntoView({behavior: "smooth"}); }));
+}
+
+function series(id){
+  const pts = [];
+  (D.trend[id] || []).forEach(t => pts.push({d: new Date(t.date), v: t.value, n: t.n}));
+  if (!pts.length) (D.history || []).forEach(h => { if (h.values[id] != null) pts.push({d: new Date(h.date), v: h.values[id], n: h.n[id]}); });
+  return pts;
+}
+
+function renderTrend(){
+  const ctl = $("#ctl-trend");
+  ctl.innerHTML = D.predictions.map(p => `<button class="chip no-avatar ${p.id === selected ? "active" : ""}" data-id="${p.id}">${p.title.split(" ").slice(0,3).join(" ")}</button>`).join("");
+  ctl.querySelectorAll(".chip").forEach(c => c.addEventListener("click", () => { selected = c.dataset.id; renderTrend(); }));
+  const p = P(selected), b = base(selected), pts = series(selected);
+  const svg = d3.select("#chart-trend"); svg.selectAll("*").remove();
+  const W = 760, H = 400, m = {l: 56, r: 150, t: 30, b: 40};
+  const vals = pts.map(x => x.v).concat([b, p.target].filter(v => v != null));
+  const pad = (d3.max(vals) - d3.min(vals)) * 0.2 || 2;
+  const y = d3.scaleLinear().domain([d3.min(vals) - pad, d3.max(vals) + pad]).range([H - m.b, m.t]);
+  const t0 = pts.length ? pts[0].d : new Date(), t1 = pts.length > 1 ? pts[pts.length-1].d : d3.timeDay.offset(t0, 7);
+  const x = d3.scaleTime().domain([t0, t1]).range([m.l, W - m.r]);
+  const [ya, yb] = p.direction === "lower" ? [y(p.target), y.range()[0]] : [y.range()[1], y(p.target)];
+  // prediction side: values on the "good" side of the target
+  const goodTop = p.direction === "higher" ? m.t : y(p.target), goodBot = p.direction === "higher" ? y(p.target) : H - m.b;
+  svg.append("rect").attr("x", m.l).attr("width", W - m.r - m.l).attr("y", Math.min(goodTop, goodBot)).attr("height", Math.abs(goodBot - goodTop)).attr("fill", "#E8F27C").attr("opacity", 0.35);
+  svg.append("g").attr("transform", `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(5).tickFormat(d3.timeFormat("%b %d"))).style("font-family", "IBM Plex Mono").style("font-size", "11px");
+  svg.append("g").attr("transform", `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(6)).style("font-family", "IBM Plex Mono").style("font-size", "11px");
+  const hl = (yy, txt, dash, c) => { svg.append("line").attr("x1", m.l).attr("x2", W - m.r).attr("y1", y(yy)).attr("y2", y(yy)).attr("stroke", c).attr("stroke-dasharray", dash).attr("stroke-width", 1.5);
+    svg.append("text").attr("x", W - m.r + 6).attr("y", y(yy) + 4).attr("font-size", 12).attr("font-family", "IBM Plex Mono").attr("fill", c).text(txt); };
+  if (b != null) hl(b, "2025-26: " + fmt(b, p), "5,4", "#4A4640");
+  hl(p.target, "target " + (p.direction === "lower" ? "≤ " : "≥ ") + p.target, "2,3", "#C1440E");
+  if (pts.length > 1) svg.append("path").datum(pts).attr("fill", "none").attr("stroke", "#04275C").attr("stroke-width", 2.5).attr("d", d3.line().x(d => x(d.d)).y(d => y(d.v)));
+  svg.selectAll("circle.pt").data(pts).join("circle").attr("class", "pt").attr("cx", d => x(d.d)).attr("cy", d => y(d.v)).attr("r", pts.length > 40 ? 0 : 4.5).attr("fill", "#04275C")
+    .on("mousemove", (e, d) => tip.style("opacity", 1).style("left", e.clientX + 12 + "px").style("top", e.clientY + 12 + "px").html(`${d3.timeFormat("%b %d")(d.d)}<br>${fmt(d.v, p)} · ${Math.round(d.n)} ${p.n_label}`))
+    .on("mouseleave", () => tip.style("opacity", 0));
+  if (pts.length) { const l = pts[pts.length-1]; svg.append("text").attr("x", Math.min(x(l.d) + 8, W - m.r - 4)).attr("y", y(l.v) - 10).attr("font-size", 13).attr("font-weight", 600).attr("fill", "#04275C").attr("font-family", "IBM Plex Mono").text("now " + fmt(l.v, p)); }
+  svg.append("text").attr("x", m.l).attr("y", 18).attr("font-family", "Fraunces").attr("font-size", 15).text(p.title);
+  if (!pts.length) svg.append("text").attr("x", (W - m.r + m.l) / 2).attr("y", H / 2).attr("text-anchor", "middle").attr("fill", "#4A4640").attr("font-family", "IBM Plex Mono").attr("font-size", 12).text("No 2026-27 data yet");
+  else if (pts.length === 1) svg.append("text").attr("x", (W - m.r + m.l) / 2).attr("y", H - 60).attr("text-anchor", "middle").attr("fill", "#4A4640").attr("font-family", "IBM Plex Mono").attr("font-size", 11).text("One data point so far; the line appears after the next update");
+  $("#cap-trend").textContent = "Yellow-green shading marks the side of the target where the prediction holds. Click a scorecard to jump to its trend.";
+}
+
+function renderNarrative(){
+  const out = [];
+  D.predictions.forEach(p => {
+    const m = D.metrics[p.id], b = base(p.id);
+    if (m.value == null) return;
+    const moved = b == null ? "" : (m.value === b ? " (unchanged from the preseason baseline)" : ` (${sign(+(m.value - b).toFixed(1))} vs. the ${fmt(b, p)} baseline)`);
+    const good = p.direction === "lower" ? (b != null && m.value < b) : (b != null && m.value > b);
+    out.push(`<li><b>${p.title}:</b> ${fmt(m.value, p)} on ${Math.round(m.n)} ${p.n_label}${moved}. ${m.status === "early" ? "Too early to grade." : m.status === "on_track" ? "Meeting the target." : "Missing the target" + (good ? ", though moving the right way." : ".")}</li>`);
+  });
+  $("#live-narrative").innerHTML = out.length ? `<b>What the numbers say right now</b><ul>${out.join("")}</ul>` : "<b>What the numbers say right now</b><ul><li>Nothing yet. Once games are in, this box writes itself from the latest pull.</li></ul>";
+}
+
+function renderShots(){
+  const svg = d3.select("#chart-liveshots"); svg.selectAll("*").remove();
+  const ids = ["Jaylen Brown","Joel Embiid","Tyrese Maxey","VJ Edgecombe","LeBron James","Dean Wade","Anfernee Simons","Kentavious Caldwell-Pope","Adem Bona","Ariel Hukporti"];
+  const zs = [["rim","Rim","#04275C"],["mid","Mid-range","#C1440E"],["three","Three","#2DA2BB"]];
+  const W = 760, rowH = 34, H = ids.length * rowH + 50; svg.attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleLinear().domain([0, 100]).range([130, W - 90]);
+  zs.forEach(([k, lab, c], i) => svg.append("text").attr("x", 130 + i * 110).attr("y", 16).attr("font-size", 12).attr("font-family", "IBM Plex Mono").attr("fill", c).text("■ " + lab));
+  ids.forEach((n, i) => {
+    const y0 = 36 + i * rowH, a = D.zones[n], bz = D.baselines.zones[n];
+    svg.append("text").attr("x", 122).attr("y", y0 + 14).attr("text-anchor", "end").attr("font-size", 13).attr("font-family", "IBM Plex Sans").attr("font-weight", ["Jaylen Brown","Joel Embiid"].includes(n) ? 700 : 400).text(SHORTN[n]);
+    zs.forEach(([k,, c], j) => {
+      const yy = y0 + j * 9;
+      if (a) svg.append("rect").attr("x", x(0)).attr("y", yy).attr("height", 7).attr("width", x(a[k]) - x(0)).attr("fill", c).attr("opacity", 0.9)
+        .on("mousemove", e => tip.style("opacity", 1).style("left", e.clientX + 12 + "px").style("top", e.clientY + 12 + "px").html(`${SHORTN[n]} · ${k}<br>now ${a[k]}% (${a.fga} FGA)<br>2025-26 ${bz ? bz[k] + "%" : "n/a"}`)).on("mouseleave", () => tip.style("opacity", 0));
+      if (bz) svg.append("line").attr("x1", x(bz[k])).attr("x2", x(bz[k])).attr("y1", yy - 2).attr("y2", yy + 9).attr("stroke", "#1A1A1A").attr("stroke-width", 2);
+    });
+    svg.append("text").attr("x", W - 4).attr("y", y0 + 14).attr("text-anchor", "end").attr("font-size", 11).attr("font-family", "IBM Plex Mono").attr("fill", "#4A4640").text(a ? a.fga + " FGA" : "no shots yet");
+  });
+  $("#cap-liveshots").textContent = "Bars = 2026-27 so far. Black ticks = 2025-26 share. Wade, Simons, KCP, Bona and Hukporti baselines come from prior teams where applicable.";
+}
+
+function renderDumbbell(id, now, bs, key, dom, dec, nkey, nlab, hideZero){
+  const svg = d3.select("#chart-" + id); svg.selectAll("*").remove();
+  const rows = Object.keys(SHORTN).filter(n => now[n] || bs[n]);
+  const W = 540, rowH = 30, H = rows.length * rowH + 50; svg.attr("viewBox", `0 0 ${W} ${H}`);
+  const x = d3.scaleLinear().domain(dom).range([100, W - 70]);
+  svg.append("g").attr("transform", `translate(0,${H - 28})`).call(d3.axisBottom(x).ticks(6)).style("font-family", "IBM Plex Mono").style("font-size", "11px");
+  if (!hideZero) svg.append("line").attr("x1", x(0)).attr("x2", x(0)).attr("y1", 8).attr("y2", H - 28).attr("stroke", "#1A1A1A").attr("stroke-dasharray", "3,3");
+  rows.forEach((n, i) => {
+    const yy = 22 + i * rowH, a = now[n], b = bs[n];
+    svg.append("text").attr("x", 92).attr("y", yy + 4).attr("text-anchor", "end").attr("font-size", 12).attr("font-family", "IBM Plex Sans").text(SHORTN[n]);
+    if (a && b) svg.append("line").attr("x1", x(b[key])).attr("x2", x(a[key])).attr("y1", yy).attr("y2", yy).attr("stroke", "#BDB6A5").attr("stroke-width", 3);
+    if (b) svg.append("circle").attr("cx", x(b[key])).attr("cy", yy).attr("r", 5).attr("fill", "#FFFDF8").attr("stroke", "#4A4640").attr("stroke-width", 2);
+    if (a) svg.append("circle").attr("cx", x(a[key])).attr("cy", yy).attr("r", 6).attr("fill", "#04275C")
+      .on("mousemove", e => tip.style("opacity", 1).style("left", e.clientX + 12 + "px").style("top", e.clientY + 12 + "px").html(`${SHORTN[n]}<br>now ${a[key].toFixed(dec)} (${a[nkey]}${nlab})<br>2025-26 ${b ? b[key].toFixed(dec) : "n/a"}`)).on("mouseleave", () => tip.style("opacity", 0));
+    else svg.append("text").attr("x", W - 4).attr("y", yy + 4).attr("text-anchor", "end").attr("font-size", 10).attr("font-family", "IBM Plex Mono").attr("fill", "#9A948A").text("no data yet");
+  });
+  $("#cap-" + id).textContent = "Hollow = 2025-26. Filled = 2026-27 so far.";
+}
+
+function renderPairs(){
+  const rows = Object.keys(D.baselines.pairs).concat(Object.keys(D.pairs).filter(k => !(k in D.baselines.pairs)));
+  const head = "<tr><th>Pair</th><th>2025-26 net</th><th>2025-26 min</th><th>Now: net</th><th>Now: min</th><th>Change</th></tr>";
+  const body = rows.map(k => {
+    const [a, b] = k.split("|"), bp = D.baselines.pairs[k], np = D.pairs[k];
+    const ch = bp && np ? +(np.net - bp.net).toFixed(1) : null;
+    const thin = np && np.min < 150 ? " title='under 150 minutes: mostly noise'" : "";
+    return `<tr><td>${NAME[a]} + ${NAME[b]}</td><td>${bp ? sign(bp.net) : "—"}</td><td>${bp ? bp.min : "—"}</td><td${thin}>${np ? sign(np.net) : "—"}</td><td>${np ? np.min : "—"}</td><td class="${ch == null ? "" : ch >= 0 ? "delta-good" : "delta-bad"}">${ch == null ? "—" : sign(ch)}</td></tr>`;
+  }).join("");
+  $("#pairs-table").innerHTML = head + body;
+}
+load();
+})();
+</script>
+
 </body>
 </html>
