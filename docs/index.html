@@ -154,10 +154,10 @@ mark.is-marked::before { transform: scaleX(1); }
   <!-- ============ 0B: BIVARIATE OVERLAP ============ -->
   <section class="section" id="overlap">
     <h2>0.5. Where two players collide</h2>
-    <p class="lede">Pick two players. Each gets their own color where they shoot a lot; the black hexagons are the spots <mark data-hl="1">both of them use heavily</mark>. Switch to "overlap × efficiency" to see whether those crowded spots are also good ones.</p>
+    <p class="lede">Pick two players. Players who share the floor shouldn't be working the same spots, especially where one of them is the clearly better shooter. <mark data-hl="1">Clogged</mark> spots are the ones both rely on, colored by who has the edge there; <mark data-hl="1b">open</mark> spots are good shots neither takes much.</p>
     <div class="viz-shell" id="shell-hexoverlap">
       <div class="viz-toolbar">
-        <span class="viz-title">shared territory</span>
+        <span class="viz-title">clogged vs. open areas</span>
         <div class="viz-controls" id="hexoverlap-a"></div>
         <span style="color:var(--ink-soft); font-family: var(--mono); font-size:0.75rem;">vs.</span>
         <div class="viz-controls" id="hexoverlap-b"></div>
@@ -417,7 +417,7 @@ mark.is-marked::before { transform: scaleX(1); }
       <div>
     <div class="viz-shell" id="shell-livespeed">
       <div class="viz-toolbar">
-        <span class="viz-title">average speed (mph)</span>
+        <span class="viz-title">average speed (mph): this season vs. last</span>
         <div class="viz-controls" id="ctl-livespeed"></div>
         <button class="icon-btn" data-fullscreen-target="shell-livespeed" title="Full screen">⤢</button>
       </div>
@@ -601,7 +601,7 @@ function drawHexLayer(svg, x, y, sh, cells, fill, tipFn, opts) {
     g.selectAll("polygon").data(cells.filter(d => d.c === c)).enter().append("polygon")
       .attr("points", d => hexPoints(x(d.cx), y(d.cy), rpx))
       .attr("fill", d => fill(d)).attr("fill-opacity", d => opts.op ? opts.op(d) : 1)
-      .attr("stroke", "#FFFDF8").attr("stroke-width", 0.5)
+      .attr("stroke", d => opts.stroke ? opts.stroke(d) : "#FFFDF8").attr("stroke-width", d => opts.sw ? opts.sw(d) : 0.5)
       .on("mousemove", (evt, d) => showTip(tipFn(d), evt)).on("mouseleave", hideTip);
   });
 }
@@ -619,84 +619,111 @@ function buildSpacing(cfg) {
   const ZK = ["rim", "mid", "three"], ZN = {rim: "Rim & paint", mid: "Mid-range", three: "Three"};
   const ZC = {rim: navy, mid: risk, three: olive}, PTS = {rim: 2, mid: 2, three: 3};
   const note = () => document.getElementById(cfg.note);
-  function message(text, sub) {
+  function message(text, sub, help) {
     svg.selectAll("*").remove();
     drawCourt(svg, x, y, P);
-    svg.append("text").attr("x", x(0)).attr("y", y(230)).attr("text-anchor", "middle").attr("font-family", "Fraunces").attr("font-size", 17).attr("fill", ink).text(text);
-    if (sub) svg.append("text").attr("x", x(0)).attr("y", y(205)).attr("text-anchor", "middle").attr("font-family", "IBM Plex Mono").attr("font-size", 11).attr("fill", inkSoft).text(sub);
-    note().textContent = cfg.help || "";
+    svg.append("text").attr("x", x(0)).attr("y", y(230)).attr("text-anchor", "middle").attr("font-family", "Fraunces").attr("font-size", 17).attr("fill", ink).attr("paint-order", "stroke").attr("stroke", "#FFFDF8").attr("stroke-width", 4).text(text);
+    if (sub) svg.append("text").attr("x", x(0)).attr("y", y(205)).attr("text-anchor", "middle").attr("font-family", "IBM Plex Mono").attr("font-size", 11).attr("fill", inkSoft).attr("paint-order", "stroke").attr("stroke", "#FFFDF8").attr("stroke-width", 4).text(sub);
+    note().textContent = help || "";
     d3.select(cfg.legend).selectAll("*").remove();
   }
   function chips() {
     chipsFor(cfg.pChips, cfg.pList, P, p => { P = p; if (T === P) T = cfg.tList.find(t => t !== P); render(); }, true);
     chipsFor(cfg.tChips, cfg.tList.filter(t => t !== P), T, t => { T = t; render(); }, true);
   }
+  const share = (c, k) => c.N ? 100 * c.zones[k].n / c.N : 0;
+  const pps = (c, k) => c.zones[k].fg == null ? null : c.zones[k].fg / 100 * PTS[k];
+  // right-hand zone cards; sides = [{lab, c, col}] (two sides = comparison, one side = single map)
+  function zonePanel(px, pw, y0, sides) {
+    ZK.forEach((k, i) => {
+      const g = svg.append("g").attr("transform", `translate(${px},${y0 + i * 122})`);
+      g.append("rect").attr("x", -10).attr("y", -6).attr("width", pw + 20).attr("height", 112).attr("rx", 4).attr("fill", "#FBF8F1").attr("stroke", "#D9D2C2");
+      g.append("rect").attr("x", -10).attr("y", -6).attr("width", 5).attr("height", 112).attr("fill", ZC[k]);
+      g.append("text").attr("x", 4).attr("y", 12).attr("font-family", "IBM Plex Sans").attr("font-weight", 700).attr("font-size", 13).attr("fill", ZC[k]).text(ZN[k]);
+      if (sides.length === 2) {
+        const d = share(sides[1].c, k) - share(sides[0].c, k);
+        g.append("text").attr("x", pw).attr("y", 12).attr("text-anchor", "end").attr("font-family", "IBM Plex Mono").attr("font-weight", 700).attr("font-size", 12).attr("fill", Math.abs(d) < 1 ? inkSoft : ink).text(`${d > 0 ? "+" : ""}${d.toFixed(1)} pts of his shots`);
+      }
+      const bx = 64, bw = pw - bx - 46, scl = v => bw * Math.min(v, 70) / 70;
+      sides.forEach((s, r) => {
+        const yy = 24 + r * 22, v = share(s.c, k);
+        g.append("text").attr("x", 4).attr("y", yy + 10).attr("font-family", "IBM Plex Mono").attr("font-size", 10).attr("fill", inkSoft).text(s.lab);
+        g.append("rect").attr("x", bx).attr("y", yy).attr("width", bw).attr("height", 14).attr("rx", 2).attr("fill", "#EFE9DA");
+        g.append("rect").attr("x", bx).attr("y", yy).attr("width", scl(v)).attr("height", 14).attr("rx", 2).attr("fill", s.col);
+        g.append("text").attr("x", bx + scl(v) + 5).attr("y", yy + 11).attr("font-family", "IBM Plex Mono").attr("font-weight", 600).attr("font-size", 11).attr("fill", ink).text(v.toFixed(1) + "%");
+      });
+      const f = v => v == null ? "—" : v.toFixed(2);
+      g.append("text").attr("x", 4).attr("y", 90).attr("font-family", "IBM Plex Mono").attr("font-size", 10).attr("fill", inkSoft)
+        .text(sides.length === 2 ? `pts/shot: ${f(pps(sides[0].c, k))} without → ${f(pps(sides[1].c, k))} with  (${sides[0].c.zones[k].n} / ${sides[1].c.zones[k].n} shots)`
+                                  : `pts/shot: ${f(pps(sides[0].c, k))}  (${sides[0].c.zones[k].n} shots)`);
+    });
+  }
   function render() {
     if (T === P) T = cfg.tList.find(t => t !== P);
     chips();
     const S = cfg.getSpace();
-    if (!S || !S.sets) return message(cfg.empty, "");
+    if (!S || !S.sets) return message(cfg.empty, "", cfg.help);
     const set = S.sets[`${P}|${T}`];
-    if (!set) return message(`${SHORT[P]} and ${SHORT[T]} haven't shared a game yet`, "no with/without comparison available");
+    if (!set) return message(`${SHORT[P]} and ${SHORT[T]} haven't shared a game yet`, "no with/without comparison available", "");
     const W = set.with, O = set.without;
-    if (!W.N || !O.N) return message(!W.N ? `${SHORT[P]} has no shots in games with ${SHORT[T]} yet` : `${SHORT[T]} has played every ${SHORT[P]} game so far`,
-      `with: ${W.games} games, ${W.N} shots · without: ${O.games} games, ${O.N} shots`);
+    if (!W.N && !O.N) return message(`No shots yet for ${SHORT[P]} in games with or without ${SHORT[T]}`, "", "");
     svg.selectAll("*").remove();
     const lines = drawCourt(svg, x, y, P, true);
     const sh = courtShapes(x, y); addZoneClips(svg, sh, cfg.pre);
-    const cells = [];
-    CLS.forEach(c => {
-      const mW = new Map(W[c] || []), mO = new Map(O[c] || []);
-      new Set([...mW.keys(), ...mO.keys()]).forEach(i => {
-        const [cx, cy] = S.cells[c][i], nw = mW.get(i) || 0, no = mO.get(i) || 0;
-        const fw = 100 * nw / W.N, fo = 100 * no / O.N;
-        cells.push({c, cx, cy, nw, no, fw, fo, diff: fw - fo});
-      });
-    });
-    const abs = cells.map(d => Math.abs(d.diff)).sort(d3.ascending), sc = d3.quantile(abs, 0.9) || 1;
-    const br = [-0.7, -0.4, -0.15, 0.15, 0.4, 0.7].map(v => v * sc);
-    const small = Math.min(W.N, O.N) < MINN;
-    drawHexLayer(svg, x, y, sh, cells, d => PAL7[d3.bisect(br, d.diff)],
-      d => `<b style="font-size:1.05em">${CLS_LABEL[d.c]}</b><br>with ${SHORT[T]}: <b>${d.fw.toFixed(1)}%</b> of ${SHORT[P]}'s shots here (${d.nw})<br>without: <b>${d.fo.toFixed(1)}%</b> (${d.no})<br>change: <b style="font-size:1.1em">${d.diff > 0 ? "+" : ""}${d.diff.toFixed(1)} pts</b>`,
-      {pre: cfg.pre, R: S.R, op: () => small ? 0.55 : 1});
-    lines();
-
-    // right panel: zone shares with vs. without
     const px = 610, pw = 340;
-    svg.append("text").attr("x", px).attr("y", 22).attr("font-family", "Fraunces").attr("font-size", 17).attr("font-weight", 600).attr("fill", ink).text(`${SHORT[P]}: with vs. without ${SHORT[T]}`);
-    svg.append("text").attr("x", px).attr("y", 40).attr("font-family", "IBM Plex Mono").attr("font-size", 10).attr("fill", inkSoft).text(`with: ${W.games} games · ${W.N} shots`);
-    svg.append("text").attr("x", px).attr("y", 54).attr("font-family", "IBM Plex Mono").attr("font-size", 10).attr("fill", inkSoft).text(`without: ${O.games} games · ${O.N} shots`);
-    if (small) {
+    const both = W.N > 0 && O.N > 0;
+    const small = Math.min(...[W, O].filter(c => c.N > 0).map(c => c.N)) < MINN;
+    const head = (t1, t2, t3) => {
+      svg.append("text").attr("x", px).attr("y", 22).attr("font-family", "Fraunces").attr("font-size", 17).attr("font-weight", 600).attr("fill", ink).text(t1);
+      svg.append("text").attr("x", px).attr("y", 40).attr("font-family", "IBM Plex Mono").attr("font-size", 10).attr("fill", inkSoft).text(t2);
+      svg.append("text").attr("x", px).attr("y", 54).attr("font-family", "IBM Plex Mono").attr("font-size", 10).attr("fill", inkSoft).text(t3);
+    };
+    const banner = txt => {
       svg.append("rect").attr("x", px - 6).attr("y", 62).attr("width", pw + 12).attr("height", 22).attr("rx", 3).attr("fill", "#FFF6D6").attr("stroke", "#E5D48A");
-      svg.append("text").attr("x", px).attr("y", 77).attr("font-family", "IBM Plex Mono").attr("font-size", 10).attr("fill", "#7A5A00").text(`Small sample (under ${MINN} shots on one side): treat as noise`);
-    }
-    const share = (c, k) => 100 * c.zones[k].n / c.N;
-    const pps = (c, k) => c.zones[k].fg == null ? null : c.zones[k].fg / 100 * PTS[k];
-    ZK.forEach((k, i) => {
-      const g = svg.append("g").attr("transform", `translate(${px},${94 + i * 122})`);
-      g.append("rect").attr("x", -10).attr("y", -6).attr("width", pw + 20).attr("height", 112).attr("rx", 4).attr("fill", "#FBF8F1").attr("stroke", "#D9D2C2");
-      g.append("rect").attr("x", -10).attr("y", -6).attr("width", 5).attr("height", 112).attr("fill", ZC[k]);
-      const sw = share(W, k), so = share(O, k), d = sw - so;
-      g.append("text").attr("x", 4).attr("y", 12).attr("font-family", "IBM Plex Sans").attr("font-weight", 700).attr("font-size", 13).attr("fill", ZC[k]).text(ZN[k]);
-      g.append("text").attr("x", pw).attr("y", 12).attr("text-anchor", "end").attr("font-family", "IBM Plex Mono").attr("font-weight", 700).attr("font-size", 12).attr("fill", Math.abs(d) < 1 ? inkSoft : ink).text(`${d > 0 ? "+" : ""}${d.toFixed(1)} pts of his shots`);
-      const bx = 64, bw = pw - bx - 46, scl = v => bw * Math.min(v, 70) / 70;
-      [["without", so, "#B9B2A0", O], ["with", sw, PCOLOR[P], W]].forEach(([lab, v, col, c], r) => {
-        const yy = 24 + r * 22;
-        g.append("text").attr("x", 4).attr("y", yy + 10).attr("font-family", "IBM Plex Mono").attr("font-size", 10).attr("fill", inkSoft).text(lab);
-        g.append("rect").attr("x", bx).attr("y", yy).attr("width", bw).attr("height", 14).attr("rx", 2).attr("fill", "#EFE9DA");
-        g.append("rect").attr("x", bx).attr("y", yy).attr("width", scl(v)).attr("height", 14).attr("rx", 2).attr("fill", col);
-        g.append("text").attr("x", bx + scl(v) + 5).attr("y", yy + 11).attr("font-family", "IBM Plex Mono").attr("font-weight", 600).attr("font-size", 11).attr("fill", ink).text(v.toFixed(1) + "%");
+      svg.append("text").attr("x", px).attr("y", 77).attr("font-family", "IBM Plex Mono").attr("font-size", 10).attr("fill", "#7A5A00").text(txt);
+    };
+    if (both) {
+      const cells = [];
+      CLS.forEach(c => {
+        const mW = new Map(W[c] || []), mO = new Map(O[c] || []);
+        new Set([...mW.keys(), ...mO.keys()]).forEach(i => {
+          const [cx, cy] = S.cells[c][i], nw = mW.get(i) || 0, no = mO.get(i) || 0;
+          const fw = 100 * nw / W.N, fo = 100 * no / O.N;
+          cells.push({c, cx, cy, nw, no, fw, fo, diff: fw - fo});
+        });
       });
-      const a = pps(O, k), b = pps(W, k);
-      g.append("text").attr("x", 4).attr("y", 90).attr("font-family", "IBM Plex Mono").attr("font-size", 10).attr("fill", inkSoft)
-        .text(`pts/shot: ${a == null ? "—" : a.toFixed(2)} without → ${b == null ? "—" : b.toFixed(2)} with  (${O.zones[k].n} / ${W.zones[k].n} shots)`);
-    });
-
-    const big = ZK.map(k => ({k, d: share(W, k) - share(O, k)})).sort((u, v) => Math.abs(v.d) - Math.abs(u.d))[0];
-    const hi = ZN[big.k].toLowerCase();
-    note().innerHTML = `With ${SHORT[T]} in the game (${W.games} games), ${SHORT[P]} takes <b>${share(W, big.k).toFixed(0)}%</b> of his shots in the ${hi} versus <b>${share(O, big.k).toFixed(0)}%</b> without him (${O.games} games): ${big.d > 0 ? "more" : "fewer"} by ${Math.abs(big.d).toFixed(1)} points. ` +
-      `On the map, orange hexagons are spots where ${SHORT[P]} shoots more often when ${SHORT[T]} plays and blue are spots where he shoots less. This compares games ${SHORT[T]} played with games he missed, not minute-by-minute lineups, so it also reflects who else was available.`;
-    legendRow(cfg.legend, `${SHORT[P]}'s shot share, with ${SHORT[T]} vs. without:`, PAL7, ["much less", "less", "a bit less", "same", "a bit more", "more", "much more"]);
+      const abs = cells.map(d => Math.abs(d.diff)).sort(d3.ascending), sc = d3.quantile(abs, 0.9) || 1;
+      const br = [-0.7, -0.4, -0.15, 0.15, 0.4, 0.7].map(v => v * sc);
+      drawHexLayer(svg, x, y, sh, cells, d => PAL7[d3.bisect(br, d.diff)],
+        d => `<b style="font-size:1.05em">${CLS_LABEL[d.c]}</b><br>with ${SHORT[T]}: <b>${d.fw.toFixed(1)}%</b> of ${SHORT[P]}'s shots here (${d.nw})<br>without: <b>${d.fo.toFixed(1)}%</b> (${d.no})<br>change: <b style="font-size:1.1em">${d.diff > 0 ? "+" : ""}${d.diff.toFixed(1)} pts</b>`,
+        {pre: cfg.pre, R: S.R, op: () => small ? 0.55 : 1});
+      lines();
+      head(`${SHORT[P]}: with vs. without ${SHORT[T]}`, `with: ${W.games} games · ${W.N} shots`, `without: ${O.games} games · ${O.N} shots`);
+      if (small) banner(`Small sample (under ${MINN} shots on one side): treat as noise`);
+      zonePanel(px, pw, 94, [{lab: "without", c: O, col: "#B9B2A0"}, {lab: "with", c: W, col: PCOLOR[P]}]);
+      const big = ZK.map(k => ({k, d: share(W, k) - share(O, k)})).sort((u, v) => Math.abs(v.d) - Math.abs(u.d))[0];
+      note().innerHTML = `With ${SHORT[T]} in the game (${W.games} games), ${SHORT[P]} takes <b>${share(W, big.k).toFixed(0)}%</b> of his shots in the ${ZN[big.k].toLowerCase()} versus <b>${share(O, big.k).toFixed(0)}%</b> without him (${O.games} games): ${big.d > 0 ? "more" : "fewer"} by ${Math.abs(big.d).toFixed(1)} points. ` +
+        `On the map, orange hexagons are spots where ${SHORT[P]} shoots more often when ${SHORT[T]} plays and blue are spots where he shoots less. This compares games ${SHORT[T]} played with games he missed, not minute-by-minute lineups, so it also reflects who else was available.`;
+      legendRow(cfg.legend, `${SHORT[P]}'s shot share, with ${SHORT[T]} vs. without:`, PAL7, ["much less", "less", "a bit less", "same", "a bit more", "more", "much more"]);
+    } else {
+      // only one side exists yet: show that side's shot map instead of a blank court
+      const C = W.N > 0 ? W : O, lab = W.N > 0 ? "with" : "without";
+      const cells = [];
+      CLS.forEach(c => (C[c] || []).forEach(([i, n]) => { const [cx, cy] = S.cells[c][i]; cells.push({c, cx, cy, n, f: 100 * n / C.N}); }));
+      const br = quantBreaks(cells.map(d => d.f), 7);
+      const ramp = d3.range(7).map(i => d3.interpolateRgb("#F1EAD6", PCOLOR[P])(0.1 + 0.9 * i / 6));
+      drawHexLayer(svg, x, y, sh, cells, d => ramp[cls7(br, d.f)],
+        d => `<b style="font-size:1.05em">${CLS_LABEL[d.c]}</b><br>${d.f.toFixed(1)}% of ${SHORT[P]}'s shots ${lab} ${SHORT[T]} are within 4.5 ft of here (${d.n})`,
+        {pre: cfg.pre, R: S.R, op: () => C.N < MINN ? 0.6 : 1});
+      lines();
+      head(`${SHORT[P]} ${lab} ${SHORT[T]}`, `${C.games} games · ${C.N} shots`, W.N > 0 ? `no games without ${SHORT[T]} yet` : `no games with ${SHORT[T]} yet`);
+      banner(C.N < MINN ? `Small sample (under ${MINN} shots): treat as noise` : `No comparison yet: nothing to compare against`);
+      zonePanel(px, pw, 94, [{lab, c: C, col: PCOLOR[P]}]);
+      note().innerHTML = W.N > 0
+        ? `${SHORT[T]} has been in every game ${SHORT[P]} has played so far, so there is no "without" sample to compare. This is ${SHORT[P]}'s shot map in those ${W.games} games; the with-vs-without comparison appears once ${SHORT[T]} misses a game.`
+        : `${SHORT[P]} hasn't played a game with ${SHORT[T]} yet. This is his shot map without ${SHORT[T]}; the comparison appears once they share a game.`;
+      legendRow(cfg.legend, `${SHORT[P]}'s shots (${lab} ${SHORT[T]}):`, ramp, ["fewest", "", "", "", "", "", "most"]);
+    }
   }
   return {render};
 }
@@ -755,16 +782,18 @@ function buildSpacing(cfg) {
 })();
 
 // =========================================================
-// 0B. WHERE TWO PLAYERS COLLIDE
+// 0B. WHERE TWO PLAYERS COLLIDE: clogged vs. open areas
 // =========================================================
 (function(){
   const svg = d3.select("#chart-hexoverlap");
   const W = 600, H = 470;
   const { x, y } = makeCourtScales(W, H, 14);
-  let pa = "Tyrese Maxey", pb = "Jaylen Brown", mode = "territory";
+  let pa = "Tyrese Maxey", pb = "Jaylen Brown", mode = "clog";
+  const EDGE = 0.10;   // points per shot: how much better one player must be for the spot to "belong" to him
   const pct = arr => { const s = arr.slice().sort(d3.ascending); return v => d3.bisectLeft(s, v) / s.length; };
   const shade = (hex, t) => d3.interpolateRgb("#F1EAD6", hex)(t);
-  const INK3 = ["#9A9484", "#4F4B41", "#14130F"], HEAVY = 0.65;
+  const INK3 = ["#9A9484", "#4F4B41", "#14130F"], HEAVY = 0.65, OPEN = "#E8F27C";
+  const PPS_HI = PPS_BREAKS[PPS_BREAKS.length - 1];
 
   function zoneShare(p) {
     const z = PLAYER_ZONE_FGPCT[p], tot = d3.sum(["rim", "mid", "three"], k => z[k].fga);
@@ -777,58 +806,91 @@ function buildSpacing(cfg) {
     const A = playerCells(pa), B = playerCells(pb);
     const rankA = pct(A.map(d => d.freq)), rankB = pct(B.map(d => d.freq));
     const mA = new Map(A.map(d => [d.key, d])), mB = new Map(B.map(d => [d.key, d]));
-    const keys = new Set([...mA.keys(), ...mB.keys()]);
     const cells = [];
-    keys.forEach(k => {
+    new Set([...mA.keys(), ...mB.keys()]).forEach(k => {
       const a = mA.get(k), b = mB.get(k), base = a || b;
       const ra = a ? rankA(a.freq) : 0, rb = b ? rankB(b.freq) : 0;
       const heavyA = ra >= HEAVY, heavyB = rb >= HEAVY;
-      const state = heavyA && heavyB ? "shared" : heavyA ? "A" : heavyB ? "B" : "light";
-      let fg = null;
-      if (a && b) fg = (a.n * a.fg + b.n * b.fg) / Math.max(1, a.n + b.n) || (a.fg + b.fg) / 2;
-      cells.push({c: base.c, cx: base.cx, cy: base.cy, a, b, ra, rb, state, fg, key: k});
+      const d = {c: base.c, cx: base.cx, cy: base.cy, a, b, ra, rb, key: k, state: heavyA && heavyB ? "shared" : heavyA ? "A" : heavyB ? "B" : "light", fg: null};
+      if (a && b) d.fg = (a.n * a.fg + b.n * b.fg) / Math.max(1, a.n + b.n) || (a.fg + b.fg) / 2;
+      if (d.state === "shared") { d.dp = a.pps - b.pps; d.edge = Math.abs(d.dp) < EDGE ? "even" : d.dp > 0 ? "A" : "B"; }
+      if (d.state === "light") { const best = Math.max(a && a.n >= 3 ? a.pps : 0, b && b.n >= 3 ? b.pps : 0); d.open = best >= PPS_HI; }
+      cells.push(d);
     });
-    const sharedCells = cells.filter(d => d.state === "shared");
+    const shared = cells.filter(d => d.state === "shared");
+    const openCells = cells.filter(d => d.open);
+    const cA = PCOLOR[pa], cB = PCOLOR[pb];
     const fill = d => {
+      if (mode === "clog") {
+        if (d.state === "shared") return d.edge === "A" ? cA : d.edge === "B" ? cB : INK3[2];
+        if (d.state === "A") return shade(cA, 0.3);
+        if (d.state === "B") return shade(cB, 0.3);
+        return d.open ? OPEN : "#F3EEDF";
+      }
       if (mode === "territory") {
         if (d.state === "shared") return INK3[Math.min(2, Math.floor((Math.min(d.ra, d.rb) - HEAVY) / (1 - HEAVY) * 3))];
-        if (d.state === "A") return shade(PCOLOR[pa], 0.5 + 0.5 * (d.ra - HEAVY) / (1 - HEAVY));
-        if (d.state === "B") return shade(PCOLOR[pb], 0.5 + 0.5 * (d.rb - HEAVY) / (1 - HEAVY));
+        if (d.state === "A") return shade(cA, 0.5 + 0.5 * (d.ra - HEAVY) / (1 - HEAVY));
+        if (d.state === "B") return shade(cB, 0.5 + 0.5 * (d.rb - HEAVY) / (1 - HEAVY));
         return "#F3EEDF";
       }
       if (d.state === "shared") return PAL7[cls7(FG_BREAKS, d.fg)];
-      if (d.state === "A") return shade(PCOLOR[pa], 0.28);
-      if (d.state === "B") return shade(PCOLOR[pb], 0.28);
+      if (d.state === "A") return shade(cA, 0.28);
+      if (d.state === "B") return shade(cB, 0.28);
       return "#F3EEDF";
     };
-    const tip = d => {
-      const f = (p, c) => c ? `<b>${SHORT[p]}</b> ${c.freq.toFixed(1)}% of shots here · ${c.fg}% FG (${c.n} att)` : `<b>${SHORT[p]}</b> rarely shoots here`;
-      return `<b style="font-size:1.05em">${CLS_LABEL[d.c]}</b> · ${ {shared: "both use it heavily", A: SHORT[pa] + " territory", B: SHORT[pb] + " territory", light: "light use"}[d.state] }<br>${f(pa, d.a)}<br>${f(pb, d.b)}` +
-        (d.fg != null ? `<br>combined FG% <b style="font-size:1.15em">${d.fg.toFixed(1)}%</b>` : "");
+    const kind = d => {
+      if (d.state === "shared") return d.edge === "even" ? "Clogged: both rely on this spot, neither is clearly better"
+        : `Clogged: both rely on this spot, <b>${SHORT[d.edge === "A" ? pa : pb]}</b> is better here`;
+      if (d.state === "A") return `${SHORT[pa]}'s spot (${SHORT[pb]} uses it lightly)`;
+      if (d.state === "B") return `${SHORT[pb]}'s spot (${SHORT[pa]} uses it lightly)`;
+      return d.open ? "Open and efficient: neither uses it much, but it's a good shot" : "Light use";
     };
-    drawHexLayer(svg, x, y, sh, cells, fill, tip, {pre: "ho"});
+    const tip = d => {
+      const f = (p, c) => c ? `<b>${SHORT[p]}</b>: ${c.freq.toFixed(1)}% of shots here · ${c.fg}% FG · ${c.pps.toFixed(2)} pts/shot (${c.n} att)` : `<b>${SHORT[p]}</b> rarely shoots here`;
+      return `<b style="font-size:1.05em">${CLS_LABEL[d.c]}</b><br>${kind(d)}<br>${f(pa, d.a)}<br>${f(pb, d.b)}`;
+    };
+    drawHexLayer(svg, x, y, sh, cells, fill, tip, {pre: "ho",
+      stroke: d => mode === "clog" && d.state === "shared" ? "#14130F" : mode === "clog" && d.open ? "#7A8B5C" : "#FFFDF8",
+      sw: d => mode === "clog" && (d.state === "shared" || d.open) ? 1.1 : 0.5});
     lines();
 
-    // narrative: which of rim / mid / three is the collision zone, and what that overlap costs
+    const nar = document.getElementById("overlap-narrative");
+    if (mode === "clog") {
+      const totA = d3.sum(A, d => d.freq), totB = d3.sum(B, d => d.freq);
+      const volA = d3.sum(shared, d => d.a.freq) / totA * 100, volB = d3.sum(shared, d => d.b.freq) / totB * 100;
+      const nA = shared.filter(d => d.edge === "A").length, nB = shared.filter(d => d.edge === "B").length, nE = shared.length - nA - nB;
+      const cededA = d3.sum(shared.filter(d => d.edge === "B"), d => d.a.freq) / totA * 100;
+      const cededB = d3.sum(shared.filter(d => d.edge === "A"), d => d.b.freq) / totB * 100;
+      const grp = d3.rollups(openCells, v => v.length, d => CLS_GROUP[d.c]).sort((u, v) => v[1] - u[1])[0];
+      const gl = {rim: "at the rim and in the paint", mid: "in the mid-range", three: "from three"};
+      nar.classList.toggle("risk", Math.max(cededA, cededB) > 8);
+      nar.innerHTML = `<b>Clogged:</b> ${volA.toFixed(0)}% of ${SHORT[pa]}'s shot volume and ${volB.toFixed(0)}% of ${SHORT[pb]}'s come from ${shared.length} spots both rely on. ` +
+        `${SHORT[pa]} is the better shooter (by at least ${EDGE.toFixed(2)} pts/shot) in ${nA} of them, ${SHORT[pb]} in ${nB}, and ${nE} are a wash. ` +
+        `That means ${cededA.toFixed(0)}% of ${SHORT[pa]}'s volume comes from spots where ${SHORT[pb]} is better, and ${cededB.toFixed(0)}% of ${SHORT[pb]}'s from spots where ${SHORT[pa]} is. ` +
+        `<b>Open:</b> ${openCells.length} spots are good shots that neither uses much` + (grp ? `, mostly ${gl[grp[0]]}.` : ".");
+      document.getElementById("hexoverlap-note").innerHTML = `Bold-outlined hexagons are clogged: both players use that spot heavily (each one's busiest third). Their color says who has the statistical edge there (higher points per shot), so that player should own the spot and the other should vacate it. Pale tints are spots only one player uses. Yellow-green hexagons are open: neither shoots there much, yet at least one of them is efficient from it.`;
+      const el = d3.select("#hexoverlap-legend"); el.selectAll("*").remove();
+      [[cA, `Clogged · ${SHORT[pa]} better`, "#14130F"], [cB, `Clogged · ${SHORT[pb]} better`, "#14130F"], [INK3[2], "Clogged · a wash", "#14130F"],
+       [shade(cA, 0.3), `${SHORT[pa]}'s own spot`], [shade(cB, 0.3), `${SHORT[pb]}'s own spot`], [OPEN, "Open and efficient", "#7A8B5C"]].forEach(([c, t, st]) =>
+        el.append("span").html(`<span class="legend-swatch" style="background:${c};${st ? "outline:1.5px solid " + st + ";" : ""}"></span>${t}`));
+      return;
+    }
+    // classic modes: which of rim / mid / three is the collision zone
     const sa = zoneShare(pa), sb = zoneShare(pb);
     const zname = {rim: "at the rim and in the paint", mid: "in the mid-range", three: "from three"};
     const zlab = {rim: "rim", mid: "mid-range", three: "three"};
     const best = ["rim", "mid", "three"].map(k => ({k, m: Math.min(sa[k], sb[k])})).sort((u, v) => v.m - u.m)[0].k;
     const za = PLAYER_ZONE_FGPCT[pa][best], zb = PLAYER_ZONE_FGPCT[pb][best];
-    const comb = (za.fgpct * za.fga + zb.fgpct * zb.fga) / (za.fga + zb.fga);
-    const pts = best === "three" ? 3 : 2;
-    const nSharedMid = sharedCells.filter(d => CLS_GROUP[d.c] === "mid").length;
-    const nSharedThree = sharedCells.filter(d => CLS_GROUP[d.c] === "three").length;
+    const comb = (za.fgpct * za.fga + zb.fgpct * zb.fga) / (za.fga + zb.fga), pts = best === "three" ? 3 : 2;
+    const nSharedMid = shared.filter(d => CLS_GROUP[d.c] === "mid").length, nSharedThree = shared.filter(d => CLS_GROUP[d.c] === "three").length;
     document.getElementById("hexoverlap-note").innerHTML = mode === "territory"
-      ? `<b style="color:${PCOLOR[pa]}">${SHORT[pa]}</b> and <b style="color:${PCOLOR[pb]}">${SHORT[pb]}</b> each get a hexagon in their own color where they use that spot heavily (their busiest third of spots). Black/gray hexagons are the traffic jams: both of them use that spot heavily. ${sharedCells.length} shared spots.`
-      : `Only the shared spots are colored by efficiency (combined FG% of both players there, seven equal-count classes across the roster); everything else fades to a light tint of each player's color. The question is whether the crowded spots are also good ones.`;
-    const nar = document.getElementById("overlap-narrative");
-    nar.innerHTML = `<b>Biggest collision zone: ${zlab[best]}.</b> ${SHORT[pa]} takes ${(sa[best]*100).toFixed(0)}% of his shots ${zname[best]} and ${SHORT[pb]} takes ${(sb[best]*100).toFixed(0)}%; together they make ${comb.toFixed(1)}% there, worth ${(comb/100*pts).toFixed(2)} points per shot. Of the ${sharedCells.length} spots both rely on, ${nSharedMid} are mid-range and ${nSharedThree} are three-point spots.`;
+      ? `<b style="color:${cA}">${SHORT[pa]}</b> and <b style="color:${cB}">${SHORT[pb]}</b> each get a hexagon in their own color where they use that spot heavily (their busiest third of spots). Black/gray hexagons are the traffic jams: both of them use that spot heavily. ${shared.length} shared spots.`
+      : `Only the shared spots are colored by efficiency (combined FG% of both players there, seven equal-count classes across the roster); everything else fades to a light tint of each player's color.`;
+    nar.innerHTML = `<b>Biggest collision zone: ${zlab[best]}.</b> ${SHORT[pa]} takes ${(sa[best]*100).toFixed(0)}% of his shots ${zname[best]} and ${SHORT[pb]} takes ${(sb[best]*100).toFixed(0)}%; together they make ${comb.toFixed(1)}% there, worth ${(comb/100*pts).toFixed(2)} points per shot. Of the ${shared.length} spots both rely on, ${nSharedMid} are mid-range and ${nSharedThree} are three-point spots.`;
     nar.classList.toggle("risk", best === "mid");
-
     if (mode === "territory") {
       const el = d3.select("#hexoverlap-legend"); el.selectAll("*").remove();
-      [[PCOLOR[pa], SHORT[pa] + " territory"], [PCOLOR[pb], SHORT[pb] + " territory"], [INK3[2], "both heavy (darker = heavier)"], ["#F3EEDF", "light use"]].forEach(([c, t]) =>
+      [[cA, SHORT[pa] + " territory"], [cB, SHORT[pb] + " territory"], [INK3[2], "both heavy (darker = heavier)"], ["#F3EEDF", "light use"]].forEach(([c, t]) =>
         el.append("span").html(`<span class="legend-swatch" style="background:${c}"></span>${t}`));
     } else legendRow("#hexoverlap-legend", "Shared spots, combined FG%:", PAL7, fmtBreaks(FG_BREAKS, v => v.toFixed(0), "<", ">"));
   }
@@ -836,7 +898,7 @@ function buildSpacing(cfg) {
   const setB = p => { if (p === pa) pa = pb; pb = p; build(); render(); };
   function build() { chipsFor("#hexoverlap-a", CORE, pa, setA); chipsFor("#hexoverlap-b", CORE, pb, setB); }
   const mt = d3.select("#hexoverlap-mode");
-  [["territory", "territory"], ["efficiency", "overlap × efficiency"]].forEach(([m, lab]) => mt.append("button").attr("class", "chip no-avatar" + (m === mode ? " active" : "")).text(lab)
+  [["clog", "clogged vs. open"], ["territory", "territory"], ["efficiency", "overlap × efficiency"]].forEach(([m, lab]) => mt.append("button").attr("class", "chip no-avatar" + (m === mode ? " active" : "")).text(lab)
     .on("click", function(){ mode = m; mt.selectAll(".chip").classed("active", false); d3.select(this).classed("active", true); render(); }));
   build(); render();
 })();
@@ -1295,7 +1357,7 @@ function render(){
   else if (T.gp < 20) { ban.hidden = false; ban.innerHTML = `<b>Small samples.</b> ${T.gp} games played: ${ready} of ${D.predictions.length} calls have enough data to grade. Early-season numbers swing a lot, so expect cards to change status.`; }
   else ban.hidden = true;
   renderCards(); renderTrend(); renderNarrative(); renderShots(); renderDumbbell("livedef", D.defense, D.baselines.defense, "diff", [-15, 15], 1, "fga", " FGA", false, 50);
-  renderDumbbell("livespeed", D.speed, D.baselines.speed, "speed", [3.4, 4.8], 2, "gp", " GP", true, 3);
+  renderDumbbell("livespeed", D.speed, D.baselines.speed, "speed", [3.2, 5.0], 2, "gp", " GP", true, 1, 5);
   renderPairs(); spaceLive.render();
 }
 
@@ -1385,7 +1447,7 @@ function renderShots(){
   $("#cap-liveshots").textContent = "Bars = 2026-27 so far. Black ticks = 2025-26 share. Wade, Simons, KCP and Bona baselines come from prior teams where applicable.";
 }
 
-function renderDumbbell(id, now, bs, key, dom, dec, nkey, nlab, hideZero, minN){
+function renderDumbbell(id, now, bs, key, dom, dec, nkey, nlab, hideZero, minN, fadeN){
   const svg = d3.select("#chart-" + id); svg.selectAll("*").remove();
   const rows = Object.keys(SHORTN).filter(n => now[n] || bs[n]);
   const W = 540, rowH = 30, H = rows.length * rowH + 50; svg.attr("viewBox", `0 0 ${W} ${H}`);
@@ -1401,13 +1463,14 @@ function renderDumbbell(id, now, bs, key, dom, dec, nkey, nlab, hideZero, minN){
     if (b) svg.append("circle").attr("cx", x(cl(b[key]))).attr("cy", yy).attr("r", 5).attr("fill", "#FFFDF8").attr("stroke", "#4A4640").attr("stroke-width", 2);
     if (usable) {
       const v = a[key], c = cl(v), off = v !== c;
-      svg.append("circle").attr("cx", x(c)).attr("cy", yy).attr("r", 6).attr("fill", "#04275C")
+      svg.append("circle").attr("cx", x(c)).attr("cy", yy).attr("r", 6).attr("fill", "#04275C").attr("opacity", fadeN && a[nkey] < fadeN ? 0.5 : 1)
         .on("mousemove", e => tip.style("opacity", 1).style("left", e.clientX + 12 + "px").style("top", e.clientY + 12 + "px").html(`${SHORTN[n]}<br>now ${v.toFixed(dec)} (${a[nkey]}${nlab})<br>2025-26 ${b ? b[key].toFixed(dec) : "n/a"}`)).on("mouseleave", () => tip.style("opacity", 0));
       if (off) svg.append("text").attr("x", x(c) + (v > c ? 10 : -10)).attr("y", yy + 4).attr("text-anchor", v > c ? "start" : "end").attr("font-size", 10).attr("font-family", "IBM Plex Mono").attr("font-weight", 700).attr("fill", "#04275C").text((v > c ? "▶ " : "◀ ") + v.toFixed(dec));
+      if (b) svg.append("text").attr("x", W - 4).attr("y", yy + 4).attr("text-anchor", "end").attr("font-size", 10).attr("font-family", "IBM Plex Mono").attr("fill", "#4A4640").text(`${v - b[key] >= 0 ? "+" : "−"}${Math.abs(v - b[key]).toFixed(dec)} · ${a[nkey]}${nlab}`);
     } else if (a) svg.append("text").attr("x", W - 4).attr("y", yy + 4).attr("text-anchor", "end").attr("font-size", 10).attr("font-family", "IBM Plex Mono").attr("fill", "#9A948A").text(`${a[nkey]}${nlab} · too early`);
     else svg.append("text").attr("x", W - 4).attr("y", yy + 4).attr("text-anchor", "end").attr("font-size", 10).attr("font-family", "IBM Plex Mono").attr("fill", "#9A948A").text("no data yet");
   });
-  $("#cap-" + id).textContent = `Hollow = 2025-26. Filled = 2026-27, shown once there are at least ${minN}${nlab.trim() ? " " + nlab.trim() : ""}. Arrows mark values beyond the axis.`;
+  $("#cap-" + id).textContent = `Hollow = 2025-26. Filled = 2026-27 so far (shown once there are at least ${minN}${nlab.trim() ? " " + nlab.trim() : ""}${fadeN ? "; faded below " + fadeN : ""}). Right column = change vs. last season. Arrows mark values beyond the axis.`;
 }
 
 function renderPairs(){
