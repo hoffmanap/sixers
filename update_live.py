@@ -167,6 +167,14 @@ def pull_live(season):
     pt = _call(synergyplaytypes.SynergyPlayTypes, season=season, season_type_all_star="Regular Season",
                player_or_team_abbreviation="P", play_type_nullable="PRBallHandler", type_grouping_nullable="offensive")
     pt["PLAY_TYPE"] = "PRBallHandler"
+    # diagnostic: say plainly why the ball-handler number may be missing
+    try:
+        _n = len(pt)
+        _l = pt[pt.PLAYER_NAME.str.contains("LeBron", case=False, na=False)] if _n else pt
+        print(f"PRBallHandler play-type rows: {_n}; LeBron rows: {len(_l)}"
+              + (f"; POSS={_l.iloc[0].POSS}" if len(_l) else ""))
+    except Exception as e:
+        print("PRBallHandler diagnostic failed:", e)
     pstats = _call(leaguedashplayerstats.LeagueDashPlayerStats, season=season, team_id_nullable=PHI,
                    season_type_all_star="Regular Season")
     tstats = _call(leaguedashteamstats.LeagueDashTeamStats, season=season, season_type_all_star="Regular Season",
