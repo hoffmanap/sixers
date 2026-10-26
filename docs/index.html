@@ -1393,7 +1393,7 @@ function renderCards(){
     return `<div class="score-card ${st}" data-id="${p.id}">
       <div class="sc-sec">${p.section}</div><h3>${p.title}</h3>
       <div class="sc-vals"><div>preseason<span>${fmt(b, p)}</span></div><div>target<span>${dir} ${p.target}${p.unit === "%" ? "%" : ""}</span></div><div class="actual">now<span>${fmt(m.value, p)}</span></div></div>
-      <span class="chipstat ${st}">${LABEL[st]}${m.value != null ? " · " + Math.round(m.n) + " " + p.n_label : ""}</span>
+      <span class="chipstat ${st}">${p.id === "lebron_prbh" && m.value == null ? "Not yet listed" : LABEL[st]}${m.value != null ? " · " + Math.round(m.n) + " " + p.n_label : ""}</span>${p.id === "lebron_prbh" && m.value == null ? `<p class="sc-claim" style="margin-top:.5rem">The NBA only lists players with enough pick-and-roll ball-handler possessions. LeBron is not on the list yet, which already suggests he is not running much of this role. This fills in once he qualifies.</p>` : ""}
       <p class="sc-claim">${p.claim}</p><div class="why"><b class="k">Why this matters</b>${WHY[p.id] || ""}</div></div>`;
   }).join("");
   document.querySelectorAll(".score-card").forEach(c => c.addEventListener("click", () => { selected = c.dataset.id; renderTrend(); $("#live-trend").scrollIntoView({behavior: "smooth"}); }));
