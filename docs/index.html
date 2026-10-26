@@ -53,6 +53,10 @@ mark.is-marked::before { transform: scaleX(1); }
 .legend-swatch { display: inline-block; width: 10px; height: 10px; margin-right: 4px; vertical-align: -1px; }
 .gradient-legend { display: flex; align-items: center; gap: 0.4rem; }
 .gradient-bar { width: 90px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, #04275C, #F5F1E8, #C1440E); }
+.why { background:#F6F1E3; border-left:3px solid #C99A12; padding:.7rem 1rem; margin:.9rem 0 0; font-size:.9rem; max-width:46rem; line-height:1.5; }
+.why b.k { font-family:var(--mono); font-size:.7rem; letter-spacing:.06em; text-transform:uppercase; color:#8A6A00; display:block; margin-bottom:.15rem; }
+.why p { margin:.3rem 0 0; }
+.score-card .why { margin:.6rem 0 0; padding:.5rem .7rem; font-size:.82rem; }
 .narrative-box { background: #FBF8F1; border-left: 3px solid var(--navy); padding: 1rem 1.25rem; margin: 1.25rem 0; font-size: 0.95rem; max-width: 46rem; }
 .narrative-box b { color: var(--navy); }
 .narrative-box.risk { border-left-color: var(--risk); }
@@ -366,6 +370,7 @@ mark.is-marked::before { transform: scaleX(1); }
       <div class="viz-caption" id="cap-trend"></div>
     </div>
     <div class="narrative-box" id="live-narrative"></div>
+    <div class="why"><b class="k">How to read it</b>Each dot is the season-to-date value after a game. The dashed line is where this stat stood last season. The yellow-green side of the target line is where the preseason prediction comes true, so dots drifting into it are good news for the prediction. Early dots swing wildly because each game is a big share of the sample.</div>
   </section>
 
   <section class="section" id="live-shots">
@@ -381,6 +386,8 @@ mark.is-marked::before { transform: scaleX(1); }
       <div class="viz-body"><svg id="chart-liveshots" viewBox="0 0 760 400"></svg></div>
       <div class="viz-caption" id="cap-liveshots"></div>
     </div>
+    <div class="why"><b class="k">How to read it</b>Each row is a player. The bar is the share of his shots from rim, mid-range or three this season; the black tick is where that share stood last year. A bar longer than its tick means he now takes more of that kind of shot.</div>
+    <div class="why"><b class="k">Why it matters</b>Shots at the rim and from three are worth the most per attempt; mid-range jumpers are worth the least. If Brown and Embiid shift toward the mid-range, they are using the same space the rest of the lineup needs and the offense gets cramped. If they move toward the rim and the arc, the roster is spreading out.</div>
   </section>
 
 
@@ -399,6 +406,8 @@ mark.is-marked::before { transform: scaleX(1); }
       <div class="legend-row" id="spacelive-legend"></div>
       <p class="viz-note" id="spacelive-note"></p>
     </div>
+    <div class="why"><b class="k">How to read it</b>Hexagons are spots on the floor. Orange means the player shoots from that spot more often when the teammate plays; blue means less often. The bars on the right show the same thing by rim, mid-range and three.</div>
+    <div class="why"><b class="k">Why it matters</b>Players who gel change where they shoot to make room for each other. If a player's shot map is the same with and without a teammate, they are not adjusting. If it shifts toward better shots, they are fitting together. This compares games, not minutes on the floor together, and it needs several games on both sides before it means anything.</div>
   </section>
 
   <section class="section" id="live-defspeed">
@@ -425,12 +434,18 @@ mark.is-marked::before { transform: scaleX(1); }
       <div class="viz-caption" id="cap-livespeed"></div>
     </div></div>
     </div>
+    <div class="two-col">
+      <div class="why"><b class="k">How to read the defense chart</b>Each dot is how much better or worse opponents shoot against that player than their usual percentage, in percentage points. Left of zero is good (opponents shoot worse). Hollow dot is last season, filled is this season, and the gray line between them is the change. Players with under 50 shots defended are left hollow because the number is not reliable yet.<p><b>Why it matters:</b> a roster built around offense needs enough defenders to cover for it. This shows who is actually making shots harder.</p></div>
+      <div class="why"><b class="k">How to read the speed chart</b>Each dot is a player's average speed in miles per hour while on the floor. Hollow is last season, filled is this season, and the right column is the change. Faded dots mean fewer than 5 games.<p><b>Why it matters:</b> speed is a rough measure of how much each player is moving. A drop for an off-ball player can mean he is standing instead of cutting, a sign the offense has stalled around the stars.</p></div>
+    </div>
   </section>
 
   <section class="section" id="live-pairs">
     <h2>Pairs to watch</h2>
     <p class="lede">Two-man net rating per 100 possessions when each pair shares the floor. Minutes matter: below roughly 150 together, treat the number as noise.</p>
     <div class="viz-shell" style="padding:1rem; overflow-x:auto;"><table class="live-table" id="pairs-table"></table></div>
+    <div class="why"><b class="k">How to read it</b>Each row is a pair of players. Net rating is how many more points the team scores than it allows per 100 possessions while both are on the floor. Positive is good. Minutes shows how much evidence there is behind the number.</div>
+    <div class="why"><b class="k">Why it matters</b>Shot charts show how the offense looks; net rating shows whether it works. A pair that shares the floor and outscores opponents is gelling regardless of how the charts look, and a pair that does not is the clearest warning sign.</div>
   </section>
 </main>
 
@@ -1361,6 +1376,16 @@ function render(){
   renderPairs(); spaceLive.render();
 }
 
+const WHY = {
+  brown_mid: "Brown is the roster's biggest mid-range shooter, and the mid-range is the least valuable shot on the floor. If he keeps taking those shots, he is working the same space Embiid and Maxey need. Falling toward his old norm means he has adapted to the new roster.",
+  embiid_games: "Fit only matters if the stars are on the floor together. Embiid's availability decides how many games the Maxey-Embiid-Brown-LeBron group can actually play, so this is the health check on the whole plan.",
+  maxey_embiid_net: "Net rating is points scored minus points allowed per 100 possessions. Above zero means the team outscores opponents when its two best players share the floor, which is the most direct test of whether they work together.",
+  lebron_prbh: "Pick-and-roll ball handler is the role Maxey owns. If LeBron takes many of those possessions, he and Maxey are competing for the ball instead of sharing it. A low share means he is playing off Maxey.",
+  lebron_def: "Opponents shooting better than normal against a defender means he is costing the team points. Offense can cover for a weak defender only up to a point, so this shows how much of LeBron's value is offset.",
+  kcp_def: "KCP is a starter-level wing on a team that needs defense to offset offensive crowding. If opponents shoot much better against him, the lineup around him has to cover for it.",
+  team_off_rank: "The whole thesis is that the stars add up to an elite offense. Rank in offensive rating is the scoreboard for that claim: spacing and fit all show up here eventually.",
+  team_def_rank: "Older stars and weak defenders could sink the team even with a great offense. A middling-to-good defensive rank means the offense is not being paid for with defense."
+};
 function renderCards(){
   $("#score-grid").innerHTML = D.predictions.map(p => {
     const m = D.metrics[p.id], b = base(p.id), st = m.status;
@@ -1369,7 +1394,7 @@ function renderCards(){
       <div class="sc-sec">${p.section}</div><h3>${p.title}</h3>
       <div class="sc-vals"><div>preseason<span>${fmt(b, p)}</span></div><div>target<span>${dir} ${p.target}${p.unit === "%" ? "%" : ""}</span></div><div class="actual">now<span>${fmt(m.value, p)}</span></div></div>
       <span class="chipstat ${st}">${LABEL[st]}${m.value != null ? " · " + Math.round(m.n) + " " + p.n_label : ""}</span>
-      <p class="sc-claim">${p.claim}</p></div>`;
+      <p class="sc-claim">${p.claim}</p><div class="why"><b class="k">Why this matters</b>${WHY[p.id] || ""}</div></div>`;
   }).join("");
   document.querySelectorAll(".score-card").forEach(c => c.addEventListener("click", () => { selected = c.dataset.id; renderTrend(); $("#live-trend").scrollIntoView({behavior: "smooth"}); }));
 }
@@ -1451,6 +1476,10 @@ function renderDumbbell(id, now, bs, key, dom, dec, nkey, nlab, hideZero, minN, 
   const svg = d3.select("#chart-" + id); svg.selectAll("*").remove();
   const rows = Object.keys(SHORTN).filter(n => now[n] || bs[n]);
   const W = 540, rowH = 30, H = rows.length * rowH + 50; svg.attr("viewBox", `0 0 ${W} ${H}`);
+  // widen the axis so nothing with a reliable sample falls off the chart
+  const vs = [];
+  rows.forEach(n => { const a = now[n], b = bs[n]; if (b) vs.push(b[key]); if (a && a[nkey] >= minN) vs.push(a[key]); });
+  if (vs.length && !hideZero) dom = [Math.min(dom[0], Math.floor((d3.min(vs) - 1) / 5) * 5), Math.max(dom[1], Math.ceil((d3.max(vs) + 1) / 5) * 5)];
   const x = d3.scaleLinear().domain(dom).range([100, W - 110]);
   svg.append("g").attr("transform", `translate(0,${H - 28})`).call(d3.axisBottom(x).ticks(6)).style("font-family", "IBM Plex Mono").style("font-size", "11px");
   if (!hideZero) svg.append("line").attr("x1", x(0)).attr("x2", x(0)).attr("y1", 8).attr("y2", H - 28).attr("stroke", "#1A1A1A").attr("stroke-dasharray", "3,3");
