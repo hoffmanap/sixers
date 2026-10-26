@@ -167,6 +167,21 @@ def pull_live(season):
     pt = _call(synergyplaytypes.SynergyPlayTypes, season=season, season_type_all_star="Regular Season",
                player_or_team_abbreviation="P", play_type_nullable="PRBallHandler", type_grouping_nullable="offensive")
     pt["PLAY_TYPE"] = "PRBallHandler"
+    # the endpoint can return only a short list early in the season; retry as season totals
+    if not len(pt[pt.PLAYER_NAME.str.contains("LeBron", case=False, na=False)]):
+        try:
+            pt2 = _call(synergyplaytypes.SynergyPlayTypes, season=season, season_type_all_star="Regular Season",
+                        player_or_team_abbreviation="P", play_type_nullable="PRBallHandler",
+                        type_grouping_nullable="offensive", per_mode_simple="Totals")
+            pt2["PLAY_TYPE"] = "PRBallHandler"
+            print(f"retry with Totals: {len(pt2)} rows")
+            if len(pt2) > len(pt): pt = pt2
+        except Exception as e:
+            print("retry failed:", e)
+        try:
+            print("PHI players in play-type data:", sorted(pt[pt.TEAM_ABBREVIATION == "PHI"].PLAYER_NAME.tolist()))
+        except Exception as e:
+            print("PHI listing failed:", e)
     # diagnostic: say plainly why the ball-handler number may be missing
     try:
         _n = len(pt)
